@@ -1552,6 +1552,7 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 ];
 const POOLS={A:{},B:{}};
 const POOL_TOT={A:295,B:295};
+const MA_POOL=[];
 function poolExpr(e){
   if(e.nw){let s='';
     for(let k=0;k<e.a.length;k++){const c=(e.c&&e.c[k]!=null)?e.c[k]:1,nm=ATTR_NAMES[e.a[k]],ac=Math.abs(c);
