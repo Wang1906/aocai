@@ -1549,8 +1549,7 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 {id:'x8',type:'xiao',name:'前2期特码肖+5',desc:'杀前2期特码生肖后移5位（全历史93.5%，近50期94%）',fn:i=>predZ((zod(tema(i-2))+5)%12)},
 {id:'x9',type:'xiao',name:'前2期特码肖+7',desc:'杀前2期特码生肖后移7位（全历史93.5%）',fn:i=>predZ((zod(tema(i-2))+7)%12)},
 {id:'x10',type:'xiao',name:'上期肖+上期尾',desc:'杀上期特码肖加上期尾数（全历史92.8%）',fn:i=>predZ((zod(tema(i-1))+wei(tema(i-1)))%12)}
-,type};
-}
+];
 function poolExpr(e){
   if(e.nw){let s='';
     for(let k=0;k<e.a.length;k++){const c=(e.c&&e.c[k]!=null)?e.c[k]:1,nm=ATTR_NAMES[e.a[k]],ac=Math.abs(c);
