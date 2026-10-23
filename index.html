@@ -445,8 +445,11 @@ h2{font-size:15px;margin-bottom:8px}
       <p class="muted" style="margin-bottom:6px">当前遗漏 = 距最近一次开出已过的期数；绿色=上期刚开，蓝色=偏冷，紫色=超过平均遗漏。</p>
       <div class="ov-grid" id="ovGrid"></div>
     </div>
+    <div class="card" style="margin-top:10px">
+      <h3>最近开奖记录</h3>
+      <div id="drawHistory" style="font-size:13px;line-height:2;color:#ccc"></div>
+    </div>
   </section>
-  <!-- ===== 视图：关于 ===== -->
   <section class="view" id="view-about">
     <h2>关于</h2>
     <div class="card">
@@ -2312,6 +2315,27 @@ const _s=document.getElementById('syncTip');if(_s)_s.textContent='已同步至�
 });
 renderHome();
 renderHot();
+renderDrawHistory();
+function renderDrawHistory(){
+  const el=document.getElementById('drawHistory');
+  if(!el)return;
+  const keys=Object.keys(DRAW).sort().reverse().slice(0,30);
+  let h='';
+  keys.forEach(k=>{
+    const nums=DRAW[k].split(',').map(Number);
+    const spec=nums[6];
+    const zod=numZodiac(spec);
+    h+='<div style="display:flex;justify-content:space-between;border-bottom:1px solid #222;padding:2px 0">';
+    h+='<span style="color:#888">'+k.slice(4)+'期</span>';
+    h+='<span>';
+    nums.slice(0,6).forEach(n=>{h+='<span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#333;margin:0 2px;font-size:11px">'+pad2(n)+'</span>';});
+    h+='<span style="display:inline-block;width:24px;height:24px;line-height:24px;text-align:center;border-radius:50%;background:#c00;margin:0 2px;font-size:11px;color:#fff">'+pad2(spec)+'</span>';
+    h+='</span>';
+    h+='<span style="color:#f80">'+zod+'</span>';
+    h+='</div>';
+  });
+  el.innerHTML=h;
+}
 /* 后台分片预计算回测缓存（约2-3秒内完成，完成后自动按真实胜率重排，首屏不卡） */
 (function(){
   let idx=0;
