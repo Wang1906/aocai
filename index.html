@@ -954,14 +954,8 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 
 
 {id:'x4',type:'xiao',name:'特码肖+9',desc:'杀上期特码生肖后移9位（全历史冷步长）（全历史94.1%）',fn:i=>predZ((zod(tema(i-1))+9)%12)},
-
-
-// 已删：近10期冷肖/热肖（连续杀同肖）
-
-
-// 已删：近10期热肖（连续杀同肖）
-
-
+{id:'x5',type:'xiao',name:'近10期冷肖',desc:'杀近10期特码肖开出最少的生肖',fn:i=>predZ(coldhot(i,10,k=>zod(tema(k))))},
+{id:'x6',type:'xiao',name:'近10期热肖',desc:'杀近10期特码肖开出最多的生肖',fn:i=>predZ(hot(i,10,k=>zod(tema(k))))},
 {id:'x7',type:'xiao',name:'三合杀一肖',desc:'杀上期特码生肖的三合位（±4）（全历史80.4%）',fn:i=>predZ([(zod(tema(i-1))+4)%12,(zod(tema(i-1))+8)%12])},
 
 
@@ -1062,14 +1056,8 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 
 
 {id:'x17',type:'xiao',name:'特码合数肖',desc:'杀上期特码数字和的生肖（全历史91.5%）',fn:i=>predZ(zodS(hs(tema(i-1))))},
-
-
-// 已删：近30期冷肖/热肖（连续杀同肖）
-
-
-// 已删：近30期热肖（连续杀同肖）
-
-
+{id:'x18',type:'xiao',name:'近30期冷肖',desc:'杀近30期特码肖开出最少的生肖',fn:i=>predZ(coldhot(i,30,k=>zod(tema(k))))},
+{id:'x19',type:'xiao',name:'近30期热肖',desc:'杀近30期特码肖开出最多的生肖',fn:i=>predZ(hot(i,30,k=>zod(tema(k))))},
 {id:'w8',type:'wei',name:'上期特码尾+1',desc:'上期特码尾加1（全历史93.0%）',fn:i=>predW((wei(tema(i-1))+1)%10)},
 
 
