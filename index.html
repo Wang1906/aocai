@@ -1659,13 +1659,30 @@ function comboKillZ(pool,k,i){
   }
   return seen;
 }
+// 从FORMULAS里取高胜率杀一肖公式，组合成杀k肖
+function xiaoNPool(){
+  return FORMULAS.filter(f=>(f.type==='xiao'||f.type==='Z')&&f.fn)
+    .map(f=>({f,st:backtest(f)}))
+    .filter(x=>x.st.hit>=255)
+    .sort((a,b)=>b.st.hit-a.st.hit);
+}
+function comboKillZFormulas(pool,k,i){
+  const seen=[];
+  for(const x of pool){
+    let z;
+    try{const p=x.f.fn(i);z=p.v!==undefined?(Array.isArray(p.v)?p.v[0]:p.v):null;}catch(e){continue;}
+    if(z==null)continue;
+    if(!seen.includes(z)){seen.push(z);if(seen.length>=k)break;}
+  }
+  return seen;
+}
 function renderXiaoN(lib){
   const t=TYPE, k=XIAO_N_M[t][0], M=XIAO_N_M[t][1];
-  const pool=(POOLS.A.xiao||[]).filter(e=>e.hit>=255).sort((a,b)=>b.hit-a.hit);
-  const curKill=comboKillZ(pool,k,N);
+  const pool=xiaoNPool();
+  const curKill=comboKillZFormulas(pool,k,N);
   let hit=0;
   for(let i=1;i<N;i++){
-    const s=comboKillZ(pool,k,i);
+    const s=comboKillZFormulas(pool,k,i);
     if(!s.includes(zodIdx(tema(i))))hit++;
   }
   const rate=hit/(N-1)*100, base=XIAO_N_BASE[k];
@@ -1673,14 +1690,14 @@ function renderXiaoN(lib){
   let h='<div class="combo-card">'
     +'<div class="combo-t">'+XIAO_N_NAMES[t]+'（组合法）<span class="muted">随机基准 '+base+'%</span></div>'
     +'<div class="combo-kill">当期杀集：<b>'+curKill.map(z=>T[z]).join(' ')+'</b></div>'
-    +'<div class="combo-rate">组合法历史胜率 <b>'+rate.toFixed(1)+'%</b>（'+hit+'/'+(N-1)+'）<span class="muted">超额 '+(rate-base).toFixed(1)+'pp ｜ 达标池 '+pool.length+' 条(全历史≥94.1%)</span></div>'
+    +'<div class="combo-rate">组合法历史胜率 <b>'+rate.toFixed(1)+'%</b>（'+hit+'/'+(N-1)+'）<span class="muted">超额 '+(rate-base).toFixed(1)+'pp ｜ 达标池 '+pool.length+' 条(全历史≥86.4%)</span></div>'
     +'<div class="muted">Top'+M+' 条公式（按全历史胜率降序）：</div></div>';
   const items=[];
-  pool.slice(0,M).forEach((e,ix)=>{
-    const p=poolPred(e,'xiao',N);
+  pool.slice(0,M).forEach((x,ix)=>{
+    const p=x.f.fn(N);
     items.push('<div class="frow">'
-      +'<div class="fname"><div class="n">'+(ix+1)+'. '+poolExpr(e)+'</div>'
-      +'<div class="sub muted">杀一肖：'+p.show+' ｜ 全历史 '+e.hit+'/'+N+'（'+poolRate(e,'A')+'%）</div></div>'
+      +'<div class="fname"><div class="n">'+(ix+1)+'. '+x.f.name+'</div>'
+      +'<div class="sub muted">'+x.f.desc+' ｜ 全历史 '+x.st.hit+'/'+(N-1)+'（'+(x.st.rate).toFixed(1)+'%）</div></div>'
       +'<div class="fpred"><b>'+p.show+'</b></div></div>');
   });
   h+=items.join('');
