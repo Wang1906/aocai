@@ -1671,7 +1671,8 @@ function comboKillZFormulas(pool,k,i){
   for(const x of pool){
     let z;
     try{const p=x.f.fn(i);z=p.v!==undefined?(Array.isArray(p.v)?p.v[0]:p.v):null;}catch(e){continue;}
-    if(z==null)continue;
+    if(z==null||isNaN(z))continue;
+    z=((z%12)+12)%12;
     if(!seen.includes(z)){seen.push(z);if(seen.length>=k)break;}
   }
   return seen;
