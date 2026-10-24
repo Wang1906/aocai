@@ -346,8 +346,7 @@ h2{font-size:15px;margin-bottom:8px}
     <div class="card" style="border:2px solid #ff4757">
       <h3 style="color:#ff4757">🔥 多公式融合·杀肖必杀</h3>
       <div id="fusionResult" style="margin-top:10px"></div>
-    </div>
-    
+    </div>    
     <div class="card">
       <h3>三期必开·头（1号论坛）<span style="font-size:13px;color:#888;font-weight:normal">窗口297-299期</span></h3>
       <p style="margin-top:6px;font-size:18px;color:#888;text-align:center">待更新（网料站已失效）</p>
@@ -411,6 +410,11 @@ h2{font-size:15px;margin-bottom:8px}
         <b style="color:#8cf">逆向1波</b>（5/13）：绿波
       </div>
     </div>
+  </section>
+  <!-- ===== 视图：并集融合 ===== -->
+  <section class="view" id="view-fusion">
+    <h2 style="color:#ff6b6b">🔥 多公式交集并集杀</h2>
+    <div id="fusionPageContent"></div>
   </section>
   <!-- ===== 视图：投票 ===== -->
   <section class="view" id="view-vote">
@@ -547,6 +551,9 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <div class="nav-item" data-v="trend">
       <svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 7-9"/><path d="M3 21h18"/></svg>网料
+    </div>
+    <div class="nav-item" data-v="fusion" style="color:#ff6b6b">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>并集
     </div>
     <div class="nav-item" data-v="vote">
       <svg viewBox="0 0 24 24"><path d="M6 4h12v4H6z"/><path d="M8 4v4M16 4v4"/><path d="M5 10h14v10H5z"/><path d="M9 13h6M9 16h4"/></svg>投票
@@ -1821,6 +1828,255 @@ function renderFusion(){
   const _m=document.getElementById('homeMore');
   if(_m)_m.style.display='none';
 }
+
+// ===== 并集融合页面（全类型） =====
+function renderFusionPage(){
+  const container = document.getElementById('fusionPageContent');
+  let h = '';
+  
+  // ========== 杀肖融合 ==========
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合</div>';
+  
+  const xiaoFormulas = [
+    {name: 'my3·P5合+P2头', fn: i => {const d=dA(i-1);return (d[5]//10+d[5]%10 + d[2]//10 + 10) % 12;}},
+    {name: 'my4·P3波+特尾+P2头', fn: i => {const d=dA(i-1);return (bose(d[3]) + d[6]%10 + d[2]//10 + 3) % 12;}},
+    {name: 'my5·P2波×3+P5头', fn: i => {const d=dA(i-1);return (bose(d[2])*3 + d[5]//10 + 1) % 12;}},
+    {name: 'my6·跨期P0波+P3头', fn: i => {if(i<2)return -1;const d1=dA(i-1);const d2=dA(i-2);return (bose(d1[0]) + d2[3]//10 + 7) % 12;}},
+  ];
+  
+  // 当期计算
+  const curN = N - 1;
+  const xiaoKills = {};
+  xiaoFormulas.forEach(f => {
+    const k = f.fn(curN);
+    if (k >= 0) xiaoKills[f.name] = k;
+  });
+  
+  const xiaoCounts = {};
+  Object.values(xiaoKills).forEach(k => { xiaoCounts[k] = (xiaoCounts[k]||0)+1; });
+  
+  const xiaoTriple = [], xiaoDouble = [];
+  Object.entries(xiaoCounts).forEach(([z, cnt]) => {
+    z = parseInt(z);
+    if (cnt >= 3) xiaoTriple.push(z);
+    else if (cnt === 2) xiaoDouble.push(z);
+  });
+  
+  const xiaoAllKilled = [...new Set(Object.values(xiaoKills))].sort((a,b)=>a-b);
+  const xiaoRemain = [];
+  for (let z = 0; z < 12; z++) if (!xiaoAllKilled.includes(z)) xiaoRemain.push(z);
+  
+  // 历史回测
+  let xiaoTriCnt=0, xiaoTriHit=0, xiaoDblCnt=0, xiaoDblHit=0, xiaoUnionHit=0;
+  for (let i = 2; i < N; i++) {
+    const t = zodIdx(tema(i));
+    const kMap = {};
+    xiaoFormulas.forEach(f => { const k=f.fn(i); if(k>=0)kMap[f.name]=k; });
+    const kc = {};
+    Object.values(kMap).forEach(k => { kc[k]=(kc[k]||0)+1; });
+    Object.entries(kc).forEach(([z,cnt]) => {
+      z=parseInt(z);
+      if(cnt>=3){xiaoTriCnt++; if(z!==t)xiaoTriHit++;}
+      else if(cnt===2){xiaoDblCnt++; if(z!==t)xiaoDblHit++;}
+    });
+    if(!Object.values(kMap).includes(t)) xiaoUnionHit++;
+  }
+  
+  h += '<div style="background:rgba(255,71,87,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">🔥 三公式交集·神级必杀</div>';
+  if(xiaoTriple.length>0) h += '<div style="font-size:20px;margin-top:4px">杀：<b>'+xiaoTriple.map(z=>T[z]).join('、')+'</b></div>';
+  else h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">本期无触发</div>';
+  h += '<div style="font-size:12px;opacity:0.8;margin-top:4px">历史'+xiaoTriCnt+'期 胜率'+(xiaoTriCnt>0?(xiaoTriHit/xiaoTriCnt*100).toFixed(1):'0')+'%</div>';
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,165,2,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if(xiaoDouble.length>0) h += '<div style="font-size:18px;margin-top:4px">杀：<b>'+xiaoDouble.map(z=>T[z]).join('、')+'</b></div>';
+  else h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">本期无触发</div>';
+  h += '<div style="font-size:12px;opacity:0.8;margin-top:4px">历史'+xiaoDblCnt+'期 胜率'+(xiaoDblCnt>0?(xiaoDblHit/xiaoDblCnt*100).toFixed(1):'0')+'%</div>';
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（4公式全杀）</div>';
+  h += '<div style="font-size:13px;margin-top:4px">历史并集命中率：<b>'+(xiaoUnionHit/(N-2)*100).toFixed(1)+'%</b></div>';
+  h += '<div style="margin-top:6px;font-size:14px">杀<b style="color:#ffd700">'+xiaoAllKilled.length+'</b>个：'+xiaoAllKilled.map(z=>T[z]).join('、')+'</div>';
+  h += '<div style="margin-top:4px;font-size:14px">剩<b style="color:#90EE90">'+xiaoRemain.length+'</b>个：'+xiaoRemain.map(z=>T[z]).join('、')+'</div>';
+  h += '</div>';
+  
+  h += '</div>'; // 杀肖卡片结束
+  
+  // ========== 杀尾融合 ==========
+  h += '<div style="background:linear-gradient(135deg,#f093fb,#f5576c);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🔢 杀尾融合</div>';
+  
+  const weiFormulas = [
+    {name: 'w2new·P5波+特肖', fn: i => {const d=dA(i-1);return (bose(d[5]) + zod(d[6]) + 7) % 10;}},
+    {name: 'w3new·P2波×3+P1波', fn: i => {const d=dA(i-1);return (bose(d[2])*3 + bose(d[1]) + 8) % 10;}},
+  ];
+  
+  const weiKills = {};
+  weiFormulas.forEach(f => { weiKills[f.name] = f.fn(curN); });
+  
+  const weiCounts = {};
+  Object.values(weiKills).forEach(k => { weiCounts[k] = (weiCounts[k]||0)+1; });
+  
+  const weiDouble = [];
+  Object.entries(weiCounts).forEach(([z, cnt]) => {
+    z = parseInt(z);
+    if (cnt >= 2) weiDouble.push(z);
+  });
+  
+  const weiAllKilled = [...new Set(Object.values(weiKills))].sort((a,b)=>a-b);
+  const weiRemain = [];
+  for (let z = 0; z < 10; z++) if (!weiAllKilled.includes(z)) weiRemain.push(z);
+  
+  // 历史回测
+  let weiDblCnt=0, weiDblHit=0, weiUnionHit=0;
+  for (let i = 2; i < N; i++) {
+    const t = tema(i) % 10;
+    const kMap = {};
+    weiFormulas.forEach(f => { kMap[f.name] = f.fn(i); });
+    const kc = {};
+    Object.values(kMap).forEach(k => { kc[k]=(kc[k]||0)+1; });
+    Object.entries(kc).forEach(([z,cnt]) => {
+      z=parseInt(z);
+      if(cnt>=2){weiDblCnt++; if(z!==t)weiDblHit++;}
+    });
+    if(!Object.values(kMap).includes(t)) weiUnionHit++;
+  }
+  
+  h += '<div style="background:rgba(255,165,2,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if(weiDouble.length>0) h += '<div style="font-size:18px;margin-top:4px">杀尾：<b>'+weiDouble.map(z=>z).join('、')+'</b></div>';
+  else h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">本期无触发</div>';
+  h += '<div style="font-size:12px;opacity:0.8;margin-top:4px">历史'+weiDblCnt+'期 胜率'+(weiDblCnt>0?(weiDblHit/weiDblCnt*100).toFixed(1):'0')+'%</div>';
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;margin-top:4px">历史并集命中率：<b>'+(weiUnionHit/(N-2)*100).toFixed(1)+'%</b></div>';
+  h += '<div style="margin-top:6px;font-size:14px">杀尾<b style="color:#ffd700">'+weiAllKilled.length+'</b>个：'+weiAllKilled.join('、')+'</div>';
+  h += '<div style="margin-top:4px;font-size:14px">剩<b style="color:#90EE90">'+weiRemain.length+'</b>个：'+weiRemain.join('、')+'</div>';
+  h += '</div>';
+  
+  h += '</div>'; // 杀尾卡片结束
+  
+  // ========== 杀合融合 ==========
+  h += '<div style="background:linear-gradient(135deg,#fa709a,#fee140);color:#333;padding:15px;border-radius:10px;margin-bottom:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">➕ 杀合融合</div>';
+  
+  const heFormulas = [
+    {name: 'h2new·P5头+P5合', fn: i => {const d=dA(i-1);return (d[5]//10 + d[5]//10+d[5]%10 + 9) % 10;}},
+    {name: 'h3new·P3头×3+P1波', fn: i => {const d=dA(i-1);return (d[3]//10*3 + bose(d[1])) % 10;}},
+  ];
+  
+  const heKills = {};
+  heFormulas.forEach(f => { heKills[f.name] = f.fn(curN); });
+  
+  const heCounts = {};
+  Object.values(heKills).forEach(k => { heCounts[k] = (heCounts[k]||0)+1; });
+  
+  const heDouble = [];
+  Object.entries(heCounts).forEach(([z, cnt]) => {
+    z = parseInt(z);
+    if (cnt >= 2) heDouble.push(z);
+  });
+  
+  const heAllKilled = [...new Set(Object.values(heKills))].sort((a,b)=>a-b);
+  const heRemain = [];
+  for (let z = 0; z < 10; z++) if (!heAllKilled.includes(z)) heRemain.push(z);
+  
+  // 历史回测
+  let heDblCnt=0, heDblHit=0, heUnionHit=0;
+  for (let i = 2; i < N; i++) {
+    const t = tema(i)//10 + tema(i)%10;
+    const kMap = {};
+    heFormulas.forEach(f => { kMap[f.name] = f.fn(i); });
+    const kc = {};
+    Object.values(kMap).forEach(k => { kc[k]=(kc[k]||0)+1; });
+    Object.entries(kc).forEach(([z,cnt]) => {
+      z=parseInt(z);
+      if(cnt>=2){heDblCnt++; if(z!==t)heDblHit++;}
+    });
+    if(!Object.values(kMap).includes(t)) heUnionHit++;
+  }
+  
+  h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if(heDouble.length>0) h += '<div style="font-size:18px;margin-top:4px">杀合：<b>'+heDouble.map(z=>z).join('、')+'</b></div>';
+  else h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">本期无触发</div>';
+  h += '<div style="font-size:12px;opacity:0.8;margin-top:4px">历史'+heDblCnt+'期 胜率'+(heDblCnt>0?(heDblHit/heDblCnt*100).toFixed(1):'0')+'%</div>';
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;margin-top:4px">历史并集命中率：<b>'+(heUnionHit/(N-2)*100).toFixed(1)+'%</b></div>';
+  h += '<div style="margin-top:6px;font-size:14px">杀合<b style="color:#d63031">'+heAllKilled.length+'</b>个：'+heAllKilled.join('、')+'</div>';
+  h += '<div style="margin-top:4px;font-size:14px">剩<b style="color:#00b894">'+heRemain.length+'</b>个：'+heRemain.join('、')+'</div>';
+  h += '</div>';
+  
+  h += '</div>'; // 杀合卡片结束
+  
+  // ========== 杀波融合 ==========
+  h += '<div style="background:linear-gradient(135deg,#43cea2,#185a9d);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🌈 杀波融合</div>';
+  
+  const boFormulas = [
+    {name: 'bo3new·P0合×2+P5尾', fn: i => {const d=dA(i-1);return ((d[0]//10+d[0]%10)*2 + d[5]%10 + 1) % 3;}},
+    {name: 'bo4new·跨期P2头+P4波×2', fn: i => {if(i<2)return -1;const d1=dA(i-1);const d2=dA(i-2);return (d1[2]//10 + bose(d2[4])*2) % 3;}},
+  ];
+  
+  const boKills = {};
+  boFormulas.forEach(f => { const k=f.fn(curN); if(k>=0) boKills[f.name] = k; });
+  
+  const boCounts = {};
+  Object.values(boKills).forEach(k => { boCounts[k] = (boCounts[k]||0)+1; });
+  
+  const boDouble = [];
+  Object.entries(boCounts).forEach(([z, cnt]) => {
+    z = parseInt(z);
+    if (cnt >= 2) boDouble.push(z);
+  });
+  
+  const boNames = ['红波','蓝波','绿波'];
+  const boAllKilled = [...new Set(Object.values(boKills))].sort((a,b)=>a-b);
+  const boRemain = [];
+  for (let z = 0; z < 3; z++) if (!boAllKilled.includes(z)) boRemain.push(z);
+  
+  // 历史回测
+  let boDblCnt=0, boDblHit=0, boUnionHit=0;
+  for (let i = 2; i < N; i++) {
+    const t = bose(tema(i));
+    const kMap = {};
+    boFormulas.forEach(f => { const k=f.fn(i); if(k>=0)kMap[f.name]=k; });
+    const kc = {};
+    Object.values(kMap).forEach(k => { kc[k]=(kc[k]||0)+1; });
+    Object.entries(kc).forEach(([z,cnt]) => {
+      z=parseInt(z);
+      if(cnt>=2){boDblCnt++; if(z!==t)boDblHit++;}
+    });
+    if(!Object.values(kMap).includes(t)) boUnionHit++;
+  }
+  
+  h += '<div style="background:rgba(255,165,2,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if(boDouble.length>0) h += '<div style="font-size:18px;margin-top:4px">杀波：<b>'+boDouble.map(z=>boNames[z]).join('、')+'</b></div>';
+  else h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">本期无触发</div>';
+  h += '<div style="font-size:12px;opacity:0.8;margin-top:4px">历史'+boDblCnt+'期 胜率'+(boDblCnt>0?(boDblHit/boDblCnt*100).toFixed(1):'0')+'%</div>';
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;margin-top:4px">历史并集命中率：<b>'+(boUnionHit/(N-2)*100).toFixed(1)+'%</b></div>';
+  h += '<div style="margin-top:6px;font-size:14px">杀波<b style="color:#ffd700">'+boAllKilled.length+'</b>个：'+boAllKilled.map(z=>boNames[z]).join('、')+'</div>';
+  h += '<div style="margin-top:4px;font-size:14px">剩<b style="color:#90EE90">'+boRemain.length+'</b>个：'+boRemain.map(z=>boNames[z]).join('、')+'</div>';
+  h += '</div>';
+  
+  h += '</div>'; // 杀波卡片结束
+  
+  container.innerHTML = h;
+}
 function renderHome(){
   if(TYPE==='x2'||TYPE==='x3'||TYPE==='x4'||TYPE==='x5'){renderXiaoN(false);return;}
   if(TYPE==='fusion'){renderFusion();return;}
@@ -2109,6 +2365,7 @@ function switchView(v){
   if(v==='trend')renderTrend();
   if(v==='tm')renderTM();
   if(v==='sm')renderSM();
+  if(v==='fusion')renderFusionPage();
 }
 function go(v){
   if(v===viewStack[viewStack.length-1]){switchView(v);return;}
