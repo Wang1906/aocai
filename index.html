@@ -1959,25 +1959,100 @@ function renderFusionPage(){
   if(!container) return;
   let h = '';
   
+  // 生肖名称
+  const T = ['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+  
+  // 下一期是 N 期
+  const curN = N;
+  
+  // 计算4个杀肖公式分别杀哪个生肖
+  function killMy3(i) {
+    const d = dA(i-1);
+    const p5he = Math.floor(d[5]/10) + d[5]%10;
+    const p2t = Math.floor(d[2]/10);
+    return (p5he + p2t + 10) % 12;
+  }
+  function killMy4(i) {
+    const d = dA(i-1);
+    const p3bo = bose(d[3]);
+    const tw = d[6] % 10;
+    const p2t = Math.floor(d[2]/10);
+    return (p3bo + tw + p2t + 3) % 12;
+  }
+  function killMy5(i) {
+    const d = dA(i-1);
+    const p2bo = bose(d[2]);
+    const p5t = Math.floor(d[5]/10);
+    return (p2bo * 3 + p5t + 1) % 12;
+  }
+  function killMy6(i) {
+    if(i < 2) return -1;
+    const d1 = dA(i-1);
+    const d2 = dA(i-2);
+    const p0bo = bose(d1[0]);
+    const p3t = Math.floor(d2[3]/10);
+    return (p0bo + p3t + 7) % 12;
+  }
+  
+  // 当期计算
+  const kills = [killMy3(curN), killMy4(curN), killMy5(curN), killMy6(curN)];
+  
+  // 统计每个生肖被几个公式杀
+  const killCount = {};
+  kills.forEach(k => {
+    if(k >= 0) killCount[k] = (killCount[k] || 0) + 1;
+  });
+  
+  // 分类
+  const tripleKill = []; // 3个或以上公式杀
+  const doubleKill = []; // 正好2个公式杀
+  const singleKill = []; // 正好1个公式杀
+  const remainXiao = []; // 没被任何公式杀
+  
+  for(let z = 0; z < 12; z++) {
+    const cnt = killCount[z] || 0;
+    if(cnt >= 3) tripleKill.push(z);
+    else if(cnt === 2) doubleKill.push(z);
+    else if(cnt === 1) singleKill.push(z);
+    else remainXiao.push(z);
+  }
+  
+  const allKilled = [...tripleKill, ...doubleKill, ...singleKill];
+  
+  // 标题
   h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
   h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合</div>';
   h += '<div style="font-size:14px">基于4个97%+胜率杀肖公式的交集并集分析</div>';
   h += '</div>';
   
-  h += '<div style="background:#ff4757;color:#fff;padding:15px;border-radius:10px;margin-bottom:10px;text-align:center">';
+  // 三公式交集
+  h += '<div style="background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;padding:15px;border-radius:10px;margin-bottom:10px">';
   h += '<div style="font-size:16px;font-weight:bold">🔥 三公式交集·神级必杀</div>';
-  h += '<div style="font-size:14px;margin-top:8px;opacity:0.9">历史胜率 100%（触发率1-2%）</div>';
+  if(tripleKill.length > 0) {
+    h += '<div style="font-size:24px;margin-top:8px;font-weight:bold">杀：' + tripleKill.map(z => T[z]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:15px;margin-top:8px;opacity:0.9">本期无触发</div>';
+  }
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史胜率 100%（触发率1-2%）</div>';
   h += '</div>';
   
-  h += '<div style="background:#ffa502;color:#fff;padding:15px;border-radius:10px;margin-bottom:10px;text-align:center">';
+  // 两公式交集
+  h += '<div style="background:linear-gradient(135deg,#ffa502,#ff6348);color:#fff;padding:15px;border-radius:10px;margin-bottom:10px">';
   h += '<div style="font-size:16px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
-  h += '<div style="font-size:14px;margin-top:8px;opacity:0.9">历史胜率 98-100%（触发率8-16%）</div>';
+  if(doubleKill.length > 0) {
+    h += '<div style="font-size:22px;margin-top:8px;font-weight:bold">杀：' + doubleKill.map(z => T[z]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:15px;margin-top:8px;opacity:0.9">本期无触发</div>';
+  }
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史胜率 98-100%（触发率8-16%）</div>';
   h += '</div>';
   
-  h += '<div style="background:#667eea;color:#fff;padding:15px;border-radius:10px;text-align:center">';
-  h += '<div style="font-size:16px;font-weight:bold">📊 并集筛选（4公式全杀）</div>';
-  h += '<div style="font-size:14px;margin-top:8px;opacity:0.95">平均每期杀3.4个生肖，剩余8.6个</div>';
-  h += '<div style="font-size:14px;margin-top:4px;opacity:0.95">特肖命中率 90.2%</div>';
+  // 并集筛选
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px">';
+  h += '<div style="font-size:16px;font-weight:bold;margin-bottom:10px">📊 并集筛选（4公式全杀）</div>';
+  h += '<div style="font-size:15px">共杀 <b style="color:#ffd700;font-size:18px">' + allKilled.length + '</b> 个：<b style="font-size:16px">' + allKilled.map(z => T[z]).join('、') + '</b></div>';
+  h += '<div style="font-size:15px;margin-top:8px">剩余 <b style="color:#90EE90;font-size:18px">' + remainXiao.length + '</b> 个：<b style="font-size:16px">' + remainXiao.map(z => T[z]).join('、') + '</b></div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:8px">历史并集命中率 90.2%（特肖在剩余生肖中）</div>';
   h += '</div>';
   
   container.innerHTML = h;
