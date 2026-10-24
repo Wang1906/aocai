@@ -2262,31 +2262,75 @@ function renderFusionPage(){
   
   h += '</div>';
   
-  // ===== 综合并集：杀后剩下的号码 =====
-  const remainNums = [];
-  for(let n = 1; n <= 49; n++) {
-    const z = zod(n);
-    const w = n % 10;
-    const he = Math.floor(n/10) + n%10;
-    const t = Math.floor(n/10);
-    const h = hbOf(n);
-    
-    const killed = allKilled.includes(z) || 
-                   weiAllKilled.includes(w) || 
-                   heAllKilled.includes(he) || 
-                   touAllKilled.includes(t) ||
-                   hbAllKilled.includes(h);
-    
-    if(!killed) remainNums.push(n);
+  // ===== 综合并集：分层杀后剩余号码 =====
+  function calcRemain(useXiao, useWei, useHe, useTou, useHb) {
+    const nums = [];
+    for(let n = 1; n <= 49; n++) {
+      const z = zod(n);
+      const w = n % 10;
+      const he = Math.floor(n/10) + n%10;
+      const t = Math.floor(n/10);
+      const h = hbOf(n);
+      
+      let killed = false;
+      if(useXiao && allKilled.includes(z)) killed = true;
+      if(useWei && weiAllKilled.includes(w)) killed = true;
+      if(useHe && heAllKilled.includes(he)) killed = true;
+      if(useTou && touAllKilled.includes(t)) killed = true;
+      if(useHb && hbAllKilled.includes(h)) killed = true;
+      
+      if(!killed) nums.push(String(n).padStart(2,'0'));
+    }
+    return nums;
   }
   
-  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">';
-  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🎯 综合并集杀后剩余号码</div>';
-  h += '<div style="font-size:14px;opacity:0.9;margin-bottom:10px">融合杀肖、杀尾、杀合、杀头、杀半波所有并集结果</div>';
+  const step1 = calcRemain(true, false, false, false, false);
+  const step2 = calcRemain(true, true, false, false, false);
+  const step3 = calcRemain(true, true, true, false, false);
+  const step4 = calcRemain(true, true, true, true, false);
+  const step5 = calcRemain(true, true, true, true, true);
   
-  h += '<div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">';
-  h += '<div style="font-size:15px;margin-bottom:8px">共剩余 <b style="color:#90EE90;font-size:20px">' + remainNums.length + '</b> 个号码：</div>';
-  h += '<div style="font-size:16px;line-height:1.8;font-weight:bold">' + remainNums.map(n => String(n).padStart(2,'0')).join('-') + '</div>';
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🎯 综合并集分层杀后剩余号码</div>';
+  
+  // 第1步：只杀肖
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold;margin-bottom:6px">① 仅杀肖（剩' + step1.length + '个）';
+  h += '<button onclick="copyText(\'' + step1.join('-') + '\')" style="float:right;background:#ffd700;color:#333;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">复制</button>';
+  h += '</div>';
+  h += '<div style="font-size:14px;line-height:1.6">' + step1.join('-') + '</div>';
+  h += '</div>';
+  
+  // 第2步：杀肖+杀尾
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold;margin-bottom:6px">② 杀肖+杀尾（剩' + step2.length + '个）';
+  h += '<button onclick="copyText(\'' + step2.join('-') + '\')" style="float:right;background:#ffd700;color:#333;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">复制</button>';
+  h += '</div>';
+  h += '<div style="font-size:14px;line-height:1.6">' + step2.join('-') + '</div>';
+  h += '</div>';
+  
+  // 第3步：杀肖+杀尾+杀合
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold;margin-bottom:6px">③ 杀肖+杀尾+杀合（剩' + step3.length + '个）';
+  h += '<button onclick="copyText(\'' + step3.join('-') + '\')" style="float:right;background:#ffd700;color:#333;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">复制</button>';
+  h += '</div>';
+  h += '<div style="font-size:14px;line-height:1.6">' + step3.join('-') + '</div>';
+  h += '</div>';
+  
+  // 第4步：杀肖+杀尾+杀合+杀头
+  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold;margin-bottom:6px">④ 杀肖+杀尾+杀合+杀头（剩' + step4.length + '个）';
+  h += '<button onclick="copyText(\'' + step4.join('-') + '\')" style="float:right;background:#ffd700;color:#333;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">复制</button>';
+  h += '</div>';
+  h += '<div style="font-size:14px;line-height:1.6">' + step4.join('-') + '</div>';
+  h += '</div>';
+  
+  // 第5步：全部杀完
+  h += '<div style="background:rgba(255,215,0,.2);padding:12px;border-radius:8px;border:1px solid #ffd700">';
+  h += '<div style="font-size:15px;font-weight:bold;margin-bottom:6px;color:#ffd700">⑤ 全部杀完（最终剩' + step5.length + '个）';
+  h += '<button onclick="copyText(\'' + step5.join('-') + '\')" style="float:right;background:#ffd700;color:#333;border:none;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px;font-weight:bold">复制</button>';
+  h += '</div>';
+  h += '<div style="font-size:16px;line-height:1.6;font-weight:bold">' + step5.join('-') + '</div>';
   h += '</div>';
   
   h += '</div>';
