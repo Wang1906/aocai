@@ -264,6 +264,7 @@ h2{font-size:15px;margin-bottom:8px}
     <div class="chip" data-t="x3">杀三肖</div>
     <div class="chip" data-t="x4">杀四肖</div>
     <div class="chip" data-t="x5">杀五肖</div>
+    <div class="chip" data-t="fusion" style="background:linear-gradient(135deg,#ff4757,#ffa502);color:#fff">交集并集杀</div>
     <div class="chip" data-t="tou">杀头</div>
     <div class="chip" data-t="wei">杀尾</div>
     <div class="chip" data-t="hb">杀半波</div>
@@ -1670,8 +1671,159 @@ function renderXiaoN(lib){
   const _m=document.getElementById(lib?'libMore':'homeMore');
   if(_m)_m.style.display='none';
 }
+
+// ===== 融合必杀页面 =====
+function renderFusion(){
+  const listId='homeList';
+  
+  // 4个杀肖公式
+  function killXiaoMy3(i) {
+    const d = dA(i-1);
+    const p5he = Math.floor(d[5]/10) + d[5]%10;
+    const p2t = Math.floor(d[2]/10);
+    return (p5he + p2t + 10) % 12;
+  }
+  function killXiaoMy4(i) {
+    const d = dA(i-1);
+    const p3bo = bose(d[3]);
+    const tw = d[6] % 10;
+    const p2t = Math.floor(d[2]/10);
+    return (p3bo + tw + p2t + 3) % 12;
+  }
+  function killXiaoMy5(i) {
+    const d = dA(i-1);
+    const p2bo = bose(d[2]);
+    const p5t = Math.floor(d[5]/10);
+    return (p2bo * 3 + p5t + 1) % 12;
+  }
+  function killXiaoMy6(i) {
+    if (i < 2) return -1;
+    const d1 = dA(i-1);
+    const d2 = dA(i-2);
+    const p0bo = bose(d1[0]);
+    const p3t = Math.floor(d2[3]/10);
+    return (p0bo + p3t + 7) % 12;
+  }
+  
+  const formulas = [
+    {name: 'my3·P5合+P2头', fn: killXiaoMy3, rate: '97.6%'},
+    {name: 'my4·P3波+特尾+P2头', fn: killXiaoMy4, rate: '97.3%'},
+    {name: 'my5·P2波×3+P5头', fn: killXiaoMy5, rate: '97.0%'},
+    {name: 'my6·跨期P0波+P3头', fn: killXiaoMy6, rate: '97.6%'},
+  ];
+  
+  // 当期计算
+  const curN = N - 1;
+  const kills = {};
+  formulas.forEach(f => {
+    const k = f.fn(curN);
+    if (k >= 0) kills[f.name] = k;
+  });
+  
+  // 统计交集
+  const killCounts = {};
+  Object.values(kills).forEach(k => {
+    killCounts[k] = (killCounts[k] || 0) + 1;
+  });
+  
+  const tripleKill = [];
+  const doubleKill = [];
+  Object.entries(killCounts).forEach(([z, cnt]) => {
+    z = parseInt(z);
+    if (cnt >= 3) tripleKill.push(z);
+    else if (cnt === 2) doubleKill.push(z);
+  });
+  
+  const allKilled = [...new Set(Object.values(kills))].sort((a,b)=>a-b);
+  const remainZodiac = [];
+  for (let z = 0; z < 12; z++) {
+    if (!allKilled.includes(z)) remainZodiac.push(z);
+  }
+  
+  // 历史回测统计
+  let tripleCount = 0, tripleHit = 0;
+  let doubleCount = 0, doubleHit = 0;
+  let unionHit = 0;
+  for (let i = 2; i < N; i++) {
+    const t = zodIdx(tema(i));
+    const kMap = {};
+    formulas.forEach(f => {
+      const k = f.fn(i);
+      if (k >= 0) kMap[f.name] = k;
+    });
+    
+    const kc = {};
+    Object.values(kMap).forEach(k => { kc[k] = (kc[k]||0)+1; });
+    
+    Object.entries(kc).forEach(([z, cnt]) => {
+      z = parseInt(z);
+      if (cnt >= 3) { tripleCount++; if (z !== t) tripleHit++; }
+      else if (cnt === 2) { doubleCount++; if (z !== t) doubleHit++; }
+    });
+    
+    // 并集
+    const killed = Object.values(kMap);
+    if (!killed.includes(t)) unionHit++;
+  }
+  
+  let h = '';
+  
+  // 标题卡片
+  h += '<div class="combo-card" style="border:2px solid #ff4757">';
+  h += '<div class="combo-t" style="color:#ff4757">🔥 多公式融合·杀肖必杀系统</div>';
+  h += '<div class="combo-rate">基于4个97%+胜率杀肖公式的交集并集融合</div>';
+  h += '</div>';
+  
+  // 三公式交集
+  h += '<div style="background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;padding:15px;border-radius:10px;margin-top:12px;text-align:center">';
+  h += '<div style="font-size:18px;font-weight:bold">🔥 三公式交集·神级必杀</div>';
+  if (tripleKill.length > 0) {
+    h += '<div style="font-size:28px;margin-top:8px;font-weight:bold">杀：' + tripleKill.map(z => T[z]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:16px;margin-top:8px;opacity:0.9">本期无触发</div>';
+  }
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史 ' + tripleCount + ' 期，胜率 ' + (tripleCount>0 ? (tripleHit/tripleCount*100).toFixed(1) : '0') + '%</div>';
+  h += '</div>';
+  
+  // 两公式交集
+  h += '<div style="background:linear-gradient(135deg,#ffa502,#ff6348);color:#fff;padding:15px;border-radius:10px;margin-top:12px;text-align:center">';
+  h += '<div style="font-size:16px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if (doubleKill.length > 0) {
+    h += '<div style="font-size:22px;margin-top:8px;font-weight:bold">杀：' + doubleKill.map(z => T[z]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:15px;margin-top:8px;opacity:0.9">本期无触发</div>';
+  }
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史 ' + doubleCount + ' 期，胜率 ' + (doubleCount>0 ? (doubleHit/doubleCount*100).toFixed(1) : '0') + '%</div>';
+  h += '</div>';
+  
+  // 并集筛选
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:12px">';
+  h += '<div style="font-size:16px;font-weight:bold;margin-bottom:10px">📊 并集筛选（4公式全杀）</div>';
+  h += '<div style="font-size:14px;opacity:0.95">历史并集命中率：<b>' + (unionHit/(N-2)*100).toFixed(1) + '%</b>（特肖在剩余生肖中）</div>';
+  h += '<div style="margin-top:10px;font-size:15px">本期杀 <b style="color:#ffd700;font-size:18px">' + allKilled.length + '</b> 个生肖：<b style="font-size:16px">' + allKilled.map(z => T[z]).join('、') + '</b></div>';
+  h += '<div style="margin-top:8px;font-size:15px">剩余 <b style="color:#90EE90;font-size:18px">' + remainZodiac.length + '</b> 个生肖：<b style="font-size:16px">' + remainZodiac.map(z => T[z]).join('、') + '</b></div>';
+  h += '</div>';
+  
+  // 各公式明细
+  h += '<div class="combo-card" style="margin-top:12px">';
+  h += '<div class="combo-t">各公式明细</div>';
+  formulas.forEach((f, ix) => {
+    const k = kills[f.name];
+    h += '<div class="frow">';
+    h += '<div class="fname"><div class="n">' + (ix+1) + '. ' + f.name + '</div>';
+    h += '<div class="d">胜率 ' + f.rate + '</div></div>';
+    h += '<div class="fpred"><div class="v">' + (k>=0 ? T[k] : '--') + '</div></div>';
+    h += '</div>';
+  });
+  h += '</div>';
+  
+  document.getElementById(listId).innerHTML = h;
+  const _m=document.getElementById('homeMore');
+  if(_m)_m.style.display='none';
+}
 function renderHome(){
   if(TYPE==='x2'||TYPE==='x3'||TYPE==='x4'||TYPE==='x5'){renderXiaoN(false);return;}
+  if(TYPE==='fusion'){renderFusion();return;}
   const t=TYPE;
   const pk=SORT==='rate'?'A':'B';
   renderLastDraw();
