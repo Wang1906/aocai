@@ -2364,7 +2364,7 @@ function switchView(v){
   if(v==='trend')renderTrend();
   if(v==='tm')renderTM();
   if(v==='sm')renderSM();
-  if(v==='fusion')renderFusionPage();
+  if(v==='fusion'){console.log('fusion page');}
 }
 function go(v){
   if(v===viewStack[viewStack.length-1]){switchView(v);return;}
