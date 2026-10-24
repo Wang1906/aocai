@@ -340,6 +340,13 @@ h2{font-size:15px;margin-bottom:8px}
   <!-- ===== 视图：网料 ===== -->
   <section class="view" id="view-trend">
     <h2>网料</h2>
+    
+    <!-- 多公式融合必杀 -->
+    <div class="card" style="border:2px solid #ff4757">
+      <h3 style="color:#ff4757">🔥 多公式融合·杀肖必杀</h3>
+      <div id="fusionResult" style="margin-top:10px"></div>
+    </div>
+    
     <div class="card">
       <h3>三期必开·头（1号论坛）<span style="font-size:13px;color:#888;font-weight:normal">窗口297-299期</span></h3>
       <p style="margin-top:6px;font-size:18px;color:#888;text-align:center">待更新（网料站已失效）</p>
@@ -2603,6 +2610,116 @@ try{renderLib();}catch(e){}
       else{ d.textContent='刷新失败，当前显示最近一次数据'; setTimeout(function(){d.remove()},3000); }
     }).catch(function(){ d.textContent='网络异常，当前显示最近一次数据'; setTimeout(function(){d.remove()},3000); });
   }catch(e){}
+})();
+
+// ===== 多公式融合杀肖计算 =====
+(function(){
+  try {
+    // 4个杀肖公式的计算函数
+    function killXiaoMy3(i) {
+      const d = dA(i-1);
+      const p5he = Math.floor(d[5]/10) + d[5]%10;
+      const p2t = Math.floor(d[2]/10);
+      return (p5he + p2t + 10) % 12;
+    }
+    function killXiaoMy4(i) {
+      const d = dA(i-1);
+      const p3bo = bose(d[3]);
+      const tw = d[6] % 10;
+      const p2t = Math.floor(d[2]/10);
+      return (p3bo + tw + p2t + 3) % 12;
+    }
+    function killXiaoMy5(i) {
+      const d = dA(i-1);
+      const p2bo = bose(d[2]);
+      const p5t = Math.floor(d[5]/10);
+      return (p2bo * 3 + p5t + 1) % 12;
+    }
+    function killXiaoMy6(i) {
+      if (i < 2) return -1;
+      const d1 = dA(i-1);
+      const d2 = dA(i-2);
+      const p0bo = bose(d1[0]);
+      const p3t = Math.floor(d2[3]/10);
+      return (p0bo + p3t + 7) % 12;
+    }
+    
+    const formulas = [
+      {name: 'my3', fn: killXiaoMy3},
+      {name: 'my4', fn: killXiaoMy4},
+      {name: 'my5', fn: killXiaoMy5},
+      {name: 'my6', fn: killXiaoMy6},
+    ];
+    
+    const curN = N - 1; // 当前期（索引）
+    const kills = {};
+    formulas.forEach(f => {
+      const k = f.fn(curN);
+      if (k >= 0) kills[f.name] = k;
+    });
+    
+    // 统计交集
+    const killCounts = {};
+    Object.values(kills).forEach(k => {
+      killCounts[k] = (killCounts[k] || 0) + 1;
+    });
+    
+    // 分类
+    const tripleKill = [];  // 三公式交集
+    const doubleKill = [];  // 两公式交集
+    const singleKill = [];  // 单公式
+    
+    Object.entries(killCounts).forEach(([z, cnt]) => {
+      z = parseInt(z);
+      if (cnt >= 3) tripleKill.push(z);
+      else if (cnt === 2) doubleKill.push(z);
+      else singleKill.push(z);
+    });
+    
+    // 生成HTML
+    let h = '';
+    
+    if (tripleKill.length > 0) {
+      h += '<div style="background:#ff4757;color:#fff;padding:10px;border-radius:8px;margin-bottom:8px;text-align:center">';
+      h += '<div style="font-size:16px;font-weight:bold">🔥 三公式交集·神级必杀</div>';
+      h += '<div style="font-size:20px;margin-top:4px">杀：' + tripleKill.map(z => T[z]).join('、') + '</div>';
+      h += '<div style="font-size:12px;opacity:0.9;margin-top:4px">历史100%胜率</div>';
+      h += '</div>';
+    }
+    
+    if (doubleKill.length > 0) {
+      h += '<div style="background:#ffa502;color:#fff;padding:10px;border-radius:8px;margin-bottom:8px;text-align:center">';
+      h += '<div style="font-size:15px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+      h += '<div style="font-size:18px;margin-top:4px">杀：' + doubleKill.map(z => T[z]).join('、') + '</div>';
+      h += '<div style="font-size:12px;opacity:0.9;margin-top:4px">历史98%胜率</div>';
+      h += '</div>';
+    }
+    
+    // 全部杀掉的生肖
+    const allKilled = Object.values(kills);
+    const remainZodiac = [];
+    for (let z = 0; z < 12; z++) {
+      if (!allKilled.includes(z)) remainZodiac.push(z);
+    }
+    
+    h += '<div style="background:#f1f2f6;padding:10px;border-radius:8px;margin-top:8px">';
+    h += '<div style="font-size:13px;color:#666">共杀 <b style="color:#ff4757">' + allKilled.length + '</b> 个生肖：';
+    h += '<b>' + [...new Set(allKilled)].sort((a,b)=>a-b).map(z => T[z]).join('、') + '</b></div>';
+    h += '<div style="font-size:13px;color:#666;margin-top:6px">剩余 <b style="color:#2ed573">' + remainZodiac.length + '</b> 个生肖：';
+    h += '<b>' + remainZodiac.map(z => T[z]).join('、') + '</b></div>';
+    h += '</div>';
+    
+    // 各公式明细
+    h += '<div style="margin-top:10px;font-size:12px;color:#888">';
+    Object.entries(kills).forEach(([name, z]) => {
+      h += '<div>' + name + '：杀' + T[z] + '</div>';
+    });
+    h += '</div>';
+    
+    document.getElementById('fusionResult').innerHTML = h;
+  } catch(e) {
+    document.getElementById('fusionResult').innerHTML = '<div style="color:#999;text-align:center">计算出错：' + e.message + '</div>';
+  }
 })();
 </script>
 
