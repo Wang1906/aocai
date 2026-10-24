@@ -2288,7 +2288,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">';
   h += '<div style="font-size:15px;margin-bottom:8px">共剩余 <b style="color:#90EE90;font-size:20px">' + remainNums.length + '</b> 个号码：</div>';
-  h += '<div style="font-size:16px;line-height:1.8;font-weight:bold">' + remainNums.map(n => String(n).padStart(2,'0')).join('、') + '</div>';
+  h += '<div style="font-size:16px;line-height:1.8;font-weight:bold">' + remainNums.map(n => String(n).padStart(2,'0')).join('-') + '</div>';
   h += '</div>';
   
   h += '</div>';
