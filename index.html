@@ -2077,38 +2077,6 @@ function renderFusionPage(){
   }
   const heAllKilled = [...heDouble, ...heSingle];
   
-  // ===== 杀波融合（整波：红/蓝/绿） =====
-  function killBoBo3(i) {
-    const d = dA(i-1);
-    const p0he = Math.floor(d[0]/10) + d[0]%10;
-    const p5w = d[5] % 10;
-    return (p0he * 2 + p5w + 1) % 3;
-  }
-  function killBoBo4(i) {
-    if(i < 2) return -1;
-    const d1 = dA(i-1);
-    const d2 = dA(i-2);
-    const p2t = Math.floor(d1[2]/10);
-    const p4bo = bose(d2[4]);
-    return (p2t + p4bo * 2) % 3;
-  }
-  
-  const boNames = ['红波', '蓝波', '绿波'];
-  const boKills = [killBoBo3(curN), killBoBo4(curN)];
-  const boCount = {};
-  boKills.forEach(k => { if(k >= 0) boCount[k] = (boCount[k] || 0) + 1; });
-  
-  const boDouble = [];
-  const boSingle = [];
-  const boRemain = [];
-  for(let b = 0; b < 3; b++) {
-    const cnt = boCount[b] || 0;
-    if(cnt >= 2) boDouble.push(b);
-    else if(cnt === 1) boSingle.push(b);
-    else boRemain.push(b);
-  }
-  const boAllKilled = [...boDouble, ...boSingle];
-  
   // ===== 杀头融合 =====
   function killTouT1(i) {
     const d = dA(i-1);
@@ -2245,27 +2213,6 @@ function renderFusionPage(){
   
   h += '</div>';
   
-  // ===== 杀波融合（整波） =====
-  h += '<div style="background:linear-gradient(135deg,#43cea2,#185a9d);color:#fff;padding:15px;border-radius:10px;margin-top:15px">';
-  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🌈 杀波融合（整波）</div>';
-  
-  h += '<div style="background:rgba(255,165,2,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
-  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
-  if(boDouble.length > 0) {
-    h += '<div style="font-size:20px;margin-top:6px;font-weight:bold">杀波：' + boDouble.map(b => boNames[b]).join('、') + '</div>';
-  } else {
-    h += '<div style="font-size:14px;margin-top:6px;opacity:0.9">本期无触发</div>';
-  }
-  h += '</div>';
-  
-  h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
-  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
-  h += '<div style="font-size:15px;margin-top:6px">杀波 <b style="color:#ffd700">' + boAllKilled.length + '</b> 个：' + boAllKilled.map(b => boNames[b]).join('、') + '</div>';
-  h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#90EE90">' + boRemain.length + '</b> 个：' + boRemain.map(b => boNames[b]).join('、') + '</div>';
-  h += '</div>';
-  
-  h += '</div>';
-  
   // ===== 杀头融合 =====
   h += '<div style="background:linear-gradient(135deg,#ff9a9e,#fecfef);color:#333;padding:15px;border-radius:10px;margin-top:15px">';
   h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🔢 杀头融合</div>';
@@ -2313,6 +2260,35 @@ function renderFusionPage(){
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（3公式全杀）</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀半波 <b style="color:#d63031">' + hbAllKilled.length + '</b> 个：' + hbAllKilled.map(h => hbNames[h]).join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + hbRemain.length + '</b> 个：' + hbRemain.map(h => hbNames[h]).join('、') + '</div>';
+  h += '</div>';
+  
+  h += '</div>';
+  
+  // ===== 综合并集：杀后剩下的号码 =====
+  const remainNums = [];
+  for(let n = 1; n <= 49; n++) {
+    const z = zod(n);
+    const w = n % 10;
+    const he = Math.floor(n/10) + n%10;
+    const t = Math.floor(n/10);
+    const h = hbOf(n);
+    
+    const killed = allKilled.includes(z) || 
+                   weiAllKilled.includes(w) || 
+                   heAllKilled.includes(he) || 
+                   touAllKilled.includes(t) ||
+                   hbAllKilled.includes(h);
+    
+    if(!killed) remainNums.push(n);
+  }
+  
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🎯 综合并集杀后剩余号码</div>';
+  h += '<div style="font-size:14px;opacity:0.9;margin-bottom:10px">融合杀肖、杀尾、杀合、杀头、杀半波所有并集结果</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">';
+  h += '<div style="font-size:15px;margin-bottom:8px">共剩余 <b style="color:#90EE90;font-size:20px">' + remainNums.length + '</b> 个号码：</div>';
+  h += '<div style="font-size:16px;line-height:1.8;font-weight:bold">' + remainNums.map(n => String(n).padStart(2,'0')).join('、') + '</div>';
   h += '</div>';
   
   h += '</div>';
