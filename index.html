@@ -2149,7 +2149,7 @@ function renderFusionPage(){
     return hbOf(recs[i-1].ns[5]);
   }
   
-  const hbNames = ['半波0', '半波1', '半波2', '半波3', '半波4', '半波5'];
+  const hbNames = ['红单', '红双', '蓝单', '蓝双', '绿单', '绿双'];
   const hbKills = [killHB2(curN), killHB3(curN), killHB4(curN)];
   const hbCount = {};
   hbKills.forEach(k => { hbCount[k] = (hbCount[k] || 0) + 1; });
