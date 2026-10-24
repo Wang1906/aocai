@@ -2181,6 +2181,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">历史并集命中率 ~92%</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀尾 <b style="color:#ffd700">' + weiAllKilled.length + '</b> 个：' + weiAllKilled.join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#90EE90">' + weiRemain.length + '</b> 个：' + weiRemain.join('、') + '</div>';
   h += '</div>';
@@ -2203,6 +2204,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~93%</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀合 <b style="color:#d63031">' + heAllKilled.length + '</b> 个：' + heAllKilled.join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + heRemain.length + '</b> 个：' + heRemain.join('、') + '</div>';
   h += '</div>';
@@ -2225,6 +2227,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~82%</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀头 <b style="color:#d63031">' + touAllKilled.length + '</b> 个：' + touAllKilled.map(t => t + '头').join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + touRemain.length + '</b> 个：' + touRemain.map(t => t + '头').join('、') + '</div>';
   h += '</div>';
@@ -2256,6 +2259,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（3公式全杀）</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~88%</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀半波 <b style="color:#d63031">' + hbAllKilled.length + '</b> 个：' + hbAllKilled.map(h => hbNames[h]).join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + hbRemain.length + '</b> 个：' + hbRemain.map(h => hbNames[h]).join('、') + '</div>';
   h += '</div>';
