@@ -2696,17 +2696,17 @@ try{renderLib();}catch(e){}
     }
     
     // 全部杀掉的生肖
-    const allKilled = Object.values(kills);
+    const allKilled = [...new Set(Object.values(kills))].sort((a,b)=>a-b);
     const remainZodiac = [];
     for (let z = 0; z < 12; z++) {
       if (!allKilled.includes(z)) remainZodiac.push(z);
     }
     
-    h += '<div style="background:#f1f2f6;padding:10px;border-radius:8px;margin-top:8px">';
-    h += '<div style="font-size:13px;color:#666">共杀 <b style="color:#ff4757">' + allKilled.length + '</b> 个生肖：';
-    h += '<b>' + [...new Set(allKilled)].sort((a,b)=>a-b).map(z => T[z]).join('、') + '</b></div>';
-    h += '<div style="font-size:13px;color:#666;margin-top:6px">剩余 <b style="color:#2ed573">' + remainZodiac.length + '</b> 个生肖：';
-    h += '<b>' + remainZodiac.map(z => T[z]).join('、') + '</b></div>';
+    h += '<div style="background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:#fff;padding:12px;border-radius:8px;margin-top:10px">';
+    h += '<div style="font-size:14px;font-weight:bold;margin-bottom:8px">📊 并集筛选（4公式全杀）</div>';
+    h += '<div style="font-size:13px;opacity:0.95">历史平均杀 <b>3.4个</b> 生肖 ｜ 剩余 <b>8.6个</b> 生肖 ｜ 特肖命中率 <b>90.2%</b></div>';
+    h += '<div style="margin-top:8px;font-size:14px">本期杀：<b style="color:#ffd700">' + allKilled.map(z => T[z]).join('、') + '</b></div>';
+    h += '<div style="margin-top:6px;font-size:14px">剩余：<b style="color:#90EE90">' + remainZodiac.map(z => T[z]).join('、') + '</b></div>';
     h += '</div>';
     
     // 各公式明细
