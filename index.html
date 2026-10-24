@@ -2138,6 +2138,35 @@ function renderFusionPage(){
   }
   const touAllKilled = [...touDouble, ...touSingle];
   
+  // ===== 杀半波融合 =====
+  function killHB2(i) {
+    return (hbOf(tema(i-1)) + 1) % 6;
+  }
+  function killHB3(i) {
+    return hbOf(recs[i-1].ns[0]);
+  }
+  function killHB4(i) {
+    return hbOf(recs[i-1].ns[5]);
+  }
+  
+  const hbNames = ['半波0', '半波1', '半波2', '半波3', '半波4', '半波5'];
+  const hbKills = [killHB2(curN), killHB3(curN), killHB4(curN)];
+  const hbCount = {};
+  hbKills.forEach(k => { hbCount[k] = (hbCount[k] || 0) + 1; });
+  
+  const hbTriple = [];
+  const hbDouble = [];
+  const hbSingle = [];
+  const hbRemain = [];
+  for(let h = 0; h < 6; h++) {
+    const cnt = hbCount[h] || 0;
+    if(cnt >= 3) hbTriple.push(h);
+    else if(cnt === 2) hbDouble.push(h);
+    else if(cnt === 1) hbSingle.push(h);
+    else hbRemain.push(h);
+  }
+  const hbAllKilled = [...hbTriple, ...hbDouble, ...hbSingle];
+  
   // 标题
   h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
   h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合</div>';
@@ -2254,6 +2283,36 @@ function renderFusionPage(){
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀头 <b style="color:#d63031">' + touAllKilled.length + '</b> 个：' + touAllKilled.map(t => t + '头').join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + touRemain.length + '</b> 个：' + touRemain.map(t => t + '头').join('、') + '</div>';
+  h += '</div>';
+  
+  h += '</div>';
+  
+  // ===== 杀半波融合 =====
+  h += '<div style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);color:#333;padding:15px;border-radius:10px;margin-top:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🌊 杀半波融合</div>';
+  
+  h += '<div style="background:rgba(255,71,87,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">🔥 三公式交集·高胜率必杀</div>';
+  if(hbTriple.length > 0) {
+    h += '<div style="font-size:20px;margin-top:6px;font-weight:bold">杀：' + hbTriple.map(h => hbNames[h]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:14px;margin-top:6px;opacity:0.9">本期无触发</div>';
+  }
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,165,2,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  if(hbDouble.length > 0) {
+    h += '<div style="font-size:18px;margin-top:6px;font-weight:bold">杀：' + hbDouble.map(h => hbNames[h]).join('、') + '</div>';
+  } else {
+    h += '<div style="font-size:14px;margin-top:6px;opacity:0.9">本期无触发</div>';
+  }
+  h += '</div>';
+  
+  h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
+  h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（3公式全杀）</div>';
+  h += '<div style="font-size:15px;margin-top:6px">杀半波 <b style="color:#d63031">' + hbAllKilled.length + '</b> 个：' + hbAllKilled.map(h => hbNames[h]).join('、') + '</div>';
+  h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + hbRemain.length + '</b> 个：' + hbRemain.map(h => hbNames[h]).join('、') + '</div>';
   h += '</div>';
   
   h += '</div>';
