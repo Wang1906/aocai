@@ -1952,6 +1952,37 @@ document.getElementById('tmCopy').addEventListener('click',()=>{
 });
 /* ===== 导航 ===== */
 let viewStack=['home'];
+
+// 并集融合页面
+function renderFusionPage(){
+  const container = document.getElementById('fusionPageContent');
+  if(!container) return;
+  let h = '';
+  
+  h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合</div>';
+  h += '<div style="font-size:14px">基于4个97%+胜率杀肖公式的交集并集分析</div>';
+  h += '</div>';
+  
+  h += '<div style="background:#ff4757;color:#fff;padding:15px;border-radius:10px;margin-bottom:10px;text-align:center">';
+  h += '<div style="font-size:16px;font-weight:bold">🔥 三公式交集·神级必杀</div>';
+  h += '<div style="font-size:14px;margin-top:8px;opacity:0.9">历史胜率 100%（触发率1-2%）</div>';
+  h += '</div>';
+  
+  h += '<div style="background:#ffa502;color:#fff;padding:15px;border-radius:10px;margin-bottom:10px;text-align:center">';
+  h += '<div style="font-size:16px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
+  h += '<div style="font-size:14px;margin-top:8px;opacity:0.9">历史胜率 98-100%（触发率8-16%）</div>';
+  h += '</div>';
+  
+  h += '<div style="background:#667eea;color:#fff;padding:15px;border-radius:10px;text-align:center">';
+  h += '<div style="font-size:16px;font-weight:bold">📊 并集筛选（4公式全杀）</div>';
+  h += '<div style="font-size:14px;margin-top:8px;opacity:0.95">平均每期杀3.4个生肖，剩余8.6个</div>';
+  h += '<div style="font-size:14px;margin-top:4px;opacity:0.95">特肖命中率 90.2%</div>';
+  h += '</div>';
+  
+  container.innerHTML = h;
+}
+
 function switchView(v){
   document.querySelectorAll('.view').forEach(x=>x.classList.remove('on'));
   document.getElementById('view-'+v).classList.add('on');
@@ -1965,7 +1996,7 @@ function switchView(v){
   if(v==='trend')renderTrend();
   if(v==='tm')renderTM();
   if(v==='sm')renderSM();
-  if(v==='fusion'){console.log('fusion page');}
+  if(v==='fusion'){renderFusionPage();}
 }
 function go(v){
   if(v===viewStack[viewStack.length-1]){switchView(v);return;}
