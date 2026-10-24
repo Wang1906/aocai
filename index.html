@@ -1489,24 +1489,20 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 {id:'x9',type:'xiao',name:'前2期特码肖+7',desc:'杀前2期特码生肖后移7位（全历史93.5%）',fn:i=>predZ((zod(tema(i-2))+7)%12)},
 {id:'x10',type:'xiao',name:'上期肖+上期尾',desc:'杀上期特码肖加上期尾数（全历史92.8%）',fn:i=>predZ((zod(tema(i-1))+wei(tema(i-1)))%12)}
 
-// ===== 新结构·高胜率公式（暴力搜索） =====
-,{id:'my2',type:'xiao',name:'新结构·P3波+特尾+P4头',desc:'P3波+特尾+P4头（98.0%）',fn:i=>{const d=dA(i-1);const p3bo=bose(d[3]);const tw=d[6]%10;const p4t=Math.floor(d[4]/10);const s=p3bo+tw+p4t;return predZ([(s%12-1+12)%12]);}}
-,{id:'my3',type:'xiao',name:'新结构·P5合+P2头',desc:'P5合+P2头+10（97.5%）',fn:i=>{const d=dA(i-1);const p5he=Math.floor(d[5]/10)+d[5]%10;const p2t=Math.floor(d[2]/10);return predZ([(p5he+p2t+10)%12]);}}
-,{id:'my4',type:'xiao',name:'新结构·P3波+特尾+P2头',desc:'P3波+特尾+P2头+3（97.2%，近50期96%）',fn:i=>{const d=dA(i-1);const p3bo=bose(d[3]);const tw=d[6]%10;const p2t=Math.floor(d[2]/10);const s=p3bo+tw+p2t+3;return predZ([s%12]);}}
-,{id:'my5',type:'xiao',name:'乘法·P2波×3+P5头',desc:'P2波×3+P5头+1（97.2%，近50期98%）',fn:i=>{const d=dA(i-1);const p2bo=bose(d[2]);const p5t=Math.floor(d[5]/10);return predZ([(p2bo*3+p5t+1)%12]);}}
-,{id:'my6',type:'xiao',name:'跨期·上期P0波+上上期P3头',desc:'上期P0波+上上期P3头+7（97.9%，近50期96%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const p0bo=bose(d1[0]);const p3t=Math.floor(d2[3]/10);return predZ([(p0bo+p3t+7)%12]);}}
-,{id:'w2new',type:'wei',name:'新结构·P5波+特肖',desc:'P5波+特肖+7（96.1%，近50期94%）',fn:i=>{const d=dA(i-1);const p5bo=bose(d[5]);const tx=zod(d[6]);return predW((p5bo+tx+7)%10);}}
-,{id:'w3new',type:'wei',name:'乘法·P2波×3+P1波',desc:'P2波×3+P1波+8（95.8%，近50期96%）',fn:i=>{const d=dA(i-1);const p2bo=bose(d[2]);const p1bo=bose(d[1]);return predW((p2bo*3+p1bo+8)%10);}}
-,{id:'h2new',type:'he',name:'新结构·P5头+P5合',desc:'P5头+P5合+9（96.3%）',fn:i=>{const d=dA(i-1);const p5=d[5];const p5t=Math.floor(p5/10);const p5he=p5t+p5%10;return predHe((p5t+p5he+9)%10);}}
-,{id:'h3new',type:'he',name:'乘法·P3头×3+P1波',desc:'P3头×3+P1波（97.9%，近50期96%）',fn:i=>{const d=dA(i-1);const p3t=Math.floor(d[3]/10);const p1bo=bose(d[1]);return predHe((p3t*3+p1bo)%10);}}
-,{id:'t2new',type:'tou',name:'新结构·P3头+特尾+P2合',desc:'P3头+特尾+P2合+2（88.0%，近50期92%）',fn:i=>{const d=dA(i-1);const p3t=Math.floor(d[3]/10);const tw=d[6]%10;const p2he=Math.floor(d[2]/10)+d[2]%10;return predT(Math.floor((p3t+tw+p2he+2)/10));}}
-,{id:'t3new',type:'tou',name:'乘法·P1合×3+P2波',desc:'P1合×3+P2波+2（88.7%）',fn:i=>{const d=dA(i-1);const p1he=Math.floor(d[1]/10)+d[1]%10;const p2bo=bose(d[2]);return predT(Math.floor((p1he*3+p2bo+2)/10));}}
-,{id:'t4new',type:'tou',name:'跨期·上期特肖×2+上上期P2波',desc:'上期特肖×2+上上期P2波+4（87.6%，近50期96%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const tx=zod(d1[6]);const p2bo=bose(d2[2]);return predT(Math.floor((tx*2+p2bo+4)/10));}}
+// ===== 新结构·高胜率公式（297期验证版） =====
+,{id:'my3',type:'xiao',name:'新结构·P5合+P2头',desc:'P5合+P2头+10（97.6%，近50期94%）',fn:i=>{const d=dA(i-1);const p5he=Math.floor(d[5]/10)+d[5]%10;const p2t=Math.floor(d[2]/10);return predZ([(p5he+p2t+10)%12]);}}
+,{id:'my4',type:'xiao',name:'新结构·P3波+特尾+P2头',desc:'P3波+特尾+P2头+3（97.3%，近50期96%）',fn:i=>{const d=dA(i-1);const p3bo=bose(d[3]);const tw=d[6]%10;const p2t=Math.floor(d[2]/10);const s=p3bo+tw+p2t+3;return predZ([s%12]);}}
+,{id:'my5',type:'xiao',name:'乘法·P2波×3+P5头',desc:'P2波×3+P5头+1（97.0%，近50期96%）',fn:i=>{const d=dA(i-1);const p2bo=bose(d[2]);const p5t=Math.floor(d[5]/10);return predZ([(p2bo*3+p5t+1)%12]);}}
+,{id:'my6',type:'xiao',name:'跨期·上期P0波+上上期P3头',desc:'上期P0波+上上期P3头+7（97.6%，近50期94%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const p0bo=bose(d1[0]);const p3t=Math.floor(d2[3]/10);return predZ([(p0bo+p3t+7)%12]);}}
+,{id:'w2new',type:'wei',name:'新结构·P5波+特肖',desc:'P5波+特肖+7（95.9%，近50期94%）',fn:i=>{const d=dA(i-1);const p5bo=bose(d[5]);const tx=zod(d[6]);return predW((p5bo+tx+7)%10);}}
+,{id:'w3new',type:'wei',name:'乘法·P2波×3+P1波',desc:'P2波×3+P1波+8（94.9%，近50期90%）',fn:i=>{const d=dA(i-1);const p2bo=bose(d[2]);const p1bo=bose(d[1]);return predW((p2bo*3+p1bo+8)%10);}}
+,{id:'h2new',type:'he',name:'新结构·P5头+P5合',desc:'P5头+P5合+9（97.0%，近50期98%）',fn:i=>{const d=dA(i-1);const p5=d[5];const p5t=Math.floor(p5/10);const p5he=p5t+p5%10;return predHe((p5t+p5he+9)%10);}}
+,{id:'h3new',type:'he',name:'乘法·P3头×3+P1波',desc:'P3头×3+P1波（97.3%，近50期92%）',fn:i=>{const d=dA(i-1);const p3t=Math.floor(d[3]/10);const p1bo=bose(d[1]);return predHe((p3t*3+p1bo)%10);}}
+,{id:'t4new',type:'tou',name:'跨期·上期特肖×2+上上期P2波',desc:'上期特肖×2+上上期P2波+4（78.0%，近50期72%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const tx=zod(d1[6]);const p2bo=bose(d2[2]);return predT(Math.floor((tx*2+p2bo+4)/10));}}
 ,{id:'wx3new',type:'HW',name:'新结构·期合+P5波+特尾+P4合',desc:'期合+P5波+特尾+P4合+4（89.8%）',fn:i=>{const d=dA(i-1);const qhe=Math.floor(recs[i-1].issue/100)+Math.floor(recs[i-1].issue/10)%10+recs[i-1].issue%10;const p5bo=bose(d[5]);const tw=d[6]%10;const p4he=Math.floor(d[4]/10)+d[4]%10;return predHW((qhe+p5bo+tw+p4he+4)%5);}}
 ,{id:'wx4new',type:'HW',name:'乘法·P1波×2+P2波',desc:'P1波×2+P2波+3（88.3%，近50期90%）',fn:i=>{const d=dA(i-1);const p1bo=bose(d[1]);const p2bo=bose(d[2]);return predHW((p1bo*2+p2bo+3)%5);}}
-,{id:'bo3new',type:'bo',name:'乘法·P0合×2+P5尾',desc:'P0合×2+P5尾+1（77.4%）',fn:i=>{const d=dA(i-1);const p0he=Math.floor(d[0]/10)+d[0]%10;const p5w=d[5]%10;return predB((p0he*2+p5w+1)%3);}}
-,{id:'bo4new',type:'bo',name:'跨期·上期P2头+上上期P4波×2',desc:'上期P2头+上上期P4波×2（77.0%，近50期88%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const p2t=Math.floor(d1[2]/10);const p4bo=bose(d2[4]);return predB((p2t+p4bo*2)%3);}}
-,{id:'ds3new',type:'ds',name:'乘法·P4合×2+P0波',desc:'P4合×2+P0波+3（84.8%）',fn:i=>{const d=dA(i-1);const p4he=Math.floor(d[4]/10)+d[4]%10;const p0bo=bose(d[0]);const s=p4he*2+p0bo+3;return{kind:'ds',v:s%4,show:['大单','大双','小单','小双'][s%4],hit:t=>dsOf(t)!==(s%4)};}}
+,{id:'bo3new',type:'bo',name:'乘法·P0合×2+P5尾',desc:'P0合×2+P5尾+1（76.4%，近50期72%）',fn:i=>{const d=dA(i-1);const p0he=Math.floor(d[0]/10)+d[0]%10;const p5w=d[5]%10;return predB((p0he*2+p5w+1)%3);}}
+,{id:'bo4new',type:'bo',name:'跨期·上期P2头+上上期P4波×2',desc:'上期P2头+上上期P4波×2（75.7%，近50期74%）',fn:i=>{const d1=dA(i-1);const d2=dA(i-2);const p2t=Math.floor(d1[2]/10);const p4bo=bose(d2[4]);return predB((p2t+p4bo*2)%3);}}
 ];
 
 
