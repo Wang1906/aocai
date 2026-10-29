@@ -317,6 +317,7 @@ h2{font-size:15px;margin-bottom:8px}
     <div class="chip" data-t="bo">杀波</div>
     <div class="chip" data-t="hw">杀行</div>
     <div class="chip" data-t="ds">杀大单大双</div>
+    <div class="chip" data-t="tsd">杀头数单双</div>
     <div class="chip" data-t="duan">杀段</div>
     <div class="chip" data-t="ma">杀码</div>
   </div>
@@ -390,14 +391,6 @@ h2{font-size:15px;margin-bottom:8px}
   <!-- ===== 视图：网料 ===== -->
   <section class="view" id="view-trend">
     <h2>网料</h2>
-    <div class="card" style="margin-top:10px;background:#1a2e1a;border:2px solid #2ecc71">
-      <h3 style="color:#2ecc71">⭐ 97%胜率杀头单双融合（303期）</h3>
-      <div style="margin-top:10px;font-size:16px;line-height:2;text-align:center">
-        <b style="color:#ffd700;font-size:24px">三公式并集共杀15码</b>
-        <p style="margin-top:6px;font-size:18px;color:#ff6b6b">❌ 杀掉：10、12、14、16、18、21、23、25、27、29、31、33、35、37、39</p>
-        <p class="muted" style="margin-top:6px;font-size:12px">3个95%+胜率公式叠加，单期剩余号码准确率99%+</p>
-      </div>
-    </div>
     <div class="card">
       <h3>三期必开·头（1号论坛）<span style="font-size:13px;color:#888;font-weight:normal">窗口284-286期</span></h3>
       <p style="margin-top:6px;font-size:22px;font-weight:800;color:#f80;text-align:center;letter-spacing:4px">1头 · 2头</p>
@@ -475,6 +468,18 @@ h2{font-size:15px;margin-bottom:8px}
       <p class="muted">核心理念：大众认为最可能开出的号码 → 正是庄家最不愿开的号码。</p>
       <div id="revGrid"></div>
       <div id="revToast" style="margin-top:8px;font-size:12px;color:#7f8;min-height:16px"></div>
+    </div>
+  </section>
+  <!-- ===== 视图：并集 ===== -->
+  <section class="view" id="view-union">
+    <h2>并集预测</h2>
+    <div class="card" style="margin-top:10px;background:#1a2e1a;border:2px solid #2ecc71">
+      <h3 style="color:#2ecc71">⭐ 97%胜率杀头单双融合（303期）</h3>
+      <div style="margin-top:10px;font-size:16px;line-height:2;text-align:center">
+        <b style="color:#ffd700;font-size:24px">三公式并集共杀15码</b>
+        <p style="margin-top:6px;font-size:18px;color:#ff6b6b">❌ 杀掉：10、12、14、16、18、21、23、25、27、29、31、33、35、37、39</p>
+        <p class="muted" style="margin-top:6px;font-size:12px">3个95%+胜率公式叠加，单期剩余号码准确率99%+</p>
+      </div>
     </div>
   </section>
   <!-- ===== 视图：关于 ===== -->
@@ -573,6 +578,9 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <div class="nav-item" data-v="vote">
       <svg viewBox="0 0 24 24"><path d="M6 4h12v4H6z"/><path d="M8 4v4M16 4v4"/><path d="M5 10h14v10H5z"/><path d="M9 13h6M9 16h4"/></svg>投票
+    </div>
+    <div class="nav-item active" data-v="union" style="color:#ff4757">
+      <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 16.8l-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg>并集
     </div>
     <div class="nav-item" data-v="hot">
       <svg viewBox="0 0 24 24"><path d="M12 3l1.8 4.6L18 9l-4.2 1.4L12 15l-1.8-4.6L6 9l4.2-1.4z"/><path d="M5 19h14"/></svg>冷热
@@ -2256,7 +2264,7 @@ function renderHot(){
 
 /* ===== 逆向思维预测（来源：外部AI站 ai.php 当期数据，随网料资料一起同步更新 REV_PRED 即可） ===== */
 const REV_PRED={
-  period:'2026302',
+  period:'2026297',
   m30:[45,13,29,43,4,27,33,12,38,3,48,28,36,32,14,10,18,35,41,39,21,15,25,46,7,26,37,49,9,6],
   x6:['兔','猪','猴','虎','蛇','羊'],
   x3:['马','猴','兔'],
