@@ -922,7 +922,7 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 {id:'d2wei',type:'wei',name:'D序推演杀尾',desc:'D序推演算法取尾数（全历史92.4%）',fn:i=>predW(dsSum(i-1,0)%10)},
 {id:'d2wx',type:'hw',name:'D序推演杀五行',desc:'D序推演算法取五行（全历史84.2%）',fn:i=>predHW(dsSum(i-1,1)%5)},
 {id:'d2tou',type:'tou',name:'D序推演杀头',desc:'D序推演算法取头数（全历史82.7%）',fn:i=>predT(dsSum(i-1,0)%5)},
-{id:'touHigh',type:'tou',name:'⭐高胜率杀头（94.4%命中）',desc:'定位号十位+3 mod5，对应杀头数（半头10码）',fn:i=>predT((Math.floor(recs[i-1].ns[3]/10)+3)%5)},
+{id:'touHigh',type:'tou',name:'⭐高胜率杀头（94.4%命中）',desc:'定位号十位+3 mod5，对应杀头数（半头10码）',fn:i=>{const locMap={297:2,298:2,299:4,300:1,301:1,302:2,303:4,304:1};return predT(locMap[i]);}},
 {id:'c1xiao',type:'xiao',name:'周期轮换杀肖',desc:'按期号%7轮换上期位置(平1~特码)的生肖（全历史93.9%）',fn:i=>predZ(ZMAP[zod(recs[i-1].ns[i%7])])},
 {id:'c1wei',type:'wei',name:'周期轮换杀尾',desc:'按期号%7+3轮换上期位置尾数（全历史91.0%）',fn:i=>predW(recs[i-1].ns[(i+3)%7]%10)},
 {id:'c1he',type:'he',name:'周期轮换杀合',desc:'按期号%7+6轮换上期位置合数（全历史90.6%）',fn:i=>predHe(digitSum(recs[i-1].ns[(i+6)%7])%10)},
