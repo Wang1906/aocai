@@ -3179,6 +3179,12 @@ try {
   document.getElementById('curPeriod5').innerText = p;
   document.getElementById('curPeriod6').innerText = p;
   document.getElementById('curPeriod7').innerText = p;
+  const d = dA(p-1);
+  const S = Math.floor(d[4]/10) + Math.floor(d[1]/10) + 1;
+  const tou = S%5;
+  const killShuang = (S%10)>=5;
+  const nums = killShuang ? [tou*10+10, tou*10+12, tou*10+14, tou*10+16, tou*10+18] : [tou*10+11, tou*10+13, tou*10+15, tou*10+17, tou*10+19];
+  document.getElementById('highTsd').innerText = `❌ 杀${tou}头${killShuang?'双':'单'}（${nums.join('、')}）`;
 } catch(e) {}
 </script>
 </body>
