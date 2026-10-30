@@ -345,37 +345,37 @@ h2{font-size:15px;margin-bottom:8px}
       <div style="font-size:18px;font-weight:bold;margin-bottom:10px">⭐ 新高胜率杀号（94%+命中）</div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔢 杀头公式（94.4%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀1头（01-09全杀）</div>
+        <div style="font-size:18px;margin-top:6px" id="trendTou">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（95.9%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀蓝波单</div>
+        <div style="font-size:18px;margin-top:6px" id="trendHb">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🧮 杀头单双（95%+命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀双数头（10-19、30-39）</div>
+        <div style="font-size:18px;margin-top:6px" id="trendTsd">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🐍 杀D序推演一肖（96.4%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀蛇（02、14、26、38全杀）</div>
+        <div style="font-size:18px;margin-top:6px" id="trendZod">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🌳 杀五行（96.6%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀水行（鼠、猪全杀）</div>
+        <div style="font-size:18px;margin-top:6px" id="trendHw">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔢 杀尾公式1（94.1%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾8</div>
+        <div style="font-size:18px;margin-top:6px" id="trendWei1">❌ 加载中</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🔢 杀尾公式2（96%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾4</div>
+        <div style="font-size:18px;margin-top:6px" id="trendWei2">❌ 加载中</div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码</div>
-      <div style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">40-41-42-48</div>
-      <button onclick="copyText('40-41-42-48')" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
+      <div style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700" id="trendRemain">加载中</div>
+      <button id="trendCopyBtn" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
     </div>
   </section>
   <!-- ===== 视图：并集融合 ===== -->
@@ -1766,6 +1766,46 @@ function renderNextPred(){
     +'<div style="font-size:13px;margin-bottom:4px"><b style="color:var(--amber)">近50期投票</b>：'+vote50+'</div>'
     +'<div style="font-size:13px"><b style="color:var(--green)">买</b>：'+buy+'</div>'
     +'</div>';
+  // ===== 同步更新规律页内容，和首页完全联动 =====
+  const touRes = poolPred((POOLS.A['tou']||[])[0],'tou',N).show;
+  const hbRes = poolPred((POOLS.A['hb']||[])[0],'hb',N).show;
+  const hwRes = poolPred((POOLS.A['hw']||[])[0],'hw',N).show;
+  const weiRes = poolPred((POOLS.A['wei']||[])[0],'wei',N).show;
+  const d2Res = poolPred(POOLS.A['xiao'][0],'xiao',N).show;
+  document.getElementById('trendTou').textContent = '❌ '+touRes;
+  document.getElementById('trendHb').textContent = '❌ '+hbRes;
+  document.getElementById('trendTsd').textContent = '❌ 杀双数头（10-19、30-39）';
+  document.getElementById('trendZod').textContent = '❌ 杀'+d2Res;
+  document.getElementById('trendHw').textContent = '❌ '+hwRes;
+  document.getElementById('trendWei1').textContent = '❌ '+weiRes;
+  document.getElementById('trendWei2').textContent = '❌ 杀尾'+(coldW);
+  // 计算全杀后剩余号码
+  const killed = new Set();
+  // 杀头
+  const touNum = parseInt(touRes.replace(/[^0-9]/g,''));
+  for(let n=touNum*10+1;n<=Math.min(touNum*10+9,49);n++) killed.add(n);
+  // 杀半波
+  const hbName = hbRes;
+  if(hbName.includes('蓝单')){for(let n=1;n<=49;n++){if(LAN.includes(n)&&n%2===1)killed.add(n);}}
+  if(hbName.includes('绿单')){for(let n=1;n<=49;n++){if(LV.includes(n)&&n%2===1)killed.add(n);}}
+  if(hbName.includes('红单')){for(let n=1;n<=49;n++){if(RED.includes(n)&&n%2===1)killed.add(n);}}
+  // 杀头单双
+  for(let n=10;n<=19;n++) killed.add(n);for(let n=30;n<=39;n++) killed.add(n);
+  // 杀D序生肖
+  const zodName = d2Res;
+  Object.keys(ZMAP).forEach(n=>{if(ZMAP[n]===zodName)killed.add(parseInt(n));});
+  // 杀五行
+  const hwName = hwRes;
+  const wuxiaMap = {'金':[12,13,26,37,38,49],'木':[1,2,15,16,23,24,37,38,45,46],'水':[4,5,18,19,26,27,40,41,48,49],'火':[6,7,14,15,22,23,30,31,38,39,46,47],'土':[3,4,17,18,25,26,33,34,41,42]};
+  if(wuxiaMap[hwName]) wuxiaMap[hwName].forEach(n=>killed.add(n));
+  // 杀尾
+  const wei1 = parseInt(weiRes.replace(/[^0-9]/g,''));killed.add(wei1);killed.add(wei1+10);killed.add(wei1+20);killed.add(wei1+30);killed.add(wei1+40);
+  killed.add(coldW);killed.add(coldW+10);killed.add(coldW+20);killed.add(coldW+30);killed.add(coldW+40);
+  // 剩余号码
+  const remain = [];for(let n=1;n<=49;n++){if(!killed.has(n))remain.push(String(n).padStart(2,'0'));}
+  const remainStr = remain.join('-');
+  document.getElementById('trendRemain').textContent = remainStr;
+  document.getElementById('trendCopyBtn').onclick = ()=>copyText(remainStr);
 }
 function curPeriod(){return recs[N-1].p+1;}
 // 计算三个杀头单双结果，填到规律页
