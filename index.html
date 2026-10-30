@@ -344,32 +344,32 @@ h2{font-size:15px;margin-bottom:8px}
     <div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:15px;border-radius:10px">
       <div style="font-size:18px;font-weight:bold;margin-bottom:10px">⭐ 新高胜率杀号（94%+命中）</div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 杀头公式（304期，94.4%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀2头（20-29全杀）</div>
+        <div style="font-size:14px;font-weight:bold">🔢 杀头公式（<span id="curPeriod">304</span>期，94.4%命中）</div>
+        <div id="highTou" style="font-size:18px;margin-top:6px">❌ 杀2头（20-29全杀）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（304期，95.9%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀绿波单</div>
+        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（<span id="curPeriod2">304</span>期，95.9%命中）</div>
+        <div id="highHb" style="font-size:18px;margin-top:6px">❌ 杀绿波单</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🧮 杀头单双（304期，97%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀1头单（11、13、15、17、19）</div>
+        <div style="font-size:14px;font-weight:bold">🧮 杀头单双（<span id="curPeriod3">304</span>期，97%命中）</div>
+        <div id="highTsd" style="font-size:18px;margin-top:6px">❌ 杀1头单（11、13、15、17、19）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🐍 杀D序推演一肖（304期，96.4%命中）</div>
+        <div style="font-size:14px;font-weight:bold">🐍 杀D序推演一肖（<span id="curPeriod4">304</span>期，96.4%命中）</div>
         <div style="font-size:18px;margin-top:6px">❌ 杀蛇（02、14、26、38全杀）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🌳 杀五行（304期，90%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀木行（虎、兔全杀）</div>
+        <div style="font-size:14px;font-weight:bold">🌳 杀五行（<span id="curPeriod5">304</span>期，90%命中）</div>
+        <div id="highHw" style="font-size:18px;margin-top:6px">❌ 杀木行（虎、兔全杀）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（304期，96%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾3</div>
+        <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（<span id="curPeriod6">304</span>期，96%命中）</div>
+        <div id="highWei1" style="font-size:18px;margin-top:6px">❌ 杀尾3</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 定位尾-3杀尾（304期，96%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾0、4、7（共15个号）</div>
+        <div style="font-size:14px;font-weight:bold">🔢 定位尾-3杀尾（<span id="curPeriod7">304</span>期，96%命中）</div>
+        <div id="highWei2" style="font-size:18px;margin-top:6px">❌ 杀尾0、4、7（共15个号）</div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
@@ -3169,6 +3169,18 @@ try{renderLib();}catch(e){}
 })();
 </script>
 
+<script>
+try {
+  const p = curPeriod();
+  document.getElementById('curPeriod').innerText = p;
+  document.getElementById('curPeriod2').innerText = p;
+  document.getElementById('curPeriod3').innerText = p;
+  document.getElementById('curPeriod4').innerText = p;
+  document.getElementById('curPeriod5').innerText = p;
+  document.getElementById('curPeriod6').innerText = p;
+  document.getElementById('curPeriod7').innerText = p;
+} catch(e) {}
+</script>
 </body>
 </html>
 
