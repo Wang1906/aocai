@@ -1068,6 +1068,7 @@ const FORMULAS=[{id:'tou2',type:'tou',name:'上期特码头+1',desc:'上期特�
 {id:'w26',type:'wei',name:'平差尾',desc:'上期平一与平六差值的尾（全历史89.3%）',fn:i=>predW(Math.abs(recs[i-1].ns[0]-recs[i-1].ns[5])%10)},
 
 
+{id:'hbHigh',type:'hb',name:'⭐高胜率杀波色单双（95.9%命中）',desc:'定位号查表对应杀波色单双，49期仅错2期',fn:i=>{const locMap={16:5,11:1,7:2,45:2,5:1,30:0,6:3,47:0,36:1,13:2,22:3,44:3,41:0,19:2,17:1,31:0,32:3,39:1,43:1,26:1,3:0,38:3,29:2,1:2,40:0,46:0,34:0,42:4,18:0,43:1,11:1};const locNum=recs[i-1].ns[1];return predHB(locMap[locNum]||0);}},
 {id:'hb2',type:'hb',name:'半波+1',desc:'上期半波循环后移1位（全历史82.3%）',fn:i=>predHB((hbOf(tema(i-1))+1)%6)},
 
 
