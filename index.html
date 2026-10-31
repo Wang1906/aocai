@@ -402,8 +402,8 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <!-- 红色面板：三半头杀参考 -->
     <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（共杀15码）</div>
-      <div style="font-size:18px;line-height:2">❌ 半头公式1（97%）：杀1头单：11、13、15、17、19<br>❌ 半头公式2（92.1%）：杀1头双：10、12、14、16、18<br>❌ 半头公式3（90.7%）：杀3头双：30、32、34、36、38</div>
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（305期，共杀15码）</div>
+      <div style="font-size:18px;line-height:2">❌ 半头公式1（97%）：杀2头双：20、22、24、26、28<br>❌ 半头公式2（92.1%）：杀4头双：40、42、44、46、48<br>❌ 半头公式3（90.7%）：杀3头单：31、33、35、37、39</div>
     </div>
   </section>
   <!-- ===== 视图：投票 ===== -->
@@ -1766,7 +1766,7 @@ function renderNextPred(){
     const pool=(t==='ma')?MA_POOL:(POOLS.A[t]||[]);
     if(!pool.length)return null;
     return tn+':'+poolPred(pool[0],t,N).show;
-  }).filter(Boolean).join(' ｜ ')+' ｜ 半头公式1(97%):杀1头单（11、13、15、17、19）';
+  }).filter(Boolean).join(' ｜ ')+' ｜ 半头公式1(97%):杀2头双（20、22、24、26、28）';
   const weiCnt=Array(10).fill(0);
   for(let i=0;i<N;i++)weiCnt[tema(i)%10]++;
   const hotW=weiCnt.map((v,w)=>[w,v]).sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0][0];
