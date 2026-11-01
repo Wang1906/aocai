@@ -411,13 +411,11 @@ h2{font-size:15px;margin-bottom:8px}
           const n3 = (S3%10>=5) ? [t3*10+10,t3*10+12,t3*10+14,t3*10+16,t3*10+18] : [t3*10+11,t3*10+13,t3*10+15,t3*10+17,t3*10+19];
           // 杀波色单双
           document.getElementById('curPeriod2').innerText = p;
-          document.getElementById('highHb').innerText = `❌ 杀绿波单：05、21、39`;
+          document.getElementById('highHb').innerText = document.getElementById('highHb').innerText || '❌ 杀绿波单';
           // D序
           document.getElementById('curPeriod4').innerText = p;
-          document.getElementById('highDx').innerText = `❌ 杀鼠（01、13、25、37全杀）`;
           // 五行
           document.getElementById('curPeriod5').innerText = p;
-          document.getElementById('highHw').innerText = `❌ 杀金行（猴、鸡全杀）`;
           // 7码总和尾
           const sum7 = d[0]+d[1]+d[2]+d[3]+d[4]+d[5]+d[6];
           document.getElementById('curPeriod6').innerText = p;
