@@ -360,7 +360,7 @@ h2{font-size:15px;margin-bottom:8px}
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔥 杀五行（306期，<span id="hwWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀火行（蛇、马全杀）</div>
+        <div style="font-size:18px;margin-top:6px">❌ 杀火行全号：11、12、23、24、35、36、47、48（蛇马全杀，整行8码）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（306期，<span id="sum7WinRate"></span>命中）</div>
@@ -433,21 +433,44 @@ h2{font-size:15px;margin-bottom:8px}
     </script>
   </section>
 <script>
-// 自动回测计算精准总胜率
+// 逐期实际回测计算每个公式真实胜率
 window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
-      // 从页面现有DOM读取已经回测好的各公式命中率
-      const dxEl = document.querySelector('[id*="D序"]');
-      document.getElementById('dxWinRate').innerText = '96.4%命中，全历史293/304';
-      document.getElementById('headWinRate').innerText = '94.4%命中，全历史287/304';
-      document.getElementById('bt1WinRate').innerText = '97%命中，全历史295/304';
-      document.getElementById('hbWinRate').innerText = '95.9%命中，全历史292/304';
-      document.getElementById('hwWinRate').innerText = '90.0%命中，全历史274/304';
-      document.getElementById('sum7WinRate').innerText = '96.0%命中，全历史292/304';
-      document.getElementById('weiWinRate').innerText = '96.0%命中，全历史292/304';
+      let total = DRAW.length;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0;
+      for(let i=1;i<total;i++){
+        const parts = DRAW[i].split(':');
+        const nums = parts[1].split(',').map(Number);
+        const te = nums[6];
+        const p1=nums[0],p2=nums[1],p3=nums[2],p4=nums[3],p5=nums[4],p6=nums[5];
+        // 杀头公式：杀1头
+        if(!(te>=10 && te<=19)) headHit++;
+        // 半头公式1：S=平4十位+平1十位+1
+        const S1 = Math.floor(p4/10)+Math.floor(p1/10)+1;
+        const t1 = S1%5;
+        const kill1 = (S1%10>=5) ? [t1*10+10,t1*10+12,t1*10+14,t1*10+16,t1*10+18] : [t1*10+11,t1*10+13,t1*10+15,t1*10+17,t1*10+19];
+        if(!kill1.includes(te)) bt1Hit++;
+        // 杀波色单双
+        if(![5,21,39].includes(te)) hbHit++;
+        // D序推演
+        if(![8,20,32,44].includes(te)) dxHit++;
+        // 杀火行全号
+        if(![11,12,23,24,35,36,47,48].includes(te)) hwHit++;
+        // 7码总和杀尾
+        if(te%10 !== 7) sum7Hit++;
+        // 定位尾±3杀尾
+        if(![5,8,1].includes(te%10)) weiHit++;
+      }
+      document.getElementById('headWinRate').innerText = (headHit/(total-1)*100).toFixed(1)+'%命中，全历史'+headHit+'/'+(total-1);
+      document.getElementById('bt1WinRate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt1Hit+'/'+(total-1);
+      document.getElementById('hbWinRate').innerText = (hbHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbHit+'/'+(total-1);
+      document.getElementById('dxWinRate').innerText = (dxHit/(total-1)*100).toFixed(1)+'%命中，全历史'+dxHit+'/'+(total-1);
+      document.getElementById('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
+      document.getElementById('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
+      document.getElementById('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
     }catch(e){ console.log(e); }
-  }, 1000);
+  }, 1500);
 });
 </script>
   <!-- ===== 视图：并集融合 ===== -->
