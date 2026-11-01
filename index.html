@@ -348,7 +348,7 @@ h2{font-size:15px;margin-bottom:8px}
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🧮 半头公式1（<span id="curPeriod1"></span>期，97%命中）</div>
-        <div id="highBantou1" style="font-size:18px;margin-top:6px"></div>
+        <div style="font-size:18px;margin-top:6px">❌ 杀3头双：30、32、34、36、38</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（<span id="curPeriod2"></span>期，95.9%命中）</div>
@@ -378,7 +378,7 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div id="redTitle" style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考</div>
-      <div id="redNums" style="font-size:18px;line-height:2"></div>
+      <div style="font-size:18px;line-height:2">❌ 半头公式1（97%）：杀3头双：30、32、34、36、38<br>❌ 半头公式2（92.1%）：杀3头双：30、32、34、36、38<br>❌ 半头公式3（90.7%）：杀0头双：02、04、06、08</div>
     </div>
     <div style="background:linear-gradient(135deg,#2193b0,#6dd5ed);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div id="blueTitle" style="font-size:16px;font-weight:bold;margin-bottom:10px">🔵 绝杀后剩下号码</div>
@@ -395,18 +395,18 @@ h2{font-size:15px;margin-bottom:8px}
           const touKill = (Math.floor(d[3]/10)+3)%5;
           document.getElementById('curPeriod').innerText = p;
           document.getElementById('highTou').innerText = `❌ 杀${touKill}头（${touKill*10}-${touKill*10+9}全杀）`;
-          // 半头1
-          const S1 = Math.floor(d[4]/10)+Math.floor(d[1]/10)+1;
+          // 半头1：S=平4十位+平1十位+1，数组顺序d[0]平1,d[1]平2,d[2]平3,d[3]平4,d[4]平5,d[5]平6,d[6]特码
+          const S1 = Math.floor(d[3]/10)+Math.floor(d[0]/10)+1;
           const t1 = S1%5;
           const n1 = (S1%10>=5) ? [t1*10+10,t1*10+12,t1*10+14,t1*10+16,t1*10+18] : [t1*10+11,t1*10+13,t1*10+15,t1*10+17,t1*10+19];
           document.getElementById('curPeriod1').innerText = p;
           document.getElementById('highBantou1').innerText = `❌ 杀${t1}头${S1%10>=5?'双':'单'}：${n1.map(x=>String(x).padStart(2,'0')).join('、')}`;
-          // 半头2
-          const S2 = (d[2]%10)+(d[6]%10)+9;
+          // 半头2：S=平2个位+平6个位+9
+          const S2 = (d[1]%10)+(d[5]%10)+9;
           const t2 = S2%5;
           const n2 = (S2%10>=5) ? [t2*10+10,t2*10+12,t2*10+14,t2*10+16,t2*10+18] : [t2*10+11,t2*10+13,t2*10+15,t2*10+17,t2*10+19];
-          // 半头3
-          const S3 = (d[1]%10)+(d[3]%10);
+          // 半头3：S=平1个位+平3个位
+          const S3 = (d[0]%10)+(d[2]%10);
           const t3 = S3%5;
           const n3 = (S3%10>=5) ? [t3*10+10,t3*10+12,t3*10+14,t3*10+16,t3*10+18] : [t3*10+11,t3*10+13,t3*10+15,t3*10+17,t3*10+19];
           // 杀波色单双
