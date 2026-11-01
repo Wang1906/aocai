@@ -351,12 +351,12 @@ h2{font-size:15px;margin-bottom:8px}
         <div style="font-size:18px;margin-top:6px">❌ 杀3头双：30、32、34、36、38</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（<span id="curPeriod2"></span>期，95.9%命中）</div>
-        <div id="highHb" style="font-size:18px;margin-top:6px"></div>
+        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（306期，95.9%命中）</div>
+        <div style="font-size:18px;margin-top:6px">❌ 杀绿波单：05、21、39</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（306期，96.4%命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀猪（06、18、30、42全杀）</div>
+        <div style="font-size:14px;font-weight:bold">🐮 杀D序推演一肖（306期，96.4%命中）</div>
+        <div style="font-size:18px;margin-top:6px">❌ 杀牛（06、18、30、42全杀）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔥 杀五行（306期，90%命中）</div>
@@ -427,28 +427,6 @@ h2{font-size:15px;margin-bottom:8px}
           const weiList = [(teWei-3+10)%10, teWei, (teWei+3)%10];
           document.getElementById('curPeriod7').innerText = p;
           document.getElementById('highWei2').innerText = `❌ 杀尾${weiList.join('、')}（共15个号）`;
-          // 汇总杀号
-          const killSet = new Set();
-          for(let i=touKill*10;i<touKill*10+10;i++) killSet.add(i);
-          n1.forEach(n=>killSet.add(n));n2.forEach(n=>killSet.add(n));n3.forEach(n=>killSet.add(n));
-          killSet.add(5);killSet.add(21);killSet.add(39);
-          killSet.add(1);killSet.add(13);killSet.add(25);killSet.add(37);
-          killSet.add(11);killSet.add(23);killSet.add(35);killSet.add(47);killSet.add(10);killSet.add(22);killSet.add(34);killSet.add(46);
-          for(let i=1;i<=49;i++) if(i%10===sum7%10) killSet.add(i);
-          weiList.forEach(w=>{ for(let i=1;i<=49;i++) if(i%10===w) killSet.add(i); });
-          const remain = [];
-          for(let i=1;i<=49;i++) if(!killSet.has(i)) remain.push(String(i).padStart(2,'0'));
-          document.getElementById('remainTitle').innerText = `🎯 全杀后剩余号码（${p}期，共${remain.length}码）`;
-          document.getElementById('remainNums').innerText = remain.join('-');
-          // 三半头红面板
-          const allHalf = [...n1,...n2,...n3];
-          document.getElementById('redTitle').innerText = `🔴 三半头杀号参考（${p}期，共杀15码）`;
-          document.getElementById('redNums').innerHTML = `❌ 半头公式1（97%）：杀${t1}头${S1%10>=5?'双':'单'}：${n1.map(x=>String(x).padStart(2,'0')).join('、')}<br>❌ 半头公式2（92.1%）：杀${t2}头${S2%10>=5?'双':'单'}：${n2.map(x=>String(x).padStart(2,'0')).join('、')}<br>❌ 半头公式3（90.7%）：杀${t3}头${S3%10>=5?'双':'单'}：${n3.map(x=>String(x).padStart(2,'0')).join('、')}`;
-          // 蓝色绝杀剩余
-          const blueKill = new Set(allHalf);
-          const blueRemain = remain.filter(x=>!blueKill.has(parseInt(x)));
-          document.getElementById('blueTitle').innerText = `🔵 绝杀后剩下号码（${p}期，共${blueRemain.length}码）`;
-          document.getElementById('blueNums').innerText = blueRemain.join('-');
         } catch(e) { console.log(e); }
       }, 1500);
     });
