@@ -352,7 +352,7 @@ h2{font-size:15px;margin-bottom:8px}
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（306期，<span id="hbWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀绿波单：05、21、39</div>
+        <div style="font-size:18px;margin-top:6px">❌ 杀绿波单：05、19、23、27、39、43、49（全7码）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（306期，<span id="dxWinRate"></span>命中）</div>
@@ -461,8 +461,8 @@ window.addEventListener('load', ()=>{
         const t3 = S3%5;
         const kill3 = (S3%10>=5) ? [t3*10+10,t3*10+12,t3*10+14,t3*10+16,t3*10+18] : [t3*10+11,t3*10+13,t3*10+15,t3*10+17,t3*10+19];
         if(!kill3.includes(te)) bt3Hit++;
-        // 杀波色单双
-        if(![5,21,39].includes(te)) hbHit++;
+        // 杀绿波单（全部7个单号）
+        if(![5,19,23,27,39,43,49].includes(te)) hbHit++;
         // D序推演
         if(![8,20,32,44].includes(te)) dxHit++;
         // 杀火行全号
