@@ -378,7 +378,7 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（306期，共杀15码）</div>
-      <div style="font-size:18px;line-height:2">❌ 半头公式1（97%）：杀3头双：30、32、34、36、38<br>❌ 半头公式2（92.1%）：杀3头双：30、32、34、36、38<br>❌ 半头公式3（90.7%）：杀0头双：02、04、06、08</div>
+      <div style="font-size:18px;line-height:2">❌ 半头公式1（<span id="bt1Rate"></span>）：杀3头双：30、32、34、36、38<br>❌ 半头公式2（<span id="bt2Rate"></span>）：杀3头双：30、32、34、36、38<br>❌ 半头公式3（<span id="bt3Rate"></span>）：杀0头双：02、04、06、08</div>
     </div>
     <div style="background:linear-gradient(135deg,#2193b0,#6dd5ed);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔵 绝杀后剩下号码（306期，共15码）</div>
@@ -438,7 +438,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -451,6 +451,16 @@ window.addEventListener('load', ()=>{
         const t1 = S1%5;
         const kill1 = (S1%10>=5) ? [t1*10+10,t1*10+12,t1*10+14,t1*10+16,t1*10+18] : [t1*10+11,t1*10+13,t1*10+15,t1*10+17,t1*10+19];
         if(!kill1.includes(te)) bt1Hit++;
+        // 半头公式2：S=平2个位+平6个位+9
+        const S2 = (p2%10)+(p6%10)+9;
+        const t2 = S2%5;
+        const kill2 = (S2%10>=5) ? [t2*10+10,t2*10+12,t2*10+14,t2*10+16,t2*10+18] : [t2*10+11,t2*10+13,t2*10+15,t2*10+17,t2*10+19];
+        if(!kill2.includes(te)) bt2Hit++;
+        // 半头公式3：S=平1个位+平3个位
+        const S3 = (p1%10)+(p3%10);
+        const t3 = S3%5;
+        const kill3 = (S3%10>=5) ? [t3*10+10,t3*10+12,t3*10+14,t3*10+16,t3*10+18] : [t3*10+11,t3*10+13,t3*10+15,t3*10+17,t3*10+19];
+        if(!kill3.includes(te)) bt3Hit++;
         // 杀波色单双
         if(![5,21,39].includes(te)) hbHit++;
         // D序推演
@@ -469,6 +479,9 @@ window.addEventListener('load', ()=>{
       document.getElementById('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       document.getElementById('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
       document.getElementById('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
+      document.getElementById('bt1Rate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%，全历史'+bt1Hit+'/'+(total-1);
+      document.getElementById('bt2Rate').innerText = (bt2Hit/(total-1)*100).toFixed(1)+'%，全历史'+bt2Hit+'/'+(total-1);
+      document.getElementById('bt3Rate').innerText = (bt3Hit/(total-1)*100).toFixed(1)+'%，全历史'+bt3Hit+'/'+(total-1);
     }catch(e){ console.log(e); }
   }, 1500);
 });
