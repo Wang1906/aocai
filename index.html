@@ -286,8 +286,8 @@ h2{font-size:15px;margin-bottom:8px}
         <div style="font-size:18px;margin-top:6px">❌ 杀绿波单：05、19、23、27、39、43、49（全7码）</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（309期，<span id="dxWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀猪（08、20、32、44全杀）</div>
+        <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（<span id="curPeriod4">--</span>期，<span id="dxWinRate">--</span>命中）</div>
+        <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🔥 杀五行（309期，<span id="hwWinRate"></span>命中）</div>
@@ -435,8 +435,16 @@ window.addEventListener('load', ()=>{
         if(!kill3.includes(te)) bt3Hit++;
         // 杀绿波单（全部7个单号）
         if(![5,19,23,27,39,43,49].includes(te)) hbHit++;
-        // D序推演
-        if(![8,20,32,44].includes(te)) dxHit++;
+        // D序推演（与首页 d2 同口径：上期推当期）
+        {
+          const pp = DRAW[i-1].split(':')[1].split(',').map(Number).slice(0,6).sort((x,y)=>y-x);
+          const ss = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const sd = (ss(pp[4])%10)+Math.floor(pp[3]/10)+ss(pp[5])+pp[3]+pp[5]+18;
+          const ZT={0:'马',1:'蛇',2:'龙',3:'兔',4:'虎',5:'牛',6:'鼠',7:'猪',8:'狗',9:'鸡',10:'猴',11:'羊'};
+          const dz = ZT[((sd-1)%12+12)%12];
+          let dzN=[]; for(let n=1;n<=49;n++) if(ZT[(n-1)%12]===dz) dzN.push(n);
+          if(!dzN.includes(te)) dxHit++;
+        }
         // 杀火行全号
         if(![11,12,23,24,35,36,47,48].includes(te)) hwHit++;
         // 7码总和杀尾
@@ -448,6 +456,16 @@ window.addEventListener('load', ()=>{
       document.getElementById('bt1WinRate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt1Hit+'/'+(total-1);
       document.getElementById('hbWinRate').innerText = (hbHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbHit+'/'+(total-1);
       document.getElementById('dxWinRate').innerText = (dxHit/(total-1)*100).toFixed(1)+'%命中，全历史'+dxHit+'/'+(total-1);
+      {
+        const lastNs = DRAW[total-1].split(':')[1].split(',').map(Number).slice(0,6).sort((x,y)=>y-x);
+        const ss2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const sd2 = (ss2(lastNs[4])%10)+Math.floor(lastNs[3]/10)+ss2(lastNs[5])+lastNs[3]+lastNs[5]+18;
+        const ZT2={0:'马',1:'蛇',2:'龙',3:'兔',4:'虎',5:'牛',6:'鼠',7:'猪',8:'狗',9:'鸡',10:'猴',11:'羊'};
+        const z2 = ZT2[((sd2-1)%12+12)%12];
+        let zn2=[]; for(let n=1;n<=49;n++) if(ZT2[(n-1)%12]===z2) zn2.push(String(n).padStart(2,'0'));
+        document.getElementById('curPeriod4').innerText = (+DRAW[total-1].split(':')[0])+1;
+        document.getElementById('highDx').innerText = '❌ 杀'+z2+'（'+zn2.join('、')+'全杀）';
+      }
       document.getElementById('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       document.getElementById('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
       document.getElementById('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
