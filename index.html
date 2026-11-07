@@ -272,152 +272,11 @@ h2{font-size:15px;margin-bottom:8px}
   <section class="view" id="view-trend">
     <h2>规律</h2>
     <div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:15px;border-radius:10px">
-      <div style="font-size:18px;font-weight:bold;margin-bottom:10px">⭐ 新高胜率杀号（94%+命中）</div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 杀头公式（<span id="curPeriod"></span>期，<span id="headWinRate"></span>命中）</div>
-        <div id="highTou" style="font-size:18px;margin-top:6px"></div>
-      </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🧮 半头公式1（<span id="curPeriod1">--</span>期，<span id="bt1WinRate">--</span>命中）</div>
-        <div id="highBantou1" style="font-size:18px;margin-top:6px">--</div>
-      </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（<span id="curPeriod2">--</span>期，<span id="hbWinRate">--</span>命中）</div>
-        <div id="highHb" style="font-size:18px;margin-top:6px">--</div>
-      </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（<span id="curPeriod4">--</span>期，<span id="dxWinRate">--</span>命中）</div>
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔥 杀五行（<span id="curPeriod5">--</span>期，<span id="hwWinRate">--</span>命中）</div>
-        <div id="highHw" style="font-size:18px;margin-top:6px">--</div>
-      </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（<span id="curPeriod6">--</span>期，<span id="sum7WinRate">--</span>命中）</div>
-        <div id="highWei1" style="font-size:18px;margin-top:6px">--</div>
-      </div>
-      <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 定位尾±3杀尾（<span id="curPeriod7">--</span>期，<span id="weiWinRate">--</span>命中）</div>
-        <div id="highWei2" style="font-size:18px;margin-top:6px">--</div>
-      </div>
     </div>
-    <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码（<span id="restPeriod">--</span>期，共<span id="restCount">--</span>码）</div>
-      <div id="restNums" style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">--</div>
-      <button id="restBtn" onclick="copyText(document.getElementById('restNums').innerText.replace(/、/g,'-'))" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
-    </div>
-    <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（<span id="btPeriod">--</span>期，共杀<span id="btTotal">--</span>码）</div>
-      <div style="font-size:18px;line-height:2"><span id="btLine1">--</span><br><span id="btLine2">--</span><br><span id="btLine3">--</span></div>
-    </div>
-    
-    <div style="background:linear-gradient(135deg,#2193b0,#6dd5ed);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔵 绝杀后剩下号码（<span id="purePeriod">--</span>期，共<span id="pureCount">--</span>码）</div>
-      <div id="pureNums" style="font-size:20px;line-height:1.8;font-weight:bold;color:#fff">--</div>
-      <button id="pureBtn" onclick="copyText(document.getElementById('pureNums').innerText.replace(/、/g,'-'))" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
-    </div>
-    <script>
-    window.addEventListener('load', () => {
-      setTimeout(()=>{
-        try {
-          const _g = (id) => document.getElementById(id) || {innerText:'', dataset:{}};
-          const p = curPeriod();
-          const d = dA(N-1);
-          const lastNs = recs[N-1].ns;
-          // 杀头公式：上期特码头 + 1
-          const touKill = (Math.floor(lastNs[6]/10)+1)%5;
-          _g('curPeriod').innerText = p;
-          _g('highTou').innerText = `❌ 杀${touKill}头（${touKill*10}-${touKill*10+9}全杀）`;
-          // 三条半头统一取「上期」原始顺序：ns[0]=平1 ns[1]=平2 ns[2]=平3 ns[3]=平4 ns[4]=平5 ns[5]=平6
-          const btKill = (S) => {
-            const h = S%5, dbl = (S%10>=5);
-            const ds = dbl?[2,4,6,8]:[1,3,5,7,9];
-            const nums = ds.map(x=>h*10+x).filter(x=>x>=1&&x<=49);
-            return {h,dbl,nums,txt:`❌ 杀${h}头${dbl?'双':'单'}：${nums.map(x=>String(x).padStart(2,'0')).join('、')}`};
-          };
-          const S1 = Math.floor(lastNs[3]/10)+Math.floor(lastNs[0]/10)+1;
-          const S2 = (lastNs[1]%10)+(lastNs[5]%10)+9;
-          const S3 = (lastNs[0]%10)+(lastNs[2]%10);
-          const b1 = btKill(S1), b2 = btKill(S2), b3 = btKill(S3);
-          _g('curPeriod1').innerText = p;
-          _g('highBantou1').innerText = b1.txt;
-          // 杀波色单双：近30期特码半波里开出最少的那一类
-          const hbCold = coldhot(N,30,k=>hbOf(tema(k)));
-          const hbNums = HBX[hbCold][1];
-          _g('curPeriod2').innerText = p;
-          _g('highHb').innerText = `❌ 杀${HBX[hbCold][0]}：${hbNums.map(x=>String(x).padStart(2,'0')).join('、')}（全${hbNums.length}码）`;
-          // D序
-          _g('curPeriod4').innerText = p;
-          // 五行：D序推演（dsSum%5）
-          const hwV = dsSum(N-1,1)%5;
-          const hwNums = WXX[hwV][1];
-          _g('curPeriod5').innerText = p;
-          _g('highHw').innerText = `❌ 杀${WXX[hwV][0]}行：${hwNums.map(x=>String(x).padStart(2,'0')).join('、')}（全${hwNums.length}码）`;
-          // 7码总和杀尾：上期7码总和尾 +1
-          const sum7 = lastNs.reduce((a,b)=>a+b,0);
-          const t7 = (sum7%10+1)%10;
-          _g('curPeriod6').innerText = p;
-          _g('highWei1').innerText = `❌ 杀尾${t7}（05、15、25、35、45共5码）`;
-          // 定位尾±3：上期平5尾为中心，保留7个连续尾，杀其余3个尾
-          const locTail = lastNs[4]%10;
-          const keepT = new Set([-3,-2,-1,0,1,2,3].map(k=>(locTail+k+10)%10));
-          const killT = [0,1,2,3,4,5,6,7,8,9].filter(t=>!keepT.has(t));
-          _g('curPeriod7').innerText = p;
-          _g('highWei2').innerText = `❌ 杀尾${killT.join('、')}（共${killT.reduce((a,t)=>a+Array.from({length:49},(_,i)=>i+1).filter(n=>n%10===t).length,0)}个号）`;
-          // ---- 全杀后剩余（6 条主杀）----
-          const allNums = Array.from({length:49},(_,i)=>i+1);
-          const addNums = (set,arr)=>arr.forEach(n=>{if(n>=1&&n<=49) set.add(n)});
-          const killBase = new Set();
-          for(let n=touKill*10;n<=touKill*10+9;n++) if(n>=1&&n<=49) killBase.add(n);
-          addNums(killBase,hbNums);
-          addNums(killBase,hwNums);
-          addNums(killBase,allNums.filter(n=>n%10===t7));
-          killT.forEach(t=>addNums(killBase,allNums.filter(n=>n%10===t)));
-          const dzA=lastNs.slice(0,6).slice().sort((x,y)=>y-x);
-          const dzS=(hs(dzA[4])%10)+Math.floor(dzA[3]/10)+hs(dzA[5])+dzA[3]+dzA[5]+18;
-          const ZT={0:'马',1:'蛇',2:'龙',3:'兔',4:'虎',5:'牛',6:'鼠',7:'猪',8:'狗',9:'鸡',10:'猴',11:'羊'};
-          const dzZ=ZT[((dzS-1)%12+12)%12];
-          addNums(killBase,allNums.filter(n=>ZT[(n-1)%12]===dzZ));
-          const rest1=allNums.filter(n=>!killBase.has(n));
-          // 绝杀：在主杀基础上再叠加三条半头
-          const killFinal=new Set(killBase);
-          addNums(killFinal,b1.nums); addNums(killFinal,b2.nums); addNums(killFinal,b3.nums);
-          const rest2=allNums.filter(n=>!killFinal.has(n));
-          _g('restPeriod').innerText = p;
-          _g('restCount').innerText = rest1.length;
-          _g('restNums').innerText = rest1.length? rest1.map(n=>String(n).padStart(2,'0')).join('、') : '全杀（无剩余）';
-          _g('purePeriod').innerText = p;
-          _g('pureCount').innerText = rest2.length;
-          _g('pureNums').innerText = rest2.length? rest2.map(n=>String(n).padStart(2,'0')).join('、') : '全杀（无剩余）';
-          // 象数演意：河图四方（平1平2平5平6）十位连加为卦数S
-          // 头 = S mod 5；卦数奇→杀该头单，偶→杀该头双
-          const xsCalc = (dd) => {
-            const S = Math.floor(dd[0]/10)+Math.floor(dd[1]/10)+Math.floor(dd[4]/10)+Math.floor(dd[5]/10);
-            const h = S%5;
-            const ds = (S%2===1)?[1,3,5,7,9]:[2,4,6,8];
-            const nums = ds.map(x=>h*10+x).filter(x=>x>=1&&x<=49);
-            return {S,h,nums,parity:(S%2===1?'单':'双')};
-          };
-          let xsOk=0, xsTot=0;
-          for(let i=0;i<N-1;i++){
-            const rr = xsCalc(recs[i].ns);
-            xsTot++;
-            if(!rr.nums.includes(tema(i+1))) xsOk++;
-          }
-          const xsD = recs[N-1].ns;
-          const xsR = xsCalc(xsD);
-          const xsPct = (xsOk/xsTot*100).toFixed(2);
-          _g('xsPeriod').innerText = curPeriod();
-          _g('xsWinRate').innerText = `${xsPct}%（全历史${xsOk}/${xsTot}）`;
-          _g('xsKill').innerText = `❌ 杀${xsR.h}头${xsR.parity}：${xsR.nums.map(x=>String(x).padStart(2,'0')).join('、')}`;
-          _g('xsCopyBtn').dataset.nums = xsR.nums.map(x=>String(x).padStart(2,'0')).join('-');
-          _g('xsNote').innerText =
-            `取数：平1(${xsD[0]})十位${Math.floor(xsD[0]/10)} + 平2(${xsD[1]})十位${Math.floor(xsD[1]/10)} + 平5(${xsD[4]})十位${Math.floor(xsD[4]/10)} + 平6(${xsD[5]})十位${Math.floor(xsD[5]/10)} = 卦数${xsR.S}；卦数取5余得头${xsR.h}，卦数${xsR.S}为${xsR.S%2===1?'奇':'偶'}→杀${xsR.parity}号（${xsR.nums.length}码）`;
-        } catch(e) { console.log(e); }
-      }, 1500);
-    });
-    </script>
   </section>
 <script>
 // 强制写入正确的2026年11月生肖对应
@@ -490,10 +349,11 @@ window.addEventListener('load', ()=>{
         const keepT = new Set([-3,-2,-1,0,1,2,3].map(k=>(lt+k+10)%10));
         if(keepT.has(te%10)) weiHit++;
       }
-      document.getElementById('headWinRate').innerText = (headHit/(total-1)*100).toFixed(1)+'%命中，全历史'+headHit+'/'+(total-1);
-      document.getElementById('bt1WinRate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt1Hit+'/'+(total-1);
-      document.getElementById('hbWinRate').innerText = (hbHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbHit+'/'+(total-1);
-      document.getElementById('dxWinRate').innerText = (dxHit/(total-1)*100).toFixed(1)+'%命中，全历史'+dxHit+'/'+(total-1);
+      const _g=(id)=>document.getElementById(id)||{innerText:'',dataset:{}};
+      _g('headWinRate').innerText = (headHit/(total-1)*100).toFixed(1)+'%命中，全历史'+headHit+'/'+(total-1);
+      _g('bt1WinRate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt1Hit+'/'+(total-1);
+      _g('hbWinRate').innerText = (hbHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbHit+'/'+(total-1);
+      _g('dxWinRate').innerText = (dxHit/(total-1)*100).toFixed(1)+'%命中，全历史'+dxHit+'/'+(total-1);
       {
         const lastNs = DRAW[total-1].split(':')[1].split(',').map(Number).slice(0,6).sort((x,y)=>y-x);
         const ss2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
@@ -501,12 +361,12 @@ window.addEventListener('load', ()=>{
         const ZT2={0:'马',1:'蛇',2:'龙',3:'兔',4:'虎',5:'牛',6:'鼠',7:'猪',8:'狗',9:'鸡',10:'猴',11:'羊'};
         const z2 = ZT2[((sd2-1)%12+12)%12];
         let zn2=[]; for(let n=1;n<=49;n++) if(ZT2[(n-1)%12]===z2) zn2.push(String(n).padStart(2,'0'));
-        document.getElementById('curPeriod4').innerText = (+DRAW[total-1].split(':')[0])+1;
-        document.getElementById('highDx').innerText = '❌ 杀'+z2+'（'+zn2.join('、')+'全杀）';
+        _g('curPeriod4').innerText = (+DRAW[total-1].split(':')[0])+1;
+        _g('highDx').innerText = '❌ 杀'+z2+'（'+zn2.join('、')+'全杀）';
       }
-      document.getElementById('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
-      document.getElementById('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
-      document.getElementById('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
+      _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
+      _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
+      _g('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
       {
         const lns = DRAW[total-1].split(':')[1].split(',').map(Number);
         const btc = (S)=>{const h=S%5,dbl=(S%10>=5);const ds=dbl?[2,4,6,8]:[1,3,5,7,9];return {h,dbl,sum:S,nums:ds.map(x=>h*10+x).filter(x=>x>=1&&x<=49)};};
@@ -516,11 +376,11 @@ window.addEventListener('load', ()=>{
         const fmt=x=>x.nums.map(n=>String(n).padStart(2,'0')).join('、');
         const predP=(+DRAW[total-1].split(':')[0])+1;
         const cnt=[...new Set([...q1.nums,...q2.nums,...q3.nums])].length;
-        document.getElementById('btPeriod').innerText=predP;
-        document.getElementById('btTotal').innerText=cnt;
-        document.getElementById('btLine1').innerText=`❌ 半头公式1（${bt1Hit}/${total-1}）：杀${q1.h}头${q1.dbl?'双':'单'}：${fmt(q1)}`;
-        document.getElementById('btLine2').innerText=`❌ 半头公式2（${bt2Hit}/${total-1}）：杀${q2.h}头${q2.dbl?'双':'单'}：${fmt(q2)}`;
-        document.getElementById('btLine3').innerText=`❌ 半头公式3（${bt3Hit}/${total-1}）：杀${q3.h}头${q3.dbl?'双':'单'}：${fmt(q3)}`;
+        _g('btPeriod').innerText=predP;
+        _g('btTotal').innerText=cnt;
+        _g('btLine1').innerText=`❌ 半头公式1（${bt1Hit}/${total-1}）：杀${q1.h}头${q1.dbl?'双':'单'}：${fmt(q1)}`;
+        _g('btLine2').innerText=`❌ 半头公式2（${bt2Hit}/${total-1}）：杀${q2.h}头${q2.dbl?'双':'单'}：${fmt(q2)}`;
+        _g('btLine3').innerText=`❌ 半头公式3（${bt3Hit}/${total-1}）：杀${q3.h}头${q3.dbl?'双':'单'}：${fmt(q3)}`;
       }
     }catch(e){ console.log(e); }
   }, 1500);
