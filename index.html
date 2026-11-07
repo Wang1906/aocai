@@ -301,6 +301,16 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbkCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div style="font-size:14px;font-weight:bold">🎯 剩余号码（<span id="curPeriodL">--</span>期，<span id="leftCount">--</span>码）</div>
+          <button id="copyLeft" onclick="copyLeftNums()" style="flex:none;background:#fff;color:#3b2a6b;border:0;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:bold">复制</button>
+        </div>
+        <div id="leftNums" style="font-size:15px;margin-top:8px;line-height:1.75;word-break:break-word">--</div>
+        <div id="leftCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
+      </div>
+    </div>
     <div id="fusionSync" style="margin-top:12px"></div>
   </section>
 <script>
@@ -467,6 +477,49 @@ window.addEventListener('load', ()=>{
         _g('zwWinRate').innerText = (zwHit/(total-1)*100).toFixed(1)+'%命中';
         _g('highZw').innerText = '\u274C 杀'+zK2+'（'+zn3.join('\u3001')+'全杀）';
         _g('zwCalc').innerText = '上期六平码降序第4个='+lastZ[3]+'+2='+sdZ2+' → '+zK2+'。全历史 93.9%（978/1042），分年 95.1/93.4/92.9';
+      }
+      {
+        const pvL = recs[total-1].ns;
+        const nextL = (+DRAW[total-1].split(':')[0])+1;
+        const ppL = pvL.slice(0,6).sort((x,y)=>y-x);
+        const ssL = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const ZLA=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+        const ZLS=['蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊','马'];
+        const tabL = (nextL<=2026047)?ZLS:ZLA;
+        const deadL = new Set();
+        const sdDL = (ssL(ppL[4])%10)+Math.floor(ppL[3]/10)+ssL(ppL[5])+ppL[3]+ppL[5]+18;
+        const zDL = tabL[((sdDL-1)%12+12)%12];
+        for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===zDL) deadL.add(n);
+        const sdZL = ppL[3]+2;
+        const zZL = tabL[((sdZL-1)%12+12)%12];
+        for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===zZL) deadL.add(n);
+        const cpL = (((nextL%1000-286)%7)+7)%7;
+        const srcL = pvL[cpL];
+        const hqL = (Math.floor(srcL/10)+3)%5;
+        for(let n=1;n<=49;n++) if(Math.min(Math.floor(n/10),4)===hqL) deadL.add(n);
+        const totL = pvL.reduce((x,y)=>x+y,0);
+        const pnL = nextL%10;
+        const thL = ssL(totL)%10;
+        const s0L = ssL(pvL[0])%10;
+        const zxL = (((pvL[0]-1)%12+12)%12)+1;
+        const SL = pnL + thL + 2*totL + 2*zxL + 2*s0L + 2;
+        const kiL = ((SL%6)+1)%6;
+        for(const n of HBX[kiL][1]) deadL.add(n);
+        let leftL=[];
+        for(let n=1;n<=49;n++) if(!deadL.has(n)) leftL.push(String(n).padStart(2,'0'));
+        const leftStr = leftL.join('-');
+        window._LEFT_NUMS = leftStr;
+        _g('curPeriodL').innerText = nextL;
+        _g('leftCount').innerText = leftL.length;
+        _g('leftNums').innerText = leftStr || '（全杀）';
+        _g('leftCalc').innerText = '四卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        window.copyLeftNums = function(){
+          const t = window._LEFT_NUMS || '';
+          const btn = document.getElementById('copyLeft');
+          const done = ()=>{ if(btn){ btn.innerText='已复制'; setTimeout(()=>{btn.innerText='复制';},1500); } };
+          const fb = ()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); done(); }catch(e){} document.body.removeChild(ta); };
+          if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).then(done).catch(fb); } else { fb(); }
+        };
       }
       _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
