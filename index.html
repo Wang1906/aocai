@@ -210,7 +210,6 @@ h2{font-size:15px;margin-bottom:8px}
   <!-- ===== 视图：首页 ===== -->
   <section class="view on" id="view-home">
     <div id="lastDrawCard"></div>
-    <div id="nextPredCard"></div>
     <div class="seg" id="sortSeg">
       <div class="seg-btn on" data-s="rate">按胜率</div>
       <div class="seg-btn" data-s="hit50">按近50期</div>
@@ -1803,13 +1802,6 @@ function renderNextPred(){
     const top=Object.entries(vc).sort((a,b)=>b[1]-a[1])[0];
     return top?tn+':'+top[0]+'('+top[1]+'票)':null;
   }).filter(Boolean).join(' ｜ ');
-  document.getElementById('nextPredCard').innerHTML=
-    '<div class="card" style="margin-bottom:10px">'
-    +'<div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px">'+PERIOD+'期 杀/买建议（全历史272期口径）</div>'
-    +'<div style="font-size:13px;margin-bottom:4px"><b style="color:var(--amber)">杀</b>：'+kills+'</div>'
-    +'<div style="font-size:13px;margin-bottom:4px"><b style="color:var(--amber)">近50期投票</b>：'+vote50+'</div>'
-    +'<div style="font-size:13px"><b style="color:var(--green)">买</b>：'+buy+'</div>'
-    +'</div>';
 }
 function curPeriod(){return recs[N-1].p+1;}
 // 计算三个杀头单双结果，填到规律页
