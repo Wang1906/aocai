@@ -277,6 +277,7 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
     </div>
+    <div id="fusionSync" style="margin-top:12px"></div>
   </section>
 <script>
 // 强制写入正确的2026年11月生肖对应
@@ -382,6 +383,7 @@ window.addEventListener('load', ()=>{
         _g('btLine2').innerText=`❌ 半头公式2（${bt2Hit}/${total-1}）：杀${q2.h}头${q2.dbl?'双':'单'}：${fmt(q2)}`;
         _g('btLine3').innerText=`❌ 半头公式3（${bt3Hit}/${total-1}）：杀${q3.h}头${q3.dbl?'双':'单'}：${fmt(q3)}`;
       }
+      try{ renderFusionPage(); }catch(e){}
     }catch(e){ console.log(e); }
   }, 1500);
 });
@@ -2011,28 +2013,28 @@ function renderFusionPage(){
   
   // 计算4个杀肖公式分别杀哪个生肖
   function killMy3(i) {
-    const d = dA(i-1);
-    const p5he = Math.floor(d[5]/10) + d[5]%10;
-    const p2t = Math.floor(d[2]/10);
+    const p = recs[i-1].ns;
+    const p5he = Math.floor(p[4]/10) + p[4]%10;
+    const p2t = Math.floor(p[1]/10);
     return (p5he + p2t + 10) % 12;
   }
   function killMy4(i) {
-    const d = dA(i-1);
-    const p3bo = bose(d[3]);
-    const tw = d[6] % 10;
-    const p2t = Math.floor(d[2]/10);
+    const p = recs[i-1].ns;
+    const p3bo = bose(p[2]);
+    const tw = p[6] % 10;
+    const p2t = Math.floor(p[1]/10);
     return (p3bo + tw + p2t + 3) % 12;
   }
   function killMy5(i) {
-    const d = dA(i-1);
-    const p2bo = bose(d[2]);
-    const p5t = Math.floor(d[5]/10);
+    const p = recs[i-1].ns;
+    const p2bo = bose(p[1]);
+    const p5t = Math.floor(p[4]/10);
     return (p2bo * 3 + p5t + 1) % 12;
   }
   function killMy6(i) {
     if(i < 2) return -1;
-    const d1 = dA(i-1);
-    const d2 = dA(i-2);
+    const d1 = recs[i-1].ns;
+    const d2 = recs[i-2].ns;
     const p0bo = bose(d1[0]);
     const p3t = Math.floor(d2[3]/10);
     return (p0bo + p3t + 7) % 12;
@@ -2065,16 +2067,16 @@ function renderFusionPage(){
   
   // ===== 杀尾融合 =====
   function killWeiW2(i) {
-    const d = dA(i-1);
-    const p5bo = bose(d[5]);
-    const tx = zod(d[6]);
-    return (p5bo + tx + 7) % 10;
+    const p = recs[i-1].ns;
+    const p6bo = bose(p[5]);
+    const tx = (p[6]-1)%12;
+    return (p6bo + tx + 7) % 10;
   }
   function killWeiW3(i) {
-    const d = dA(i-1);
-    const p2bo = bose(d[2]);
-    const p1bo = bose(d[1]);
-    return (p2bo * 3 + p1bo + 8) % 10;
+    const p = recs[i-1].ns;
+    const p3bo = bose(p[2]);
+    const p2bo = bose(p[1]);
+    return (p3bo * 3 + p2bo + 8) % 10;
   }
   
   const weiKills = [killWeiW2(curN), killWeiW3(curN)];
@@ -2094,16 +2096,16 @@ function renderFusionPage(){
   
   // ===== 杀合融合 =====
   function killHeH2(i) {
-    const d = dA(i-1);
-    const p5t = Math.floor(d[5]/10);
-    const p5he = Math.floor(d[5]/10) + d[5]%10;
-    return (p5t + p5he + 9) % 10;
+    const p = recs[i-1].ns;
+    const p6t = Math.floor(p[5]/10);
+    const p6he = p6t + p[5]%10;
+    return (p6t + p6he + 9) % 10;
   }
   function killHeH3(i) {
-    const d = dA(i-1);
-    const p3t = Math.floor(d[3]/10);
-    const p1bo = bose(d[1]);
-    return (p3t * 3 + p1bo) % 10;
+    const p = recs[i-1].ns;
+    const p4t = Math.floor(p[3]/10);
+    const p2bo = bose(p[1]);
+    return (p4t * 3 + p2bo) % 10;
   }
   
   const heKills = [killHeH2(curN), killHeH3(curN)];
@@ -2123,16 +2125,16 @@ function renderFusionPage(){
   
   // ===== 杀头融合 =====
   function killTouT1(i) {
-    const d = dA(i-1);
-    const p5bo = bose(d[5]);
-    const tw = d[6] % 10;
-    return Math.floor((p5bo + tw + 5) / 10);
+    const p = recs[i-1].ns;
+    const p6bo = bose(p[5]);
+    const tw = p[6] % 10;
+    return Math.floor((p6bo + tw + 5) / 10);
   }
   function killTouT2(i) {
-    const d = dA(i-1);
-    const p3he = Math.floor(d[3]/10) + d[3]%10;
-    const p2w = d[2] % 10;
-    return Math.floor((p3he + p2w + 2) / 10);
+    const p = recs[i-1].ns;
+    const p4he = Math.floor(p[3]/10) + p[3]%10;
+    const p3w = p[2] % 10;
+    return Math.floor((p4he + p3w + 2) / 10);
   }
   
   const touKills = [killTouT1(curN), killTouT2(curN)];
@@ -2181,7 +2183,7 @@ function renderFusionPage(){
   
   // 标题
   h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">';
-  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合 <span style="font-size:14px;opacity:0.8">（第309期）</span></div>';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🐯 杀肖融合 <span style="font-size:14px;opacity:0.8">（第'+(curN+1)+'期）</span></div>';
   h += '</div>';
   
   // 三公式交集
@@ -2192,7 +2194,7 @@ function renderFusionPage(){
   } else {
     h += '<div style="font-size:15px;margin-top:8px;opacity:0.9">本期无触发</div>';
   }
-  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史胜率 100%（触发率1-2%）</div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">真实回测：触发 3/309（1.0%），命中 3/3（样本仅3期，参考价值低）</div>';
   h += '</div>';
   
   // 两公式交集
@@ -2203,7 +2205,7 @@ function renderFusionPage(){
   } else {
     h += '<div style="font-size:15px;margin-top:8px;opacity:0.9">本期无触发</div>';
   }
-  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">历史胜率 98-100%（触发率8-16%）</div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:6px">真实回测：触发 129/309（41.7%），命中 121/129 = 93.8%（≈基线93.9%，无优势）</div>';
   h += '</div>';
   
   // 并集筛选
@@ -2211,7 +2213,7 @@ function renderFusionPage(){
   h += '<div style="font-size:16px;font-weight:bold;margin-bottom:10px">📊 并集筛选（4公式全杀）</div>';
   h += '<div style="font-size:15px">共杀 <b style="color:#ffd700;font-size:18px">' + allKilled.length + '</b> 个：<b style="font-size:16px">' + allKilled.map(z => T[z]).join('、') + '</b></div>';
   h += '<div style="font-size:15px;margin-top:8px">剩余 <b style="color:#90EE90;font-size:18px">' + remainXiao.length + '</b> 个：<b style="font-size:16px">' + remainXiao.map(z => T[z]).join('、') + '</b></div>';
-  h += '<div style="font-size:13px;opacity:0.9;margin-top:8px">历史并集命中率 90.2%（特肖在剩余生肖中）</div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:8px">真实回测：4公式并集后，特肖落剩余 230/309 = 74.4%</div>';
   h += '</div>';
   
   // ===== 杀尾融合 =====
@@ -2230,7 +2232,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
-  h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">历史并集命中率 ~92%</div>';
+  h += '<div style="font-size:13px;opacity:0.9;margin-top:4px">真实回测：两公式交集触发 36/310（11.6%），命中 33/36 = 91.7%（基线89.8%）</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀尾 <b style="color:#ffd700">' + weiAllKilled.length + '</b> 个：' + weiAllKilled.join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#90EE90">' + weiRemain.length + '</b> 个：' + weiRemain.join('、') + '</div>';
   h += '</div>';
@@ -2253,7 +2255,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
-  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~93%</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">真实回测：两公式交集触发 34/310（11.0%），命中 34/34 = 100%（唯一显著超额）</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀合 <b style="color:#d63031">' + heAllKilled.length + '</b> 个：' + heAllKilled.join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + heRemain.length + '</b> 个：' + heRemain.join('、') + '</div>';
   h += '</div>';
@@ -2263,7 +2265,7 @@ function renderFusionPage(){
   // ===== 杀头融合 =====
   h += '<div style="background:linear-gradient(135deg,#ff9a9e,#fecfef);color:#333;padding:15px;border-radius:10px;margin-top:15px">';
   h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🔢 杀头融合</div>';
-  h += '<div style="font-size:13px;opacity:0.8">基于2个78%+胜率杀头公式</div>';
+  h += '<div style="font-size:13px;opacity:0.8">真实回测：两公式交集触发 155/310（50.0%），命中 117/155 = 75.5%，低于基线 79.6%（无效）</div>';
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
   h += '<div style="font-size:14px;font-weight:bold">⚡ 两公式交集·高胜率必杀</div>';
@@ -2276,7 +2278,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（2公式全杀）</div>';
-  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~82%</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">真实回测：并集命中率 75.5%（低于基线79.6%）</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀头 <b style="color:#d63031">' + touAllKilled.length + '</b> 个：' + touAllKilled.map(t => t + '头').join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + touRemain.length + '</b> 个：' + touRemain.map(t => t + '头').join('、') + '</div>';
   h += '</div>';
@@ -2286,7 +2288,7 @@ function renderFusionPage(){
   // ===== 杀半波融合 =====
   h += '<div style="background:linear-gradient(135deg,#a18cd1,#fbc2eb);color:#333;padding:15px;border-radius:10px;margin-top:15px">';
   h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🌊 杀半波融合</div>';
-  h += '<div style="font-size:13px;opacity:0.8">基于3个83%+胜率杀半波公式</div>';
+  h += '<div style="font-size:13px;opacity:0.8">真实回测：三公式交集 6/7=85.7%，两公式 120/145=82.8%（≈基线）</div>';
   
   h += '<div style="background:rgba(255,71,87,.3);padding:10px;border-radius:8px;margin-bottom:8px">';
   h += '<div style="font-size:14px;font-weight:bold">🔥 三公式交集·高胜率必杀</div>';
@@ -2308,7 +2310,7 @@ function renderFusionPage(){
   
   h += '<div style="background:rgba(255,255,255,.3);padding:10px;border-radius:8px">';
   h += '<div style="font-size:14px;font-weight:bold">📊 并集筛选（3公式全杀）</div>';
-  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">历史并集命中率 ~88%</div>';
+  h += '<div style="font-size:13px;opacity:0.8;margin-top:4px">真实回测：两公式交集 120/145 = 82.8%</div>';
   h += '<div style="font-size:15px;margin-top:6px">杀半波 <b style="color:#d63031">' + hbAllKilled.length + '</b> 个：' + hbAllKilled.map(h => hbNames[h]).join('、') + '</div>';
   h += '<div style="font-size:15px;margin-top:4px">剩余 <b style="color:#00b894">' + hbRemain.length + '</b> 个：' + hbRemain.map(h => hbNames[h]).join('、') + '</div>';
   h += '</div>';
@@ -2379,7 +2381,7 @@ function renderFusionPage(){
   const step5 = calcRemainNums(curN, true, true, true, true, true).map(n => String(n).padStart(2,'0'));
   
   h += '<div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">';
-  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🎯 综合并集分层杀后剩余号码 <span style="font-size:14px;opacity:0.8">（第' + (recs[curN-1].issue + 1) + '期）</span></div>';
+  h += '<div style="font-size:18px;font-weight:bold;margin-bottom:10px">🎯 综合并集分层杀后剩余号码 <span style="font-size:14px;opacity:0.8">（第' + (recs[curN-1].p + 1) + '期）</span></div>';
   
   // 第1步：只杀肖
   h += '<div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">';
@@ -2424,6 +2426,26 @@ function renderFusionPage(){
   h += '</div>';
 
   container.innerHTML = h;
+  // ===== 高胜率结果同步到规律页 =====
+  try{
+    const syncBox = document.getElementById('fusionSync');
+    if(syncBox){
+      let sh='', any=false;
+      if(tripleKill.length){
+        sh += '<div style="background:linear-gradient(135deg,#ff4757,#c0392b);color:#fff;padding:12px;border-radius:10px;margin-bottom:8px"><div style="font-size:13px;opacity:.9">🎯 并集同步 · 三公式杀肖（触发 3/309，命中 3/3）</div><div style="font-size:20px;font-weight:bold;margin-top:6px">杀 '+tripleKill.map(z=>T[z]).join('、')+'</div></div>';
+        any=true;
+      }
+
+      if(heDouble.length){
+        sh += '<div style="background:linear-gradient(135deg,#fa709a,#fee140);color:#333;padding:12px;border-radius:10px;margin-bottom:8px"><div style="font-size:13px;opacity:.8">⚡ 并集同步 · 杀合（触发 34/310，命中 34/34 = 100%）</div><div style="font-size:20px;font-weight:bold;margin-top:6px">杀合 '+heDouble.join('、')+'</div></div>';
+        any=true;
+      }
+      if(!any){
+        sh = '<div style="background:rgba(255,255,255,.1);color:#9aa4b2;padding:12px;border-radius:10px;font-size:13px">本期并集页无高胜率触发</div>';
+      }
+      syncBox.innerHTML = sh;
+    }
+  }catch(e){}
 }
 
 function switchView(v){
