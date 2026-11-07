@@ -280,11 +280,6 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
     </div>
-    <div style="background:linear-gradient(135deg,#2c5364,#0f2027);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
-      <div style="font-size:14px;font-weight:bold">🔁 隔期回响观察（<span id="echoStart">--</span>期起记账·无统计结论）</div>
-      <div id="echoNow" style="font-size:15px;margin-top:8px;line-height:1.8">--</div>
-      <div id="echoScore" style="font-size:13px;margin-top:8px;opacity:.92;line-height:1.7">--</div>
-    </div>
     <div id="fusionSync" style="margin-top:12px"></div>
   </section>
 <script>
@@ -377,34 +372,6 @@ window.addEventListener('load', ()=>{
         _g('curPeriod4').innerText = (+DRAW[total-1].split(':')[0])+1;
         _g('highDx').innerText = '❌ 杀'+z2+'（'+zn2.join('、')+'全杀）';
       }
-      {
-        // 隔期回响观察：312 期起纯样本外记账
-        const OBS_START='2026312';
-        const ZE=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
-        const zE=n=>ZE[((n-1)%12+12)%12];
-        const pad2=n=>String(n).padStart(2,'0');
-        let oN=0,oH1=0,oH3=0;
-        const sidx=recs.findIndex(r=>String(r.p)>=OBS_START);
-        if(sidx>4){for(let i=sidx;i<recs.length;i++){
-          const dyn=zE(recs[i].ns[6]);
-          oN++;
-          if(dyn!==zE(recs[i-2].ns[6]))oH1++;
-          const s3=new Set([zE(recs[i-2].ns[6]),zE(recs[i-3].ns[6]),zE(recs[i-4].ns[6])]);
-          if(!s3.has(dyn))oH3++;
-        }}
-        const L=recs.length;
-        if(L>=5){
-          const nxt=String(+recs[L-1].p+1);
-          const z2k=zE(recs[L-3].ns[6]);
-          const k3=[recs[L-3].ns[6],recs[L-4].ns[6],recs[L-5].ns[6]];
-          const c1=[];for(let n=1;n<=49;n++) if(zE(n)===z2k) c1.push(pad2(n));
-          _g('echoStart').innerText=OBS_START;
-          _g('echoNow').innerHTML='本期（'+nxt+'）推演<br>❌ 隔2期杀肖：<b style="color:#ffd54f">'+z2k+'</b>（'+c1.join('、')+'）<br>❌ 并集杀3码：<b style="color:#ff8a65">'+k3.map(pad2).join('、')+'</b>';
-          _g('echoScore').innerHTML= oN===0
-            ? '样本外记账：<b>0 期</b>（'+OBS_START+' 期开奖后自动开始累计）'
-            : '样本外记账 <b>'+oN+'</b> 期｜杀肖 <b>'+oH1+'/'+oN+'</b>（'+(oH1/oN*100).toFixed(1)+'%）｜并集3码 <b>'+oH3+'/'+oN+'</b>（'+(oH3/oN*100).toFixed(1)+'%）';
-        }
-      }
       _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
       _g('weiWinRate').innerText = (weiHit/(total-1)*100).toFixed(1)+'%命中，全历史'+weiHit+'/'+(total-1);
@@ -446,17 +413,6 @@ window.addEventListener('load', ()=>{
     <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px">
       <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（305期，共杀15码）</div>
       <div style="font-size:18px;line-height:2">❌ 半头公式1（97%）：杀2头双：20、22、24、26、28<br>❌ 半头公式2（92.1%）：杀4头双：40、42、44、46、48<br>❌ 半头公式3（90.7%）：杀3头单：31、33、35、37、39</div>
-    </div>
-  </section>
-  <!-- ===== 视图：象数 ===== -->
-  <section class="view" id="view-xs">
-    <h2>象数演意</h2>
-    <p class="muted" style="margin-bottom:12px">以四方之数起卦：取平1、平2、平5、平6 的十位连加为卦数，卦数取 5 余定头，卦数奇偶定单双。数值随每期开奖实时重算。</p>
-    <div style="background:linear-gradient(135deg,#1a2a6c,#3a6073);color:#fff;padding:15px;border-radius:10px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:8px">☯ 象数演意杀头（<span id="xsPeriod">--</span>期，<span id="xsWinRate">--</span>命中）</div>
-      <div id="xsKill" style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">--</div>
-      <div id="xsNote" style="font-size:12px;line-height:1.7;opacity:.85;margin-top:8px"></div>
-      <button id="xsCopyBtn" onclick="copyText(this.dataset.nums)" data-nums="" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
     </div>
   </section>
   <!-- ===== 视图：投票 ===== -->
@@ -594,9 +550,6 @@ window.addEventListener('load', ()=>{
     </div>
     <div class="nav-item" data-v="trend">
       <svg viewBox="0 0 24 24"><path d="M3 17l5-6 4 4 7-9"/><path d="M3 21h18"/></svg>规律
-    </div>
-    <div class="nav-item" data-v="xs">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 1 0 9 4.5 4.5 0 0 0 0 9"/><circle cx="12" cy="7.5" r="1.5"/></svg>象数
     </div>
     <div class="nav-item" data-v="fusion" style="color:#ff6b6b">
       <svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z"/></svg>并集
