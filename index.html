@@ -282,30 +282,30 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="highBantou1" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（309期，<span id="hbWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀绿波单：05、19、23、27、39、43、49（全7码）</div>
+        <div style="font-size:14px;font-weight:bold">🌊 杀波色单双（<span id="curPeriod2">--</span>期，<span id="hbWinRate">--</span>命中）</div>
+        <div id="highHb" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
         <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（<span id="curPeriod4">--</span>期，<span id="dxWinRate">--</span>命中）</div>
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔥 杀五行（309期，<span id="hwWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀火行（蛇、马全杀）</div>
+        <div style="font-size:14px;font-weight:bold">🔥 杀五行（<span id="curPeriod5">--</span>期，<span id="hwWinRate">--</span>命中）</div>
+        <div id="highHw" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px;margin-bottom:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（309期，<span id="sum7WinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾7</div>
+        <div style="font-size:14px;font-weight:bold">🔢 7码总和杀尾（<span id="curPeriod6">--</span>期，<span id="sum7WinRate">--</span>命中）</div>
+        <div id="highWei1" style="font-size:18px;margin-top:6px">--</div>
       </div>
       <div style="background:rgba(255,255,255,.15);padding:10px;border-radius:8px">
-        <div style="font-size:14px;font-weight:bold">🔢 定位尾±3杀尾（309期，<span id="weiWinRate"></span>命中）</div>
-        <div style="font-size:18px;margin-top:6px">❌ 杀尾5、8、1（共15个号）</div>
+        <div style="font-size:14px;font-weight:bold">🔢 定位尾±3杀尾（<span id="curPeriod7">--</span>期，<span id="weiWinRate">--</span>命中）</div>
+        <div id="highWei2" style="font-size:18px;margin-top:6px">--</div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码（309期，共18码）</div>
-      <div style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">01-03-05-07-09-11-12-13-15-16-17-19-21-23-25-26-27-29</div>
-      <button onclick="copyText('01-03-05-07-09-11-12-13-15-16-17-19-21-23-25-26-27-29')" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码（<span id="restPeriod">--</span>期，共<span id="restCount">--</span>码）</div>
+      <div id="restNums" style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">--</div>
+      <button id="restBtn" onclick="copyText(document.getElementById('restNums').innerText.replace(/、/g,'-'))" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
     </div>
     <div style="background:linear-gradient(135deg,#f85032,#e73827);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
       <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔴 三半头杀号参考（<span id="btPeriod">--</span>期，共杀<span id="btTotal">--</span>码）</div>
@@ -313,9 +313,9 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     
     <div style="background:linear-gradient(135deg,#2193b0,#6dd5ed);color:#fff;padding:15px;border-radius:10px;margin-top:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔵 绝杀后剩下号码（309期，共15码）</div>
-      <div style="font-size:20px;line-height:1.8;font-weight:bold;color:#fff">01-03-05-07-09-11-13-15-17-19-21-23-25-27-29</div>
-      <button onclick="copyText('01-03-05-07-09-11-13-15-17-19-21-23-25-27-29')" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🔵 绝杀后剩下号码（<span id="purePeriod">--</span>期，共<span id="pureCount">--</span>码）</div>
+      <div id="pureNums" style="font-size:20px;line-height:1.8;font-weight:bold;color:#fff">--</div>
+      <button id="pureBtn" onclick="copyText(document.getElementById('pureNums').innerText.replace(/、/g,'-'))" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
     </div>
     <script>
     window.addEventListener('load', () => {
@@ -324,12 +324,12 @@ h2{font-size:15px;margin-bottom:8px}
           const _g = (id) => document.getElementById(id) || {innerText:'', dataset:{}};
           const p = curPeriod();
           const d = dA(N-1);
-          // 杀头公式
-          const touKill = (Math.floor(d[3]/10)+3)%5;
+          const lastNs = recs[N-1].ns;
+          // 杀头公式：上期特码头 + 1
+          const touKill = (Math.floor(lastNs[6]/10)+1)%5;
           _g('curPeriod').innerText = p;
           _g('highTou').innerText = `❌ 杀${touKill}头（${touKill*10}-${touKill*10+9}全杀）`;
           // 三条半头统一取「上期」原始顺序：ns[0]=平1 ns[1]=平2 ns[2]=平3 ns[3]=平4 ns[4]=平5 ns[5]=平6
-          const lastNs = recs[N-1].ns;
           const btKill = (S) => {
             const h = S%5, dbl = (S%10>=5);
             const ds = dbl?[2,4,6,8]:[1,3,5,7,9];
@@ -342,24 +342,54 @@ h2{font-size:15px;margin-bottom:8px}
           const b1 = btKill(S1), b2 = btKill(S2), b3 = btKill(S3);
           _g('curPeriod1').innerText = p;
           _g('highBantou1').innerText = b1.txt;
-          // 杀波色单双
+          // 杀波色单双：近30期特码半波里开出最少的那一类
+          const hbCold = coldhot(N,30,k=>hbOf(tema(k)));
+          const hbNums = HBX[hbCold][1];
           _g('curPeriod2').innerText = p;
-          _g('highHb').innerText = '❌ 杀绿波单';
+          _g('highHb').innerText = `❌ 杀${HBX[hbCold][0]}：${hbNums.map(x=>String(x).padStart(2,'0')).join('、')}（全${hbNums.length}码）`;
           // D序
           _g('curPeriod4').innerText = p;
-          _g('highDx').innerText = '❌ 杀猪（06、18、30、42全杀）';
-          // 五行
+          // 五行：D序推演（dsSum%5）
+          const hwV = dsSum(N-1,1)%5;
+          const hwNums = WXX[hwV][1];
           _g('curPeriod5').innerText = p;
-          _g('highHw').innerText = '❌ 杀火行（蛇、马全杀）';
-          // 7码总和尾
-          const sum7 = d[0]+d[1]+d[2]+d[3]+d[4]+d[5]+d[6];
+          _g('highHw').innerText = `❌ 杀${WXX[hwV][0]}行：${hwNums.map(x=>String(x).padStart(2,'0')).join('、')}（全${hwNums.length}码）`;
+          // 7码总和杀尾：上期7码总和尾 +1
+          const sum7 = lastNs.reduce((a,b)=>a+b,0);
+          const t7 = (sum7%10+1)%10;
           _g('curPeriod6').innerText = p;
-          _g('highWei1').innerText = `❌ 杀尾${sum7%10}`;
-          // 定位尾
-          const teWei = d[0]%10;
-          const weiList = [(teWei-3+10)%10, teWei, (teWei+3)%10];
+          _g('highWei1').innerText = `❌ 杀尾${t7}（05、15、25、35、45共5码）`;
+          // 定位尾±3：上期平5尾为中心，保留7个连续尾，杀其余3个尾
+          const locTail = lastNs[4]%10;
+          const keepT = new Set([-3,-2,-1,0,1,2,3].map(k=>(locTail+k+10)%10));
+          const killT = [0,1,2,3,4,5,6,7,8,9].filter(t=>!keepT.has(t));
           _g('curPeriod7').innerText = p;
-          _g('highWei2').innerText = `❌ 杀尾${weiList.join('、')}（共15个号）`;
+          _g('highWei2').innerText = `❌ 杀尾${killT.join('、')}（共${killT.reduce((a,t)=>a+Array.from({length:49},(_,i)=>i+1).filter(n=>n%10===t).length,0)}个号）`;
+          // ---- 全杀后剩余（6 条主杀）----
+          const allNums = Array.from({length:49},(_,i)=>i+1);
+          const addNums = (set,arr)=>arr.forEach(n=>{if(n>=1&&n<=49) set.add(n)});
+          const killBase = new Set();
+          for(let n=touKill*10;n<=touKill*10+9;n++) if(n>=1&&n<=49) killBase.add(n);
+          addNums(killBase,hbNums);
+          addNums(killBase,hwNums);
+          addNums(killBase,allNums.filter(n=>n%10===t7));
+          killT.forEach(t=>addNums(killBase,allNums.filter(n=>n%10===t)));
+          const dzA=lastNs.slice(0,6).slice().sort((x,y)=>y-x);
+          const dzS=(hs(dzA[4])%10)+Math.floor(dzA[3]/10)+hs(dzA[5])+dzA[3]+dzA[5]+18;
+          const ZT={0:'马',1:'蛇',2:'龙',3:'兔',4:'虎',5:'牛',6:'鼠',7:'猪',8:'狗',9:'鸡',10:'猴',11:'羊'};
+          const dzZ=ZT[((dzS-1)%12+12)%12];
+          addNums(killBase,allNums.filter(n=>ZT[(n-1)%12]===dzZ));
+          const rest1=allNums.filter(n=>!killBase.has(n));
+          // 绝杀：在主杀基础上再叠加三条半头
+          const killFinal=new Set(killBase);
+          addNums(killFinal,b1.nums); addNums(killFinal,b2.nums); addNums(killFinal,b3.nums);
+          const rest2=allNums.filter(n=>!killFinal.has(n));
+          _g('restPeriod').innerText = p;
+          _g('restCount').innerText = rest1.length;
+          _g('restNums').innerText = rest1.length? rest1.map(n=>String(n).padStart(2,'0')).join('、') : '全杀（无剩余）';
+          _g('purePeriod').innerText = p;
+          _g('pureCount').innerText = rest2.length;
+          _g('pureNums').innerText = rest2.length? rest2.map(n=>String(n).padStart(2,'0')).join('、') : '全杀（无剩余）';
           // 象数演意：河图四方（平1平2平5平6）十位连加为卦数S
           // 头 = S mod 5；卦数奇→杀该头单，偶→杀该头双
           const xsCalc = (dd) => {
@@ -416,8 +446,9 @@ window.addEventListener('load', ()=>{
         const nums = parts[1].split(',').map(Number);
         const te = nums[6];
         const p1=nums[0],p2=nums[1],p3=nums[2],p4=nums[3],p5=nums[4],p6=nums[5];
-        // 杀头公式：杀1头
-        if(!(te>=10 && te<=19)) headHit++;
+        // 杀头公式：上期特码头 + 1
+        const kt = (Math.floor(tema(i-1)/10)+1)%5;
+        if(!(te>=kt*10 && te<=kt*10+9)) headHit++;
         // 三条半头：按定义取「上期」数据推当期
         const pv = DRAW[i-1].split(':')[1].split(',').map(Number);
         // 半头公式1：S=平4十位+平1十位+1
@@ -435,8 +466,9 @@ window.addEventListener('load', ()=>{
         const t3 = S3%5;
         const kill3 = (S3%10>=5) ? [2,4,6,8].map(x=>t3*10+x).filter(n=>n>=1&&n<=49) : [1,3,5,7,9].map(x=>t3*10+x).filter(n=>n>=1&&n<=49);
         if(!kill3.includes(te)) bt3Hit++;
-        // 杀绿波单（全部7个单号）
-        if(![5,19,23,27,39,43,49].includes(te)) hbHit++;
+        // 杀波色单双：近30期特码半波里开出最少的
+        const hbK = coldhot(i,30,k=>hbOf(tema(k)));
+        if(hbOf(te) !== hbK) hbHit++;
         // D序推演（与首页 d2 同口径：上期推当期）
         {
           const pp = DRAW[i-1].split(':')[1].split(',').map(Number).slice(0,6).sort((x,y)=>y-x);
@@ -447,12 +479,16 @@ window.addEventListener('load', ()=>{
           let dzN=[]; for(let n=1;n<=49;n++) if(ZT[(n-1)%12]===dz) dzN.push(n);
           if(!dzN.includes(te)) dxHit++;
         }
-        // 杀火行全号
-        if(![11,12,23,24,35,36,47,48].includes(te)) hwHit++;
-        // 7码总和杀尾
-        if(te%10 !== 7) sum7Hit++;
-        // 定位尾±3杀尾
-        if(![5,8,1].includes(te%10)) weiHit++;
+        // 杀五行：D序推演
+        const hwK = dsSum(i-1,1)%5;
+        if(wxOf(te) !== hwK) hwHit++;
+        // 7码总和杀尾：上期7码总和尾 +1
+        const t7K = (sumAll(i-1)%10+1)%10;
+        if(te%10 !== t7K) sum7Hit++;
+        // 定位尾±3：上期平5尾为中心，保留7个连续尾，杀其余3尾
+        const lt = recs[i-1].ns[4]%10;
+        const keepT = new Set([-3,-2,-1,0,1,2,3].map(k=>(lt+k+10)%10));
+        if(keepT.has(te%10)) weiHit++;
       }
       document.getElementById('headWinRate').innerText = (headHit/(total-1)*100).toFixed(1)+'%命中，全历史'+headHit+'/'+(total-1);
       document.getElementById('bt1WinRate').innerText = (bt1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt1Hit+'/'+(total-1);
