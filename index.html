@@ -280,6 +280,20 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#2c5364,#203a43);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🎯 取位循环杀头（<span id="curPeriodC">--</span>期，<span id="cyWinRate">--</span>命中）</div>
+        <div id="highCy" style="font-size:16px;margin-top:6px;line-height:1.65;word-break:break-word">--</div>
+        <div id="cyCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#1e3c72,#2a5298);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🌈 波色半波（<span id="curPeriodD">--</span>期，<span id="hbkWinRate">--</span>命中）</div>
+        <div id="highHbk" style="font-size:16px;margin-top:6px;line-height:1.65;word-break:break-word">--</div>
+        <div id="hbkCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
+      </div>
+    </div>
     <div id="fusionSync" style="margin-top:12px"></div>
   </section>
 <script>
@@ -303,7 +317,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -344,6 +358,25 @@ window.addEventListener('load', ()=>{
           let dzN=[]; for(let n=1;n<=49;n++) if(tab[(n-1)%12]===dz) dzN.push(n);
           if(!dzN.includes(te)) dxHit++;
         }
+        // 取位循环杀头：上期第 ((期号后三位-286)%7)+1 码，十位+3 取 5 头中缺的那个
+        {
+          const pn = (+DRAW[i].split(':')[0]) % 1000;
+          const cp = (((pn-286)%7)+7)%7;
+          const srcC = recs[i-1].ns[cp];
+          const hqC = (Math.floor(srcC/10)+3)%5;
+          const teH = Math.min(Math.floor(recs[i].ns[6]/10),4);
+          if(teH !== hqC) cyHit++;
+        }
+        // 波色半波：S=期尾+总合尾+2*总和+2*一肖+2*一合尾+2
+        {
+          const pvD = recs[i-1].ns;
+          const ssD = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const totD = pvD.reduce((x,y)=>x+y,0);
+          const s0D = ssD(pvD[0])%10;
+          const SD = ((+DRAW[i].split(':')[0])%10) + ssD(totD)%10 + 2*totD + 2*((((pvD[0]-1)%12+12)%12)+1) + 2*s0D + 2;
+          const kiD = ((SD%6)+1)%6;
+          if(!HBX[kiD][1].includes(te)) hbkHit++;
+        }
         // 杀五行：D序推演
         const hwK = dsSum(i-1,1)%5;
         if(wxOf(te) !== hwK) hwHit++;
@@ -371,6 +404,37 @@ window.addEventListener('load', ()=>{
         let zn2=[]; for(let n=1;n<=49;n++) if(tab2[(n-1)%12]===z2) zn2.push(String(n).padStart(2,'0'));
         _g('curPeriod4').innerText = (+DRAW[total-1].split(':')[0])+1;
         _g('highDx').innerText = '❌ 杀'+z2+'（'+zn2.join('、')+'全杀）';
+      }
+      {
+        const lastPn = (+DRAW[total-1].split(':')[0]);
+        const nextPn = lastPn + 1;
+        const cp = (((nextPn%1000-286)%7)+7)%7;
+        const srcC = recs[total-1].ns[cp];
+        const aC = Math.floor(srcC/10);
+        const hqC = (aC+3)%5;
+        const listed = [(aC-1+5)%5, aC, (aC+1)%5, (aC+2)%5];
+        let clsC=[]; for(let n=1;n<=49;n++) if(Math.min(Math.floor(n/10),4)===hqC) clsC.push(String(n).padStart(2,'0'));
+        _g('curPeriodC').innerText = nextPn;
+        _g('cyWinRate').innerText = (cyHit/(total-1)*100).toFixed(1)+'%命中，全历史'+cyHit+'/'+(total-1);
+        _g('highCy').innerText = '❌ 杀'+hqC+'头（'+clsC.join('、')+'）';
+        _g('cyCalc').innerText = '取上期第'+(cp+1)+'码='+srcC+'，十位'+aC+' → 列'+listed.join('·')+'，缺'+hqC+'头';
+      }
+      {
+        const lastPnD = (+DRAW[total-1].split(':')[0]);
+        const nextPnD = lastPnD + 1;
+        const pvD2 = recs[total-1].ns;
+        const ssD2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const totD2 = pvD2.reduce((x,y)=>x+y,0);
+        const pnD2 = nextPnD%10;
+        const s0D2 = ssD2(pvD2[0])%10;
+        const zxD2 = (((pvD2[0]-1)%12+12)%12)+1;
+        const thD2 = ssD2(totD2)%10;
+        const SD2 = pnD2 + thD2 + 2*totD2 + 2*zxD2 + 2*s0D2 + 2;
+        const kiD2 = ((SD2%6)+1)%6;
+        _g('curPeriodD').innerText = nextPnD;
+        _g('hbkWinRate').innerText = (hbkHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbkHit+'/'+(total-1);
+        _g('highHbk').innerText = '\u274C 杀'+HBX[kiD2][0]+'（'+HBX[kiD2][1].map(n=>String(n).padStart(2,'0')).join('\u3001')+'）';
+        _g('hbkCalc').innerText = 'S=期尾'+pnD2+'+总合尾'+thD2+'+2×总和'+totD2+'+2×一肖'+zxD2+'+2×一合尾'+s0D2+'+2='+SD2+'，余'+(SD2%6)+' → '+HBX[kiD2][0];
       }
       _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
