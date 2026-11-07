@@ -294,6 +294,14 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbkCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#396afc,#2948ff);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🔗 杀尾（<span id="curPeriodW">--</span>期，二尾<span id="we2WinRate">--</span>／三尾<span id="we3WinRate">--</span>）</div>
+        <div id="highWe2" style="font-size:15px;margin-top:8px;line-height:1.7;word-break:break-word">--</div>
+        <div id="highWe3" style="font-size:15px;margin-top:4px;line-height:1.7;word-break:break-word">--</div>
+        <div id="weCalc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div id="fusionSync" style="margin-top:12px"></div>
   </section>
 <script>
@@ -317,7 +325,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, we2Hit=0, we3Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -377,6 +385,17 @@ window.addEventListener('load', ()=>{
           const kiD = ((SD%6)+1)%6;
           if(!HBX[kiD][1].includes(te)) hbkHit++;
         }
+        // 杀尾：二尾=总和尾+9、偏移4；三尾=数位和(总和)+5、偏移2和6
+        {
+          const pvW = recs[i-1].ns;
+          const ssW = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const totW = pvW.reduce((x,y)=>x+y,0);
+          const z2W = ((totW%10)+9)%10;
+          const z3W = ((ssW(totW)%10)+5)%10;
+          const tW = te%10;
+          if(tW!==z2W && tW!==((z2W+4)%10)) we2Hit++;
+          if(tW!==z3W && tW!==((z3W+2)%10) && tW!==((z3W+6)%10)) we3Hit++;
+        }
         // 杀五行：D序推演
         const hwK = dsSum(i-1,1)%5;
         if(wxOf(te) !== hwK) hwHit++;
@@ -435,6 +454,22 @@ window.addEventListener('load', ()=>{
         _g('hbkWinRate').innerText = (hbkHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hbkHit+'/'+(total-1);
         _g('highHbk').innerText = '\u274C 杀'+HBX[kiD2][0]+'（'+HBX[kiD2][1].map(n=>String(n).padStart(2,'0')).join('\u3001')+'）';
         _g('hbkCalc').innerText = 'S=期尾'+pnD2+'+总合尾'+thD2+'+2×总和'+totD2+'+2×一肖'+zxD2+'+2×一合尾'+s0D2+'+2='+SD2+'，余'+(SD2%6)+' → '+HBX[kiD2][0];
+      }
+      {
+        const lastW = recs[total-1].ns;
+        const ssW2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const totW2 = lastW.reduce((x,y)=>x+y,0);
+        const z2W2 = ((totW2%10)+9)%10;
+        const z3W2 = ((ssW2(totW2)%10)+5)%10;
+        const k2 = [z2W2, (z2W2+4)%10];
+        const k3 = [z3W2, (z3W2+2)%10, (z3W2+6)%10];
+        const numsOf = ks=>{let a=[];for(let n=1;n<=49;n++) if(ks.indexOf(n%10)>=0) a.push(String(n).padStart(2,'0'));return a;};
+        _g('curPeriodW').innerText = (+DRAW[total-1].split(':')[0])+1;
+        _g('we2WinRate').innerText = (we2Hit/(total-1)*100).toFixed(1)+'%';
+        _g('we3WinRate').innerText = (we3Hit/(total-1)*100).toFixed(1)+'%';
+        _g('highWe2').innerText = '\u26A0 杀二尾：'+k2[0]+'尾、'+k2[1]+'尾（'+numsOf(k2).join('\u3001')+'）';
+        _g('highWe3').innerText = '\u26A0 杀三尾：'+k3[0]+'、'+k3[1]+'、'+k3[2]+'尾（'+numsOf(k3).join('\u3001')+'）';
+        _g('weCalc').innerText = '二尾：总和'+totW2+'的尾'+totW2%10+'+9→'+z2W2+'+4偏移；三尾：数位和'+ssW2(totW2)+'+5→'+z3W2+'+2/+6偏移。基线 二尾79.6%／三尾69.4%';
       }
       _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
