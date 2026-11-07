@@ -280,6 +280,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="highDx" style="font-size:18px;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#0f3443,#34e89e);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🔍 杀一肖·稳版（<span id="curPeriodZ">--</span>期，<span id="zwWinRate">--</span>命中）</div>
+        <div id="highZw" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="zwCalc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#2c5364,#203a43);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🎯 取位循环杀头（<span id="curPeriodC">--</span>期，<span id="cyWinRate">--</span>命中）</div>
@@ -325,7 +332,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, we2Hit=0, we3Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, we2Hit=0, we3Hit=0, zwHit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -384,6 +391,17 @@ window.addEventListener('load', ()=>{
           const SD = ((+DRAW[i].split(':')[0])%10) + ssD(totD)%10 + 2*totD + 2*((((pvD[0]-1)%12+12)%12)+1) + 2*s0D + 2;
           const kiD = ((SD%6)+1)%6;
           if(!HBX[kiD][1].includes(te)) hbkHit++;
+        }
+        // 杀一肖·稳版：上期六平码降序第4个 + 2
+        {
+          const ppZ = recs[i-1].ns.slice(0,6).sort((x,y)=>y-x);
+          const ZTZA=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+          const ZTZS=['蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊','马'];
+          const tabZ=(+DRAW[i].split(':')[0]<=2026047)?ZTZS:ZTZA;
+          const sdZ=ppZ[3]+2;
+          const zK=tabZ[((sdZ-1)%12+12)%12];
+          let zn=[]; for(let n=1;n<=49;n++) if(tabZ[(n-1)%12]===zK) zn.push(n);
+          if(!zn.includes(te)) zwHit++;
         }
         // 杀尾：二尾=总和尾+9、偏移4；三尾=数位和(总和)+5、偏移2和6
         {
@@ -470,6 +488,20 @@ window.addEventListener('load', ()=>{
         _g('highWe2').innerText = '\u26A0 杀二尾：'+k2[0]+'尾、'+k2[1]+'尾（'+numsOf(k2).join('\u3001')+'）';
         _g('highWe3').innerText = '\u26A0 杀三尾：'+k3[0]+'、'+k3[1]+'、'+k3[2]+'尾（'+numsOf(k3).join('\u3001')+'）';
         _g('weCalc').innerText = '二尾：总和'+totW2+'的尾'+totW2%10+'+9→'+z2W2+'+4偏移；三尾：数位和'+ssW2(totW2)+'+5→'+z3W2+'+2/+6偏移。基线 二尾79.6%／三尾69.4%';
+      }
+      {
+        const lastZ = recs[total-1].ns.slice(0,6).sort((x,y)=>y-x);
+        const ZT3A=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+        const ZT3S=['蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊','马'];
+        const nextZ = (+DRAW[total-1].split(':')[0])+1;
+        const tab3 = (nextZ<=2026047)?ZT3S:ZT3A;
+        const sdZ2 = lastZ[3]+2;
+        const zK2 = tab3[((sdZ2-1)%12+12)%12];
+        let zn3=[]; for(let n=1;n<=49;n++) if(tab3[(n-1)%12]===zK2) zn3.push(String(n).padStart(2,'0'));
+        _g('curPeriodZ').innerText = nextZ;
+        _g('zwWinRate').innerText = (zwHit/(total-1)*100).toFixed(1)+'%命中';
+        _g('highZw').innerText = '\u274C 杀'+zK2+'（'+zn3.join('\u3001')+'全杀）';
+        _g('zwCalc').innerText = '上期六平码降序第4个='+lastZ[3]+'+2='+sdZ2+' → '+zK2+'。全历史 93.9%（978/1042），分年 95.1/93.4/92.9';
       }
       _g('hwWinRate').innerText = (hwHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hwHit+'/'+(total-1);
       _g('sum7WinRate').innerText = (sum7Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+sum7Hit+'/'+(total-1);
