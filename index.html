@@ -301,6 +301,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbkCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#c31432,#240b36);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">✂️ 杀一尾·七项破解（<span id="curPeriodW">--</span>期，<span id="wei2WinRate">--</span>命中）</div>
+        <div id="highWei2" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="wei2Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -334,7 +341,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -415,6 +422,13 @@ window.addEventListener('load', ()=>{
         const lt = recs[i-1].ns[4]%10;
         const keepT = new Set([-3,-2,-1,0,1,2,3].map(k=>(lt+k+10)%10));
         if(keepT.has(te%10)) weiHit++;
+        // 七项杀尾：平2十位+平2肖序+平6合尾+平3合尾+总尾+平1+5 → 取个位杀该尾
+        {
+          const pvW3 = recs[i-1].ns;
+          const ssW3 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const SW3 = Math.floor(pvW3[1]/10) + ((((pvW3[1]-1)%12+12)%12)+1) + ssW3(pvW3[5])%10 + ssW3(pvW3[2])%10 + (pvW3.reduce((x,y)=>x+y,0)%10) + pvW3[0] + 5;
+          if(te%10 !== SW3%10) wei2Hit++;
+        }
       }
       const _g=(id)=>document.getElementById(id)||{innerText:'',dataset:{}};
       _g('headWinRate').innerText = (headHit/(total-1)*100).toFixed(1)+'%命中，全历史'+headHit+'/'+(total-1);
@@ -477,6 +491,19 @@ window.addEventListener('load', ()=>{
         _g('zwWinRate').innerText = (zwHit/(total-1)*100).toFixed(1)+'%命中';
         _g('highZw').innerText = '\u274C 杀'+zK2+'（'+zn3.join('\u3001')+'全杀）';
         _g('zwCalc').innerText = '上期六平码降序第4个='+lastZ[3]+'+2='+sdZ2+' → '+zK2+'。全历史 93.9%（978/1042），分年 95.1/93.4/92.9';
+      }
+      {
+        const pvW = recs[total-1].ns;
+        const nextW = (+DRAW[total-1].split(':')[0])+1;
+        const ssW = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const zxW = ((((pvW[1]-1)%12+12)%12)+1);
+        const SW = Math.floor(pvW[1]/10) + zxW + ssW(pvW[5])%10 + ssW(pvW[2])%10 + (pvW.reduce((x,y)=>x+y,0)%10) + pvW[0] + 5;
+        const kW = ((SW%10)+10)%10;
+        let kwn=[]; for(let n=1;n<=49;n++) if(n%10===kW) kwn.push(String(n).padStart(2,'0'));
+        _g('curPeriodW').innerText = nextW;
+        _g('wei2WinRate').innerText = (wei2Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+wei2Hit+'/'+(total-1);
+        _g('highWei2').innerText = '\u274C 杀'+kW+'尾（'+kwn.join('\u3001')+'）';
+        _g('wei2Calc').innerText = 'S=平2十位'+Math.floor(pvW[1]/10)+'+平2肖序'+zxW+'+平6合尾'+(ssW(pvW[5])%10)+'+平3合尾'+(ssW(pvW[2])%10)+'+总尾'+((pvW.reduce((x,y)=>x+y,0))%10)+'+平1'+pvW[0]+'+5='+SW+' → 杀'+kW+'尾';
       }
       {
         const pvL = recs[total-1].ns;
