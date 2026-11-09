@@ -503,7 +503,7 @@ window.addEventListener('load', ()=>{
         _g('curPeriodW').innerText = nextW;
         _g('wei2WinRate').innerText = (wei2Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+wei2Hit+'/'+(total-1);
         _g('highWei2').innerText = '\u274C 杀'+kW+'尾（'+kwn.join('\u3001')+'）';
-        _g('wei2Calc').innerText = 'S=平2十位'+Math.floor(pvW[1]/10)+'+平2肖序'+zxW+'+平6合尾'+(ssW(pvW[5])%10)+'+平3合尾'+(ssW(pvW[2])%10)+'+总尾'+((pvW.reduce((x,y)=>x+y,0))%10)+'+平1'+pvW[0]+'+5='+SW+' → 杀'+kW+'尾';
+        _g('wei2Calc').innerText = 'S=平2十位'+Math.floor(pvW[1]/10)+'+平2肖序'+zxW+'+平6合尾'+(ssW(pvW[5])%10)+'+平3合尾'+(ssW(pvW[2])%10)+'+总尾'+((pvW.reduce((x,y)=>x+y,0))%10)+'+平1='+pvW[0]+'+5='+SW+' → 杀'+kW+'尾';
       }
       {
         const pvL = recs[total-1].ns;
