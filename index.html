@@ -592,6 +592,10 @@ window.addEventListener('load', ()=>{
       <div id="hotZod"></div>
     </div>
     <div class="card">
+      <h3>特肖遗漏（多少期没开特码）</h3>
+      <div class="ov-grid" id="zodOvGrid" style="grid-template-columns:repeat(4,1fr)"></div>
+    </div>
+    <div class="card">
       <h3>号码遗漏（多少期没开）</h3>
       <div class="grid2" style="margin-bottom:8px">
         <div class="kpi"><div class="k">最大遗漏</div><div class="v a" id="ovMax">--</div></div>
@@ -2651,6 +2655,18 @@ function ovStat(mode){
   }
   return {cur,mx,avg:sum.map(v=>v/N)};
 }
+function zodOv(){
+  const cur=Array(12).fill(0),mx=Array(12).fill(0),sum=Array(12).fill(0);
+  for(let i=0;i<N;i++){
+    const z=zodIdx(tema(i));
+    for(let k=0;k<12;k++){
+      if(k===z)cur[k]=0;else cur[k]++;
+      if(cur[k]>mx[k])mx[k]=cur[k];
+      sum[k]+=cur[k];
+    }
+  }
+  return {cur,mx,avg:sum.map(v=>v/N)};
+}
 function renderHot(){
   const cnt=hotCnt(HOT_WIN,HOT_MODE);
   const ranked=[...Array(49)].map((_,i)=>i+1).sort((a,b)=>cnt[b]-cnt[a]||a-b);
@@ -2676,6 +2692,15 @@ function renderHot(){
   });
   s+='</div>';
   document.getElementById('hotZod').innerHTML=s;
+  const zov=zodOv();
+  const zlist=[...Array(12)].map((_,z)=>z).sort((a,b)=>zov.cur[b]-zov.cur[a]||a-b);
+  let zgg='';
+  zlist.forEach(z=>{
+    const d=zov.cur[z];
+    const cls=d===0?'hot':(d>=zov.mx[z]*0.9?'ice':(d>zov.avg[z]?'cold':''));
+    zgg+='<div class="ov-cell '+cls+'"><div class="num">'+ZZ_NAMES[z]+'</div><div class="gap">'+d+'期</div></div>';
+  });
+  document.getElementById('zodOvGrid').innerHTML=zgg;
   const {cur,mx,avg}=ovStat(HOT_MODE);
   let g='';
   for(let n=1;n<=49;n++){
