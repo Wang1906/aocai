@@ -318,7 +318,7 @@ h2{font-size:15px;margin-bottom:8px}
     <div style="background:linear-gradient(135deg,#3a1c71,#d76d77,#ffaf7b);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-          <div style="font-size:14px;font-weight:bold">🧩 半头并集剩余（<span id="curPeriodHB">--</span>期，<span id="hbLeftCount">--</span>码）</div>
+          <div style="font-size:14px;font-weight:bold">🧩 半头五行及以上合并剩余（<span id="curPeriodHB">--</span>期，<span id="hbLeftCount">--</span>码）</div>
           <button id="copyHbLeft" onclick="copyHbLeftNums()" style="flex:none;background:#fff;color:#3b2a6b;border:0;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:bold">复制</button>
         </div>
         <div id="hbLeftNums" style="font-size:15px;margin-top:8px;line-height:1.75;word-break:break-word">--</div>
@@ -618,17 +618,38 @@ window.addEventListener('load', ()=>{
         const nxH = (+DRAW[total-1].split(':')[0])+1;
         const sH = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
         const wH = n=>{ for(let w=0;w<WXX.length;w++) if(WXX[w][1].includes(n)) return w+1; return 1; };
+        const ZA=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+        const ZS=['蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊','马'];
+        const tbH=(nxH<=2026047)?ZS:ZA;
         const deadH = new Set();
-        [wH(pvH[0])+sH(pvH[0])+1, wH(pvH[3])+sH(pvH[4])+4].forEach(S=>{
-          const h=S%5, dbl=(S%10>=5);
+        const ppH = pvH.slice(0,6).sort((x,y)=>y-x);
+        const sdH = (sH(ppH[4])%10)+Math.floor(ppH[3]/10)+sH(ppH[5])+ppH[3]+ppH[5]+18;
+        const z1H = tbH[((sdH-1)%12+12)%12];
+        for(let n=1;n<=49;n++) if(tbH[(n-1)%12]===z1H) deadH.add(n);
+        const z2H = tbH[(((ppH[3]+2-1)%12+12)%12)];
+        for(let n=1;n<=49;n++) if(tbH[(n-1)%12]===z2H) deadH.add(n);
+        const cpH = (((nxH%1000-286)%7)+7)%7;
+        const hqH = (Math.floor(pvH[cpH]/10)+3)%5;
+        for(let n=1;n<=49;n++) if(Math.min(Math.floor(n/10),4)===hqH) deadH.add(n);
+        const totH = pvH.reduce((x,y)=>x+y,0);
+        const zxH = (((pvH[0]-1)%12+12)%12)+1;
+        const SHH = (nxH%10) + (sH(totH)%10) + 2*totH + 2*zxH + 2*(sH(pvH[0])%10) + 2;
+        const kiH = ((SHH%6)+1)%6;
+        for(const n of HBX[kiH][1]) deadH.add(n);
+        const zx2H = (((pvH[1]-1)%12+12)%12)+1;
+        const SWH = Math.floor(pvH[1]/10) + zx2H + sH(pvH[5])%10 + sH(pvH[2])%10 + (totH%10) + pvH[0] + 5;
+        for(let n=1;n<=49;n++) if(n%10===((SWH%10)+10)%10) deadH.add(n);
+        const S4H = wH(pvH[0]) + sH(pvH[0]) + 1;
+        {
+          const h=S4H%5, dbl=(S4H%10>=5);
           (dbl?[2,4,6,8]:[1,3,5,7,9]).forEach(x=>{ const n=h*10+x; if(n>=1&&n<=49) deadH.add(n); });
-        });
+        }
         let leftH=[]; for(let n=1;n<=49;n++) if(!deadH.has(n)) leftH.push(String(n).padStart(2,'0'));
         window._HB_LEFT = leftH.join('-');
         _g('curPeriodHB').innerText = nxH;
         _g('hbLeftCount').innerText = leftH.length;
         _g('hbLeftNums').innerText = leftH.join('-') || '（全杀）';
-        _g('hbLeftCalc').innerText = '半头两条并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
+        _g('hbLeftCalc').innerText = '本卡及以上 6 卡并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
         window.copyHbLeftNums = function(){
           const t = window._HB_LEFT || '';
           const btn = document.getElementById('copyHbLeft');
