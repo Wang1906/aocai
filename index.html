@@ -2160,33 +2160,6 @@ function renderFusionPage(){
   
   // 下一期是 N 期
   const curN = N;
-  // ===== 上期号 ±3 去重 → 生肖 =====
-  const lastNums=recs[N-1].ns.slice();
-  const set3=new Set(), items3=[];
-  lastNums.forEach(n=>{
-    [n-3,n+3].forEach(v=>{
-      if(v>=1&&v<=49&&!set3.has(v)){set3.add(v);items3.push({ch:String(v).padStart(2,'0'),z:T[zod(v)]});}
-    });
-  });
-  const zset=[...new Set(items3.map(o=>o.z))];
-  h += '<div style="background:linear-gradient(135deg,#1e293b,#0f172a);border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:12px">';
-  h += '<div style="font-size:15px;font-weight:bold;color:#fbbf24;margin-bottom:8px">🔁 上期号 ±3（去重）→ 所属生肖</div>';
-  h += '<div style="font-size:12px;color:#94a3b8;margin-bottom:10px">上期 '+lastNums.map(n=>String(n).padStart(2,'0')).join('/')+'：每个号减3、加3，超出 01–49 丢弃，重复号只留一次</div>';
-  h += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
-  lastNums.forEach(n=>{
-    const vs=[n-3,n+3].filter(v=>v>=1&&v<=49);
-    h += '<div style="background:rgba(255,255,255,.05);border:1px solid #334155;border-radius:8px;padding:6px 9px;font-size:12px;color:#e2e8f0"><b style="color:#93c5fd">'+String(n).padStart(2,'0')+'</b> → '+vs.map(v=>String(v).padStart(2,'0')+'('+T[zod(v)]+')').join('、')+'</div>';
-  });
-  h += '</div>';
-  h += '<div style="font-size:12px;color:#94a3b8;margin-bottom:6px">去重后 <b style="color:#fbbf24">'+items3.length+'</b> 个号</div>';
-  h += '<div style="display:flex;flex-wrap:wrap;gap:6px">';
-  items3.forEach(o=>{
-    h += '<span style="display:inline-flex;align-items:center;gap:3px;background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.4);border-radius:7px;padding:4px 8px;font-size:13px;font-weight:700;color:#fde68a">'+o.ch+'<span style="font-size:10px;font-weight:400;color:#94a3b8">'+o.z+'</span></span>';
-  });
-  h += '</div>';
-  h += '<div style="margin-top:10px;font-size:13px;color:#e2e8f0">涉及生肖 <b style="color:#fbbf24">'+zset.length+'</b> 个：'+zset.join('、')+'</div>';
-  h += '</div>';
-
   
   // 计算4个杀肖公式分别杀哪个生肖
   function killMy3(i) {
