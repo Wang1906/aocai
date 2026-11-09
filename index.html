@@ -308,6 +308,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="wei2Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#8e2de2,#4a00e0);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🧭 半头·五行合值（<span id="curPeriodB4">--</span>期，<span id="bt4WinRate">--</span>命中）</div>
+        <div id="highBt4" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="bt4Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -341,7 +348,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -367,6 +374,15 @@ window.addEventListener('load', ()=>{
         const t3 = S3%5;
         const kill3 = (S3%10>=5) ? [2,4,6,8].map(x=>t3*10+x).filter(n=>n>=1&&n<=49) : [1,3,5,7,9].map(x=>t3*10+x).filter(n=>n>=1&&n<=49);
         if(!kill3.includes(te)) bt3Hit++;
+        // 半头公式4（五行+合值）：S=五行序(平1)+合值(平1)+1
+        {
+          const wx4 = n=>{ for(let w=0;w<WXX.length;w++) if(WXX[w][1].includes(n)) return w+1; return 1; };
+          const ss4 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const S4 = wx4(pv[0]) + ss4(pv[0]) + 1;
+          const t4 = S4%5;
+          const kill4 = (S4%10>=5) ? [2,4,6,8].map(x=>t4*10+x).filter(n=>n>=1&&n<=49) : [1,3,5,7,9].map(x=>t4*10+x).filter(n=>n>=1&&n<=49);
+          if(!kill4.includes(te)) bt4Hit++;
+        }
         // 杀波色单双：近30期特码半波里开出最少的
         const hbK = coldhot(i,30,k=>hbOf(tema(k)));
         if(hbOf(te) !== hbK) hbHit++;
@@ -504,6 +520,21 @@ window.addEventListener('load', ()=>{
         _g('wei2WinRate').innerText = (wei2Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+wei2Hit+'/'+(total-1);
         _g('highWei2').innerText = '\u274C 杀'+kW+'尾（'+kwn.join('\u3001')+'）';
         _g('wei2Calc').innerText = 'S=平2十位'+Math.floor(pvW[1]/10)+'+平2肖序'+zxW+'+平6合尾'+(ssW(pvW[5])%10)+'+平3合尾'+(ssW(pvW[2])%10)+'+总尾'+((pvW.reduce((x,y)=>x+y,0))%10)+'+平1='+pvW[0]+'+5='+SW+' → 杀'+kW+'尾';
+      }
+      {
+        const pvB = recs[total-1].ns;
+        const nextB = (+DRAW[total-1].split(':')[0])+1;
+        const ssB = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const wxB = n=>{ for(let w=0;w<WXX.length;w++) if(WXX[w][1].includes(n)) return w+1; return 1; };
+        const SB = wxB(pvB[0]) + ssB(pvB[0]) + 1;
+        const tB = SB%5;
+        const dB = (SB%10>=5);
+        const kb = (dB?[2,4,6,8]:[1,3,5,7,9]).map(x=>tB*10+x).filter(n=>n>=1&&n<=49);
+        const knb = kb.map(n=>String(n).padStart(2,'0'));
+        _g('curPeriodB4').innerText = nextB;
+        _g('bt4WinRate').innerText = (bt4Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+bt4Hit+'/'+(total-1);
+        _g('highBt4').innerText = '\u274C 杀'+tB+'头'+(dB?'双':'单')+'（'+knb.join('\u3001')+'）';
+        _g('bt4Calc').innerText = 'S=五行'+['金','木','水','火','土'][wxB(pvB[0])-1]+'('+wxB(pvB[0])+')+合值'+ssB(pvB[0])+'+1='+SB+' → '+SB+'%5='+tB+'，个位'+(SB%10)+(dB?'≥5杀双':'<5杀单');
       }
       {
         const pvL = recs[total-1].ns;
