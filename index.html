@@ -596,6 +596,22 @@ window.addEventListener('load', ()=>{
       <div class="ov-grid" id="zodOvGrid" style="grid-template-columns:repeat(4,1fr)"></div>
     </div>
     <div class="card">
+      <h3>头 / 尾 / 五行 / 五门 遗漏</h3>
+      <p class="muted" style="margin:4px 0 8px">特码口径，数字=多少期没开；绿色=上期刚开，紫色=接近历史最大遗漏</p>
+      <div style="font-size:12px;color:var(--tx2);margin:0 0 2px">头数</div>
+      <div class="ov-grid" id="ovTou" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">尾数</div>
+      <div class="ov-grid" id="ovWei" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">五行</div>
+      <div class="ov-grid" id="ovWx" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">五门</div>
+      <div class="ov-grid" id="ovMen" style="grid-template-columns:repeat(5,1fr)"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">波色单双</div>
+      <div class="ov-grid" id="ovBs" style="grid-template-columns:repeat(3,1fr)"></div>
+      <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">大小单双</div>
+      <div class="ov-grid" id="ovDs" style="grid-template-columns:repeat(4,1fr)"></div>
+    </div>
+    <div class="card">
       <h3>号码遗漏（多少期没开）</h3>
       <div class="grid2" style="margin-bottom:8px">
         <div class="kpi"><div class="k">最大遗漏</div><div class="v a" id="ovMax">--</div></div>
@@ -2655,6 +2671,21 @@ function ovStat(mode){
   }
   return {cur,mx,avg:sum.map(v=>v/N)};
 }
+function ovGroups(gens){
+  const n=gens.length;
+  const gi=new Array(50).fill(-1);
+  gens.forEach((g,k)=>g.num.forEach(v=>{gi[v]=k;}));
+  const cur=Array(n).fill(0),mx=Array(n).fill(0),sum=Array(n).fill(0);
+  for(let i=0;i<N;i++){
+    const k=gi[tema(i)];
+    for(let j=0;j<n;j++){
+      if(j===k)cur[j]=0;else cur[j]++;
+      if(cur[j]>mx[j])mx[j]=cur[j];
+      sum[j]+=cur[j];
+    }
+  }
+  return {cur,mx,avg:sum.map(v=>v/N)};
+}
 function zodOv(){
   const cur=Array(12).fill(0),mx=Array(12).fill(0),sum=Array(12).fill(0);
   for(let i=0;i<N;i++){
@@ -2701,6 +2732,26 @@ function renderHot(){
     zgg+='<div class="ov-cell '+cls+'"><div class="num">'+ZZ_NAMES[z]+'</div><div class="gap">'+d+'期</div></div>';
   });
   document.getElementById('zodOvGrid').innerHTML=zgg;
+  const touG=[...Array(5)].map((_,h)=>({n:h+'头',num:[]}));
+  for(let n2=1;n2<=49;n2++)touG[Math.floor(n2/10)].num.push(n2);
+  const weiG=[...Array(10)].map((_,d)=>({n:d+'尾',num:[]}));
+  for(let n2=1;n2<=49;n2++)weiG[n2%10].num.push(n2);
+  const wxG=BOXES.find(b=>b.t==='五行').opts.filter(o=>!o.all);
+  const menG=BOXES.find(b=>b.t==='五门').opts.filter(o=>!o.all);
+  const drawG=(el,gens)=>{
+    const ov=ovGroups(gens);
+    let hh='';
+    gens.forEach((g,k)=>{
+      const d=ov.cur[k];
+      const cls=d===0?'hot':(d>=ov.mx[k]*0.9?'ice':(d>ov.avg[k]?'cold':''));
+      hh+='<div class="ov-cell '+cls+'"><div class="num">'+g.n+'</div><div class="gap">'+d+'期</div></div>';
+    });
+    document.getElementById(el).innerHTML=hh;
+  };
+  drawG('ovTou',touG);drawG('ovWei',weiG);drawG('ovWx',wxG);drawG('ovMen',menG);
+  const bsG=BOXES.find(b=>b.t==='波色单双').opts.filter(o=>!o.all);
+  const dsG=BOXES.find(b=>b.t==='大小单双').opts.filter(o=>!o.all);
+  drawG('ovBs',bsG);drawG('ovDs',dsG);
   const {cur,mx,avg}=ovStat(HOT_MODE);
   let g='';
   for(let n=1;n<=49;n++){
