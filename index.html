@@ -353,6 +353,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="zw3Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#136a8a,#267871);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">✂️ 杀二尾·双尾版（<span id="curPeriodT2">--</span>期，<span id="t2WinRate">--</span>命中）</div>
+        <div id="highT2" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="t2Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -386,7 +393,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, tail2Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -459,6 +466,13 @@ window.addEventListener('load', ()=>{
           const dz8=tb8[((S8%12+12)%12)];
           let q8=[]; for(let n=1;n<=49;n++) if(tb8[(n-1)%12]===dz8) q8.push(n);
           if(!q8.includes(te)) zw3Hit++;
+        }
+        // 杀二尾：平6合值尾 + 平6肖序尾
+        {
+          const sT2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const k1T = sT2(pv[5])%10;
+          const k2T = ((((pv[5]-1)%12)+1))%10;
+          if(te%10!==k1T && te%10!==k2T) tail2Hit++;
         }
         // 杀波色单双：近30期特码半波里开出最少的
         const hbK = coldhot(i,30,k=>hbOf(tema(k)));
@@ -714,6 +728,20 @@ window.addEventListener('load', ()=>{
         _g('zw3WinRate').innerText = (zw3Hit/(total-1)*100).toFixed(1)+'%命中，今年'+zw3Hit+'/'+(total-1);
         _g('highZw3').innerText = '\u274C 杀'+dz8+'（'+q8.join('\u3001')+'）';
         _g('zw3Calc').innerText = 'S=合值'+s8(pv8[0])+'(平1)+合值'+s8(pv8[4])+'(平5)+3='+S8+' → '+S8+'%12='+(S8%12);
+      }
+      {
+        const pvT = recs[total-1].ns;
+        const nxT = (+DRAW[total-1].split(':')[0])+1;
+        const sT = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const k1 = sT(pvT[5])%10;
+        const zxT = (((pvT[5]-1)%12)+1);
+        const k2 = zxT%10;
+        const ksT = (k1===k2) ? [k1] : [k1,k2];
+        let qT=[]; for(let n=1;n<=49;n++) if(ksT.includes(n%10)) qT.push(String(n).padStart(2,'0'));
+        _g('curPeriodT2').innerText = nxT;
+        _g('t2WinRate').innerText = (tail2Hit/(total-1)*100).toFixed(1)+'%命中，今年'+tail2Hit+'/'+(total-1);
+        _g('highT2').innerText = '\u274C 杀'+ksT.join('\u3001')+'尾（'+qT.join('\u3001')+'）';
+        _g('t2Calc').innerText = '平6='+pvT[5]+' → 合值尾'+k1+'、肖序'+zxT+'取尾'+k2+(k1===k2?'（重合，只杀1尾）':'');
       }
       {
         const pvL = recs[total-1].ns;
