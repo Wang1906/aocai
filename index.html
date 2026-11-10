@@ -844,7 +844,7 @@ window.addEventListener('load', ()=>{
       </div>
       <div class="seg" id="hotModeSeg">
         <div class="seg-btn on" data-m="t">特码</div>
-        <div class="seg-btn" data-m="a">平码+特码</div>
+        <div class="seg-btn" data-m="a">平码</div>
       </div>
     </div>
     <div class="card">
@@ -861,7 +861,7 @@ window.addEventListener('load', ()=>{
     </div>
     <div class="card">
       <h3>头 / 尾 / 五行 / 五门 遗漏</h3>
-      <p class="muted" style="margin:4px 0 8px">特码口径，数字=多少期没开；绿色=上期刚开，紫色=接近历史最大遗漏</p>
+      <p class="muted" style="margin:4px 0 8px">特码 / 平码 分别看，数字=多少期没开；绿色=上期刚开，紫色=接近历史最大遗漏</p>
       <div style="font-size:12px;color:var(--tx2);margin:0 0 2px">头数</div>
       <div class="ov-grid" id="ovTou" style="grid-template-columns:repeat(5,1fr)"></div>
       <div style="font-size:12px;color:var(--tx2);margin:10px 0 2px">尾数</div>
@@ -2917,17 +2917,17 @@ function hotCnt(win,mode){
   const cnt=Array(50).fill(0),base=N-win;
   for(let i=base;i<N;i++){
     const ns=recs[i].ns;
-    if(mode==='a')for(let k=0;k<6;k++)cnt[ns[k]]++;
-    cnt[ns[6]]++;
+    if(mode==='a'){for(let k=0;k<6;k++)cnt[ns[k]]++;}
+    else cnt[ns[6]]++;
   }
   return cnt;
 }
 function ovStat(mode){
   const cur=Array(50).fill(0),mx=Array(50).fill(0),sum=Array(50).fill(0);
-  const inHit=n=>{for(let k=0;k<6;k++)if(recs[i].ns[k]===n)return true;return recs[i].ns[6]===n;};
+  const inHit=(n,idx)=>{for(let k=0;k<6;k++)if(recs[idx].ns[k]===n)return true;return false;};
   for(let i=0;i<N;i++){
     for(let n=1;n<=49;n++){
-      const hit=(mode==='a')?inHit(n):(recs[i].ns[6]===n);
+      const hit=(mode==='a')?inHit(n,i):(recs[i].ns[6]===n);
       cur[n]=hit?0:cur[n]+1;
       if(cur[n]>mx[n])mx[n]=cur[n];
       sum[n]+=cur[n];
@@ -2935,15 +2935,17 @@ function ovStat(mode){
   }
   return {cur,mx,avg:sum.map(v=>v/N)};
 }
-function ovGroups(gens){
+function ovGroups(gens,mode){
   const n=gens.length;
   const gi=new Array(50).fill(-1);
   gens.forEach((g,k)=>g.num.forEach(v=>{gi[v]=k;}));
   const cur=Array(n).fill(0),mx=Array(n).fill(0),sum=Array(n).fill(0);
   for(let i=0;i<N;i++){
-    const k=gi[tema(i)];
+    const hit=new Array(n).fill(false);
+    if(mode==='a'){for(let k=0;k<6;k++){const g=gi[recs[i].ns[k]];if(g>=0)hit[g]=true;}}
+    else {const g=gi[tema(i)];if(g>=0)hit[g]=true;}
     for(let j=0;j<n;j++){
-      if(j===k)cur[j]=0;else cur[j]++;
+      if(hit[j])cur[j]=0;else cur[j]++;
       if(cur[j]>mx[j])mx[j]=cur[j];
       sum[j]+=cur[j];
     }
@@ -3003,7 +3005,7 @@ function renderHot(){
   const wxG=BOXES.find(b=>b.t==='五行').opts.filter(o=>!o.all);
   const menG=BOXES.find(b=>b.t==='五门').opts.filter(o=>!o.all);
   const drawG=(el,gens)=>{
-    const ov=ovGroups(gens);
+    const ov=ovGroups(gens,HOT_MODE);
     let hh='';
     gens.forEach((g,k)=>{
       const d=ov.cur[k];
