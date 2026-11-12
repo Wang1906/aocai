@@ -368,6 +368,27 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="z4Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#00b4db,#0083b0);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">✂️ 杀一尾·两位版（<span id="curPeriodW5">--</span>期，<span id="w5WinRate">--</span>命中）</div>
+        <div id="highW5" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="w5Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#8e2de2,#4a00e0);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🐑 杀一肖·平四版（<span id="curPeriodZ5">--</span>期，<span id="z5WinRate">--</span>命中）</div>
+        <div id="highZ5" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="z5Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#eb3349,#f45c43);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🐑 杀一肖·平六版（<span id="curPeriodZ6">--</span>期，<span id="z6WinRate">--</span>命中）</div>
+        <div id="highZ6" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="z6Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -400,7 +421,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -487,6 +508,28 @@ window.addEventListener('load', ()=>{
           const dz4 = zt4[((ss4z(pv[2]) + (((pv[3]-1)%12+12)%12) + (((pv[5]-1)%12+12)%12) + 1)%12)];
           let q4=[]; for(let nn=1;nn<=49;nn++) if(zt4[(nn-1)%12]===dz4) q4.push(nn);
           if(!q4.includes(te)) z4Hit++;
+        }
+        // 杀尾·两位版：平2肖序+平4十+平6合+1
+        {
+          const ss5 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const kw5 = (((((pv[1]-1)%12+12)%12) + Math.floor(pv[3]/10) + ss5(pv[5]) + 1)%10+10)%10;
+          if(te%10 !== kw5) w5Hit++;
+        }
+        // 杀肖·平四版：平4合+平6合+平6肖序+7
+        {
+          const ss6 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const zt6=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+          const dz5 = zt6[((ss6(pv[3]) + ss6(pv[5]) + (((pv[5]-1)%12+12)%12) + 7)%12)];
+          let q5=[]; for(let nn=1;nn<=49;nn++) if(zt6[(nn-1)%12]===dz5) q5.push(nn);
+          if(!q5.includes(te)) z5Hit++;
+        }
+        // 杀肖·平六版：平4合+平6本身+平6合+6
+        {
+          const ss7 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const zt7=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+          const dz6 = zt7[((ss7(pv[3]) + pv[5] + ss7(pv[5]) + 6)%12)];
+          let q6=[]; for(let nn=1;nn<=49;nn++) if(zt7[(nn-1)%12]===dz6) q6.push(nn);
+          if(!q6.includes(te)) z6Hit++;
         }
         // 杀波色单双：近30期特码半波里开出最少的
         const hbK = coldhot(i,30,k=>hbOf(tema(k)));
@@ -648,6 +691,41 @@ window.addEventListener('load', ()=>{
         _g('z4WinRate').innerText = (z4Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+z4Hit+'/'+(total-1);
         _g('highZ4').innerText = '\u274C 杀'+dz4+'（'+qz4.map(n=>String(n).padStart(2,'0')).join('\u3001')+'）';
         _g('z4Calc').innerText = 'S=平3合'+ss4z(pz4[2])+'+平4肖序'+(((pz4[3]-1)%12+12)%12)+'+平6肖序'+(((pz4[5]-1)%12+12)%12)+'+1 → 取第'+(((ss4z(pz4[2]) + (((pz4[3]-1)%12+12)%12) + (((pz4[5]-1)%12+12)%12) + 1)%12)+1)+'肖='+dz4;
+      }
+      {
+        const pw5 = recs[total-1].ns;
+        const nw5 = (+DRAW[total-1].split(':')[0])+1;
+        const ss5r = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const kw5 = (((((pw5[1]-1)%12+12)%12) + Math.floor(pw5[3]/10) + ss5r(pw5[5]) + 1)%10+10)%10;
+        let qw5=[]; for(let n=1;n<=49;n++) if(n%10===kw5) qw5.push(String(n).padStart(2,'0'));
+        _g('curPeriodW5').innerText = nw5;
+        _g('w5WinRate').innerText = (w5Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+w5Hit+'/'+(total-1);
+        _g('highW5').innerText = '\u274C 杀'+kw5+'尾（'+qw5.join('\u3001')+'）';
+        _g('w5Calc').innerText = 'S=平2肖序'+(((pw5[1]-1)%12+12)%12)+'+平4十'+Math.floor(pw5[3]/10)+'+平6合'+ss5r(pw5[5])+'+1='+kw5+' → 杀'+kw5+'尾';
+      }
+      {
+        const pz5 = recs[total-1].ns;
+        const nz5 = (+DRAW[total-1].split(':')[0])+1;
+        const ss6r = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const zt6r=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+        const dz5 = zt6r[((ss6r(pz5[3]) + ss6r(pz5[5]) + (((pz5[5]-1)%12+12)%12) + 7)%12)];
+        let qz5=[]; for(let n=1;n<=49;n++) if(zt6r[(n-1)%12]===dz5) qz5.push(String(n).padStart(2,'0'));
+        _g('curPeriodZ5').innerText = nz5;
+        _g('z5WinRate').innerText = (z5Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+z5Hit+'/'+(total-1);
+        _g('highZ5').innerText = '\u274C 杀'+dz5+'（'+qz5.join('\u3001')+'）';
+        _g('z5Calc').innerText = 'S=平4合'+ss6r(pz5[3])+'+平6合'+ss6r(pz5[5])+'+平6肖序'+(((pz5[5]-1)%12+12)%12)+'+7 → 取第'+(((ss6r(pz5[3]) + ss6r(pz5[5]) + (((pz5[5]-1)%12+12)%12) + 7)%12)+1)+'肖='+dz5;
+      }
+      {
+        const pz6 = recs[total-1].ns;
+        const nz6 = (+DRAW[total-1].split(':')[0])+1;
+        const ss7r = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const zt7r=['马','蛇','龙','兔','虎','牛','鼠','猪','狗','鸡','猴','羊'];
+        const dz6 = zt7r[((ss7r(pz6[3]) + pz6[5] + ss7r(pz6[5]) + 6)%12)];
+        let qz6=[]; for(let n=1;n<=49;n++) if(zt7r[(n-1)%12]===dz6) qz6.push(String(n).padStart(2,'0'));
+        _g('curPeriodZ6').innerText = nz6;
+        _g('z6WinRate').innerText = (z6Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+z6Hit+'/'+(total-1);
+        _g('highZ6').innerText = '\u274C 杀'+dz6+'（'+qz6.join('\u3001')+'）';
+        _g('z6Calc').innerText = 'S=平4合'+ss7r(pz6[3])+'+平6本身'+pz6[5]+'+平6合'+ss7r(pz6[5])+'+6 → 取第'+(((ss7r(pz6[3]) + pz6[5] + ss7r(pz6[5]) + 6)%12)+1)+'肖='+dz6;
       }
       {
         const pvB = recs[total-1].ns;
@@ -826,6 +904,12 @@ window.addEventListener('load', ()=>{
           for(let n=1;n<=49;n++) if(n%10===kw4L) deadL.add(n);
           const dz4L = tabL[((ssL(pvL[2]) + (((pvL[3]-1)%12+12)%12) + (((pvL[5]-1)%12+12)%12) + 1)%12)];
           for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===dz4L) deadL.add(n);
+          const kw5L = (((((pvL[1]-1)%12+12)%12) + Math.floor(pvL[3]/10) + ssL(pvL[5]) + 1)%10+10)%10;
+          for(let n=1;n<=49;n++) if(n%10===kw5L) deadL.add(n);
+          const dz5L = tabL[((ssL(pvL[3]) + ssL(pvL[5]) + (((pvL[5]-1)%12+12)%12) + 7)%12)];
+          for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===dz5L) deadL.add(n);
+          const dz6L = tabL[((ssL(pvL[3]) + pvL[5] + ssL(pvL[5]) + 6)%12)];
+          for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===dz6L) deadL.add(n);
         }
         let leftL=[];
         for(let n=1;n<=49;n++) if(!deadL.has(n)) leftL.push(String(n).padStart(2,'0'));
@@ -834,7 +918,7 @@ window.addEventListener('load', ()=>{
         _g('curPeriodL').innerText = nextL;
         _g('leftCount').innerText = leftL.length;
         _g('leftNums').innerText = leftStr || '（全杀）';
-        _g('leftCalc').innerText = '全部 12 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        _g('leftCalc').innerText = '全部 15 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
         window.copyLeftNums = function(){
           const t = window._LEFT_NUMS || '';
           const btn = document.getElementById('copyLeft');
