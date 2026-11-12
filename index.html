@@ -399,16 +399,7 @@ h2{font-size:15px;margin-bottom:8px}
     </div>
     <div id="fusionSync" style="margin-top:12px"></div>
     
-    <div style="background:linear-gradient(135deg,#0f9b8e,#1de9b6);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
-      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
-          <div style="font-size:14px;font-weight:bold">✅ 杀码集合剩下什么（<span id="curPeriodLH">--</span>期，<span id="leftCountH">--</span>码）</div>
-          <button onclick="copyText(window._LEFT_HI||'')" style="flex:none;background:#fff;color:#065f56;border:0;border-radius:6px;padding:6px 14px;font-size:13px;font-weight:bold">复制</button>
-        </div>
-        <div id="leftNumsH" style="font-size:15px;margin-top:8px;line-height:1.75;word-break:break-word">--</div>
-        <div id="leftCalcH" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
-      </div>
-    </div>
+    
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -959,6 +950,11 @@ window.addEventListener('load', ()=>{
         _g('leftNumsH').innerText = leftStrH || '（全杀）';
         _g('leftCountH').innerText = leftH.length;
         _g('leftCalcH').innerText = '杀码集合 12 卡并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
+        window._HB_LEFT = leftStrH;
+        _g('curPeriodHB').innerText = nextL;
+        _g('hbLeftCount').innerText = leftH.length;
+        _g('hbLeftNums').innerText = leftStrH || '（全杀）';
+        _g('hbLeftCalc').innerText = '12 张 ≥94% 卡并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
         window._LEFT_NUMS = leftStr;
         _g('curPeriodL').innerText = nextL;
         _g('leftCount').innerText = leftL.length;
