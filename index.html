@@ -274,6 +274,13 @@ h2{font-size:15px;margin-bottom:8px}
   <!-- ===== 视图：规律 ===== -->
   <section class="view" id="view-trend">
     <h2>规律</h2>
+    <div style="background:linear-gradient(135deg,#434343,#000000);color:#fff;padding:15px;border-radius:10px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🎯 固定杀一码·上期特码（<span id="curPeriodM1">--</span>期，<span id="m1WinRate">--</span>命中）</div>
+        <div id="highM1" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="m1Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;padding:15px;border-radius:10px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🐷 杀D序推演一肖（<span id="curPeriod4">--</span>期，<span id="dxWinRate">--</span>命中）</div>
@@ -387,13 +394,6 @@ h2{font-size:15px;margin-bottom:8px}
         <div style="font-size:14px;font-weight:bold">🐑 杀一肖·平六版（<span id="curPeriodZ6">--</span>期，<span id="z6WinRate">--</span>命中）</div>
         <div id="highZ6" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
         <div id="z6Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
-      </div>
-    </div>
-    <div style="background:linear-gradient(135deg,#434343,#000000);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
-      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
-        <div style="font-size:14px;font-weight:bold">🎯 固定杀一码·上期特码（<span id="curPeriodM1">--</span>期，<span id="m1WinRate">--</span>命中）</div>
-        <div id="highM1" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
-        <div id="m1Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
@@ -937,6 +937,8 @@ window.addEventListener('load', ()=>{
         _g('curPeriodL').innerText = nextL;
         _g('leftCount').innerText = leftL.length;
         _g('leftNums').innerText = leftStr || '（全杀）';
+        if(document.getElementById('leftNums2')) _g('leftNums2').innerText = leftStr || '（全杀）';
+        if(document.getElementById('leftCount2')) _g('leftCount2').innerText = leftL.length;
         _g('leftCalc').innerText = '全部 16 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
         window.copyLeftNums = function(){
           const t = window._LEFT_NUMS || '';
@@ -979,9 +981,9 @@ window.addEventListener('load', ()=>{
     <h2>自定义杀号结果</h2>
     <!-- 紫色面板：全杀后剩余号码 -->
     <div style="background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:15px;border-radius:10px;margin-bottom:15px">
-      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码</div>
-      <div style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">01-02-05-06-08-09-12-16-18-31-32-35-36-38-39-41-42-45-46-48-49</div>
-      <button onclick="copyText('01-02-05-06-08-09-12-16-18-31-32-35-36-38-39-41-42-45-46-48-49')" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
+      <div style="font-size:16px;font-weight:bold;margin-bottom:10px">🎯 全杀后剩余号码（<span id="leftCount2">--</span>码）</div>
+      <div id="leftNums2" style="font-size:20px;line-height:1.8;font-weight:bold;color:#ffd700">--</div>
+      <button onclick="copyText(window._LEFT_NUMS||'')" style="margin-top:10px;background:#ffd700;color:#333;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-weight:bold">复制号码</button>
     </div>
     </section>
   <!-- ===== 视图：投票 ===== -->
