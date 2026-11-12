@@ -389,6 +389,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="z6Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#434343,#000000);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🎯 固定杀一码·上期特码（<span id="curPeriodM1">--</span>期，<span id="m1WinRate">--</span>命中）</div>
+        <div id="highM1" style="font-size:18px;margin-top:6px;line-height:1.6;word-break:break-word">--</div>
+        <div id="m1Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#614385,#516395);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
@@ -421,7 +428,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0, m1Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -531,6 +538,8 @@ window.addEventListener('load', ()=>{
           let q6=[]; for(let nn=1;nn<=49;nn++) if(zt7[(nn-1)%12]===dz6) q6.push(nn);
           if(!q6.includes(te)) z6Hit++;
         }
+        // 固定杀一码：上期特码
+        if(te !== pv[6]) m1Hit++;
         // 杀波色单双：近30期特码半波里开出最少的
         const hbK = coldhot(i,30,k=>hbOf(tema(k)));
         if(hbOf(te) !== hbK) hbHit++;
@@ -728,6 +737,15 @@ window.addEventListener('load', ()=>{
         _g('z6Calc').innerText = 'S=平4合'+ss7r(pz6[3])+'+平6本身'+pz6[5]+'+平6合'+ss7r(pz6[5])+'+6 → 取第'+(((ss7r(pz6[3]) + pz6[5] + ss7r(pz6[5]) + 6)%12)+1)+'肖='+dz6;
       }
       {
+        const pm1 = recs[total-1].ns;
+        const nm1 = (+DRAW[total-1].split(':')[0])+1;
+        const km1 = pm1[6];
+        _g('curPeriodM1').innerText = nm1;
+        _g('m1WinRate').innerText = (m1Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+m1Hit+'/'+(total-1);
+        _g('highM1').innerText = '\u274C 杀 '+String(km1).padStart(2,'0');
+        _g('m1Calc').innerText = '固定规则：上期特码 '+String(km1).padStart(2,'0')+' 直接杀掉，本期不出这一码（理论 '+(48/49*100).toFixed(1)+'%）';
+      }
+      {
         const pvB = recs[total-1].ns;
         const nextB = (+DRAW[total-1].split(':')[0])+1;
         const ssB = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
@@ -910,6 +928,7 @@ window.addEventListener('load', ()=>{
           for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===dz5L) deadL.add(n);
           const dz6L = tabL[((ssL(pvL[3]) + pvL[5] + ssL(pvL[5]) + 6)%12)];
           for(let n=1;n<=49;n++) if(tabL[(n-1)%12]===dz6L) deadL.add(n);
+          deadL.add(pvL[6]);
         }
         let leftL=[];
         for(let n=1;n<=49;n++) if(!deadL.has(n)) leftL.push(String(n).padStart(2,'0'));
@@ -918,7 +937,7 @@ window.addEventListener('load', ()=>{
         _g('curPeriodL').innerText = nextL;
         _g('leftCount').innerText = leftL.length;
         _g('leftNums').innerText = leftStr || '（全杀）';
-        _g('leftCalc').innerText = '全部 15 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        _g('leftCalc').innerText = '全部 16 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
         window.copyLeftNums = function(){
           const t = window._LEFT_NUMS || '';
           const btn = document.getElementById('copyLeft');
