@@ -368,7 +368,7 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbLeftCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
       </div>
     </div>
-    <div style="margin:22px 0 2px;font-size:14px;font-weight:bold;color:#9aa0a6;letter-spacing:1px">📌 其余参考 · 胜率 &lt;94%（5 张）</div>
+    <div style="margin:22px 0 2px;font-size:14px;font-weight:bold;color:#9aa0a6;letter-spacing:1px">📌 其余参考 · 胜率 &lt;94%（6 张）</div>
     <div style="background:linear-gradient(135deg,#8e2de2,#4a00e0);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🧭 半头·五行合值（<span id="curPeriodB4">--</span>期，<span id="bt4WinRate">--</span>命中）</div>
@@ -395,6 +395,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div style="font-size:14px;font-weight:bold">🪵 杀一行·五行（<span id="curPeriodHx">--</span>期，<span id="hxWinRate">--</span>命中）</div>
         <div id="highHx" style="font-size:16px;margin-top:6px;line-height:1.65;word-break:break-word">--</div>
         <div id="hxCalc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
+    <div style="background:linear-gradient(135deg,#2c3e50,#4ca1af);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">🎨 半波·整类大小（<span id="curPeriodQ">--</span>期，<span id="qWinRate">--</span>命中）</div>
+        <div id="highQ" style="font-size:16px;margin-top:6px;line-height:1.65;word-break:break-word">--</div>
+        <div id="qCalc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
       </div>
     </div>
     <div style="background:linear-gradient(135deg,#42275a,#734b6d);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
@@ -439,7 +446,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0, m1Hit=0, bhHit=0, hxHit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0, m1Hit=0, bhHit=0, hxHit=0, qHit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -573,6 +580,19 @@ window.addEventListener('load', ()=>{
           const SX = 2*ssX(pnX) + pv[5] + 3;
           if(!WXX[SX%5][1].includes(te)) hxHit++;
         }
+        // 半波整类：半波 ki 定单双，总合尾≥5 定大
+        {
+          const pnQ = (+DRAW[i].split(':')[0]);
+          const ssQ = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const pvQ = recs[i-1].ns;
+          const TQ = pvQ.reduce((a,b)=>a+b,0);
+          const SQ = (pnQ%10)+(ssQ(TQ)%10)+2*TQ+2*((((pvQ[0]-1)%12)+12)%12+1)+2*(ssQ(pvQ[0])%10)+2;
+          const kQ = ((SQ%6)+1)%6;
+          const predQ = ((kQ%2===0)?2:0) + ((ssQ(TQ)%10)>=5?0:1);
+          let inQ=false;
+          for(let nq=1;nq<=49;nq++){ const gq=((nq%2===1)?2:0)+((nq>=25)?0:1); if(gq===predQ && nq===te){ inQ=true; break; } }
+          if(!inQ) qHit++;
+        }
         // 两头并杀：B4 头 + B5 头一起杀
         {
           const wxB = n=>{ for(let w=0;w<WXX.length;w++) if(WXX[w][1].includes(n)) return w+1; return 1; };
@@ -659,6 +679,17 @@ window.addEventListener('load', ()=>{
         _g('hxWinRate').innerText = (hxHit/(total-1)*100).toFixed(1)+'%命中，全历史'+hxHit+'/'+(total-1);
         _g('highHx').innerText = '❌ 杀'+WXX[kX2][0]+'（'+WXX[kX2][1].map(n=>String(n).padStart(2,'0')).join('、')+'）';
         _g('hxCalc').innerText = 'S=期号和'+ssX2(pnX2)+'×2 + 平6('+pvB[5]+') + 3 = '+SX2+' → '+SX2+'%5='+kX2+' → 杀'+WXX[kX2][0];
+        const pnQ2 = (+DRAW[total-1].split(':')[0]) + 1;
+        const ssQ2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+        const TQ2 = pvB.reduce((a,b)=>a+b,0);
+        const SQ2 = (pnQ2%10)+(ssQ2(TQ2)%10)+2*TQ2+2*((((pvB[0]-1)%12)+12)%12+1)+2*(ssQ2(pvB[0])%10)+2;
+        const kQ2 = ((SQ2%6)+1)%6, singleQ2 = (kQ2%2===0), bigQ2 = (ssQ2(TQ2)%10)>=5;
+        const predQ2 = (singleQ2?2:0) + (bigQ2?0:1);
+        const candQ2=[]; for(let nq2=1;nq2<=49;nq2++){ const gq2=((nq2%2===1)?2:0)+((nq2>=25)?0:1); if(gq2===predQ2) candQ2.push(nq2); }
+        _g('curPeriodQ').innerText = pnQ2;
+        _g('qWinRate').innerText = (qHit/(total-1)*100).toFixed(1)+'%命中，全历史'+qHit+'/'+(total-1);
+        _g('highQ').innerText = '❌ 杀'+['大双','小双','大单','小单'][predQ2]+'（'+candQ2.map(n=>String(n).padStart(2,'0')).join('、')+'）';
+        _g('qCalc').innerText = '半波 ki='+kQ2+' → '+['红单','红双','蓝单','蓝双','绿单','绿双'][kQ2]+'（'+(singleQ2?'单':'双')+'）；总合尾'+ssQ2(TQ2)+' → '+(bigQ2?'大':'小')+' → 杀'+['大双','小双','大单','小单'][predQ2]+' '+candQ2.length+'码';
       }
       {
         const lastPnD = (+DRAW[total-1].split(':')[0]);
@@ -964,6 +995,13 @@ window.addEventListener('load', ()=>{
         {
           const SXL = 2*ssL(nextL) + pvL[5] + 3;
           for(const n of WXX[SXL%5][1]) deadL.add(n);
+        {
+          const TQL = pvL.reduce((a,b)=>a+b,0);
+          const SQL = (nextL%10)+(ssL(TQL)%10)+2*TQL+2*((((pvL[0]-1)%12)+12)%12+1)+2*(ssL(pvL[0])%10)+2;
+          const kQL = ((SQL%6)+1)%6;
+          const predQL = ((kQL%2===0)?2:0) + ((ssL(TQL)%10)>=5?0:1);
+          for(let n=1;n<=49;n++){ const g=((n%2===1)?2:0)+((n>=25)?0:1); if(g===predQL) deadL.add(n); }
+        }
         }
         let leftL=[];
         for(let n=1;n<=49;n++) if(!deadL.has(n)) leftL.push(String(n).padStart(2,'0'));
@@ -987,7 +1025,7 @@ window.addEventListener('load', ()=>{
         _g('leftNums').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftNums2')) _g('leftNums2').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftCount2')) _g('leftCount2').innerText = leftL.length;
-        _g('leftCalc').innerText = '全部 17 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        _g('leftCalc').innerText = '全部 18 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
         window.copyText = function(t){
           const fb = ()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); };
           if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).catch(fb); } else { fb(); }
