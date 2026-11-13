@@ -1064,9 +1064,9 @@ window.addEventListener('load', ()=>{
             const rec=DRAW.find(x=>+x.split(':')[0]===p);
             const o=tr[p];
             const nl=o.L.split('-').filter(Boolean).length, nh=o.H.split('-').filter(Boolean).length;
-            const sL = nl<=4?20:(nl>=8&&nl<=10?10:0);
+            const sL = nl<=4?20:10;
             const sH = nh<=14?20:10;
-            const wL = sL===20?'加倍20/码':(sL===10?'正常10/码':'跳过');
+            const wL = sL===20?'加倍20/码':'基础10/码';
             const wH = sH===20?'加倍20/码':'基础10/码';
             if(!rec){ out.push(p+'｜全集'+nl+'码 '+wL+' 待开奖｜94%'+nh+'码 '+wH+' 待开奖'); continue; }
             const te=+rec.split(':')[1].split(',')[6];
@@ -1085,10 +1085,10 @@ window.addEventListener('load', ()=>{
         {
           const nT2 = leftL.length;
           let tx2, bg2, fg2;
-          if(nT2<=4){ tx2='🔥 本期可加倍下（'+nT2+'码，回款3.27倍）'; bg2='#ffd700'; fg2='#5a1a00'; }
-          else if(nT2<=7){ tx2='⏸ 本期建议跳过（'+nT2+'码，回款仅1.48倍）'; bg2='#95a5a6'; fg2='#1b1b1b'; }
-          else if(nT2<=10){ tx2='✔ 本期正常下（'+nT2+'码，回款2.05倍）'; bg2='#7bed9f'; fg2='#0b3d1e'; }
-          else { tx2='✖ 本期不下（'+nT2+'码，回款仅1.08倍）'; bg2='rgba(255,255,255,.35)'; fg2='#222'; }
+          if(nT2<=4){ tx2='🔥 本期加倍下（'+nT2+'码，回款3.27倍）'; bg2='#ffd700'; fg2='#5a1a00'; }
+          else if(nT2<=7){ tx2='➖ 本期基础注，不加倍（'+nT2+'码，回款1.48倍）'; bg2='#7bed9f'; fg2='#0b3d1e'; }
+          else if(nT2<=10){ tx2='➖ 本期基础注，不加倍（'+nT2+'码，回款2.05倍）'; bg2='#7bed9f'; fg2='#0b3d1e'; }
+          else { tx2='➖ 本期基础注，不加倍（'+nT2+'码，回款1.08倍）'; bg2='#ffd166'; fg2='#4a2100'; }
           const et2=_g('leftTip'); et2.innerText=tx2; et2.style.background=bg2; et2.style.color=fg2;
         }
         window.copyText = function(t){
