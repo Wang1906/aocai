@@ -366,6 +366,7 @@ h2{font-size:15px;margin-bottom:8px}
         </div>
         <div id="hbLeftNums" style="font-size:15px;margin-top:8px;line-height:1.75;word-break:break-word">--</div>
         <div id="hbLeftCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
+        <div id="hbTip" style="margin-top:10px;padding:10px 12px;border-radius:8px;font-size:15px;font-weight:bold;line-height:1.5;background:rgba(0,0,0,.25)">--</div>
         <div style="font-size:12px;line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.3);opacity:.95">📌 怎么下：剩13-14码→回款2.14倍，可加一档注｜15-16码→1.89倍，基础注｜17-20码→1.64倍｜21码以上→1.59~1.44倍，不加注。连中后第1-3期加档，输一场立刻回基础注；别按月份挑期（单年样本）。</div>
       </div>
     </div>
@@ -423,6 +424,7 @@ h2{font-size:15px;margin-bottom:8px}
         </div>
         <div id="leftNums" style="font-size:15px;margin-top:8px;line-height:1.75;word-break:break-word">--</div>
         <div id="leftCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
+        <div id="leftTip" style="margin-top:10px;padding:10px 12px;border-radius:8px;font-size:15px;font-weight:bold;line-height:1.5;background:rgba(0,0,0,.25)">--</div>
         <div style="font-size:12px;line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.3);opacity:.95">📌 怎么下：剩≤4码→回款3.27倍，最强档，可重注｜5-7码→仅1.48倍，建议跳过｜8-10码→2.05倍，正常下｜11码以上→1.08倍，不下。≤4码档全年约59期，一个月才几次，等得到才下。</div>
       </div>
     </div>
@@ -856,6 +858,15 @@ window.addEventListener('load', ()=>{
         _g('hbLeftCount').innerText = leftH.length;
         _g('hbLeftNums').innerText = leftH.join('-') || '（全杀）';
         _g('hbLeftCalc').innerText = '12 张 ≥94% 卡并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
+        {
+          const nT = leftH.length;
+          let tx, bg, fg;
+          if(nT<=14){ tx='🔥 本期可加注（'+nT+'码，回款2.14倍）'; bg='#ffd700'; fg='#5a1a00'; }
+          else if(nT<=16){ tx='✔ 本期基础注（'+nT+'码，回款1.89倍）'; bg='#7bed9f'; fg='#0b3d1e'; }
+          else if(nT<=20){ tx='➖ 本期普通下（'+nT+'码，回款1.64倍）'; bg='#ffa502'; fg='#4a2100'; }
+          else { tx='✖ 本期不加注（'+nT+'码，回款1.44倍）'; bg='rgba(255,255,255,.35)'; fg='#222'; }
+          const et=_g('hbTip'); et.innerText=tx; et.style.background=bg; et.style.color=fg;
+        }
         window.copyHbLeftNums = function(){
           const t = window._HB_LEFT || '';
           const btn = document.getElementById('copyHbLeft');
@@ -1021,6 +1032,15 @@ window.addEventListener('load', ()=>{
         _g('hbLeftCount').innerText = leftH.length;
         _g('hbLeftNums').innerText = leftStrH || '（全杀）';
         _g('hbLeftCalc').innerText = '12 张 ≥94% 卡并杀 '+deadH.size+' 码 → 剩 '+leftH.length+' 码';
+        {
+          const nT = leftH.length;
+          let tx, bg, fg;
+          if(nT<=14){ tx='🔥 本期可加注（'+nT+'码，回款2.14倍）'; bg='#ffd700'; fg='#5a1a00'; }
+          else if(nT<=16){ tx='✔ 本期基础注（'+nT+'码，回款1.89倍）'; bg='#7bed9f'; fg='#0b3d1e'; }
+          else if(nT<=20){ tx='➖ 本期普通下（'+nT+'码，回款1.64倍）'; bg='#ffa502'; fg='#4a2100'; }
+          else { tx='✖ 本期不加注（'+nT+'码，回款1.44倍）'; bg='rgba(255,255,255,.35)'; fg='#222'; }
+          const et=_g('hbTip'); et.innerText=tx; et.style.background=bg; et.style.color=fg;
+        }
         window._LEFT_NUMS = leftStr;
         _g('curPeriodL').innerText = nextL;
         _g('leftCount').innerText = leftL.length;
@@ -1028,6 +1048,15 @@ window.addEventListener('load', ()=>{
         if(document.getElementById('leftNums2')) _g('leftNums2').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftCount2')) _g('leftCount2').innerText = leftL.length;
         _g('leftCalc').innerText = '全部 18 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        {
+          const nT2 = leftL.length;
+          let tx2, bg2, fg2;
+          if(nT2<=4){ tx2='🔥 本期可加倍下（'+nT2+'码，回款3.27倍）'; bg2='#ffd700'; fg2='#5a1a00'; }
+          else if(nT2<=7){ tx2='⏸ 本期建议跳过（'+nT2+'码，回款仅1.48倍）'; bg2='#95a5a6'; fg2='#1b1b1b'; }
+          else if(nT2<=10){ tx2='✔ 本期正常下（'+nT2+'码，回款2.05倍）'; bg2='#7bed9f'; fg2='#0b3d1e'; }
+          else { tx2='✖ 本期不下（'+nT2+'码，回款仅1.08倍）'; bg2='rgba(255,255,255,.35)'; fg2='#222'; }
+          const et2=_g('leftTip'); et2.innerText=tx2; et2.style.background=bg2; et2.style.color=fg2;
+        }
         window.copyText = function(t){
           const fb = ()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); };
           if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).catch(fb); } else { fb(); }
