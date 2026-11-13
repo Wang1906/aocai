@@ -390,6 +390,13 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbkCalc" style="font-size:12px;opacity:.85;margin-top:6px">--</div>
       </div>
     </div>
+    <div style="background:linear-gradient(135deg,#1f4037,#3b6e5a);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
+      <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
+        <div style="font-size:14px;font-weight:bold">✂️ 杀两尾·合值版（<span id="curPeriodT2">--</span>期，<span id="t2WinRate">--</span>命中）</div>
+        <div id="highT2" style="font-size:16px;margin-top:6px;line-height:1.65;word-break:break-word">--</div>
+        <div id="t2Calc" style="font-size:12px;opacity:.85;margin-top:6px;line-height:1.6">--</div>
+      </div>
+    </div>
     <div style="background:linear-gradient(135deg,#5a3a22,#8b5e34);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
         <div style="font-size:14px;font-weight:bold">🪵 杀一行·五行（<span id="curPeriodHx">--</span>期，<span id="hxWinRate">--</span>命中）</div>
@@ -446,7 +453,7 @@ window.addEventListener('load', ()=>{
   setTimeout(()=>{
     try{
       let total = DRAW.length;
-      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0, m1Hit=0, bhHit=0, hxHit=0, qHit=0;
+      let headHit=0, bt1Hit=0, hbHit=0, dxHit=0, hwHit=0, sum7Hit=0, weiHit=0, bt2Hit=0, bt3Hit=0, cyHit=0, hbkHit=0, zwHit=0, wei2Hit=0, bt4Hit=0, bt5Hit=0, wei3Hit=0, zw2Hit=0, zw3Hit=0, w4Hit=0, z4Hit=0, w5Hit=0, z5Hit=0, z6Hit=0, m1Hit=0, bhHit=0, hxHit=0, qHit=0, t2Hit=0;
       for(let i=1;i<total;i++){
         const parts = DRAW[i].split(':');
         const nums = parts[1].split(',').map(Number);
@@ -592,6 +599,15 @@ window.addEventListener('load', ()=>{
           let inQ=false;
           for(let nq=1;nq<=49;nq++){ const gq=((nq%2===1)?2:0)+((nq>=25)?0:1); if(gq===predQ && nq===te){ inQ=true; break; } }
           if(!inQ) qHit++;
+        }
+        // 杀两尾
+        {
+          const sst2 = n=>String(n).split('').reduce((x,y)=>x+ +y,0);
+          const q6b = recs[i-1].ns.slice(0,6);
+          const taB=(sst2(q6b[4])+1)%10;
+          let tbB=(sst2(q6b[1])+5)%10;
+          if(taB===tbB) tbB=(tbB+1)%10;
+          if(te%10!==taB && te%10!==tbB) t2Hit++;
         }
         // 两头并杀：B4 头 + B5 头一起杀
         {
@@ -1003,6 +1019,17 @@ window.addEventListener('load', ()=>{
           for(let n=1;n<=49;n++){ const g=((n%2===1)?2:0)+((n>=25)?0:1); if(g===predQL) deadL.add(n); }
         }
         }
+        {
+          const taL=(ssL(pvL[4])+1)%10;
+          let tbL=(ssL(pvL[1])+5)%10;
+          if(taL===tbL) tbL=(tbL+1)%10;
+          const arrTL=[];
+          for(let n=1;n<=49;n++){ if(n%10===taL||n%10===tbL){ deadL.add(n); arrTL.push(n); } }
+          _g('curPeriodT2').innerText=nextL;
+          _g('t2WinRate').innerText=(t2Hit/(total-1)*100).toFixed(1)+'%命中，全历史'+t2Hit+'/'+(total-1);
+          _g('highT2').innerText='❌ 杀尾'+taL+'、'+tbL+'（共'+arrTL.length+'码：'+arrTL.map(n=>String(n).padStart(2,'0')).join('、')+'）';
+          _g('t2Calc').innerText='平5合'+ssL(pvL[4])+' → 尾'+taL+'；平2合'+ssL(pvL[1])+' → 尾'+tbL;
+        }
         let leftL=[];
         for(let n=1;n<=49;n++) if(!deadL.has(n)) leftL.push(String(n).padStart(2,'0'));
         const leftStr = leftL.join('-');
@@ -1025,7 +1052,7 @@ window.addEventListener('load', ()=>{
         _g('leftNums').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftNums2')) _g('leftNums2').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftCount2')) _g('leftCount2').innerText = leftL.length;
-        _g('leftCalc').innerText = '全部 18 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        _g('leftCalc').innerText = '全部 19 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
         window.copyText = function(t){
           const fb = ()=>{ const ta=document.createElement('textarea'); ta.value=t; ta.style.position='fixed'; ta.style.opacity='0'; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} document.body.removeChild(ta); };
           if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(t).catch(fb); } else { fb(); }
