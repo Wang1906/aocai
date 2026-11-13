@@ -1057,19 +1057,26 @@ window.addEventListener('load', ()=>{
           try{ tr=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ tr={}; }
           if(!tr[nextL]){ tr[nextL]={L:leftStr, H:leftStrH}; localStorage.setItem(KEY, JSON.stringify(tr)); }
           const ps=Object.keys(tr).map(Number).filter(x=>x>=318).sort((a,b)=>a-b);
-          let out=[], nL=0,hL=0,nH=0,hH=0;
+          let out=[], nL=0,hL=0,nH=0,hH=0,pL=0,pH=0;
           for(const p of ps){
             const rec=DRAW.find(x=>+x.split(':')[0]===p);
             const o=tr[p];
-            if(!rec){ out.push(p+'｜全集 '+o.L.split('-').length+'码 待开奖｜94% '+o.H.split('-').length+'码 待开奖'); continue; }
+            const nl=o.L.split('-').filter(Boolean).length, nh=o.H.split('-').filter(Boolean).length;
+            const sL = nl<=4?20:(nl>=8&&nl<=10?10:0);
+            const sH = nh<=14?20:(nh<=20?10:0);
+            const wL = sL===20?'加倍20/码':(sL===10?'正常10/码':'不下');
+            const wH = sH===20?'加注20/码':(sH===10?'基础10/码':'不加注');
+            if(!rec){ out.push(p+'｜全集'+nl+'码 '+wL+' 待开奖｜94%'+nh+'码 '+wH+' 待开奖'); continue; }
             const te=+rec.split(':')[1].split(',')[6];
             const okL=o.L.split('-').map(Number).includes(te);
             const okH=o.H.split('-').map(Number).includes(te);
-            nL++; nH++; if(okL) hL++; if(okH) hH++;
-            out.push(p+'｜全集 '+o.L.split('-').length+'码 '+(okL?'✅中':'❌未中')+'｜94% '+o.H.split('-').length+'码 '+(okH?'✅中':'❌未中'));
+            if(sL){ nL++; if(okL) hL++; pL += okL? (47*sL*nl - sL*nl) : (-sL*nl); }
+            if(sH){ nH++; if(okH) hH++; pH += okH? (47*sH*nh - sH*nh) : (-sH*nh); }
+            out.push(p+'｜全集'+nl+'码 '+wL+' '+(sL?(okL?'✅中':'❌未中'):'—')+'｜94%'+nh+'码 '+wH+' '+(sH?(okH?'✅中':'❌未中'):'—'));
           }
           _g('trackList').innerText = out.length? out.join('\n') : '（从 2026318 期开始记录）';
-          _g('trackSum').innerText = nL? ('累计：全集 '+hL+'/'+nL+' = '+(hL/nL*100).toFixed(1)+'% ｜ ≥94% '+hH+'/'+nH+' = '+(hH/nH*100).toFixed(1)+'%') : '累计：暂无已开奖记录';
+          const fm=v=>(v>=0?'+':'')+v;
+          _g('trackSum').innerText = (nL||nH)? ('按打法过滤后：\n全集 下'+nL+'期 中'+hL+'（'+(nL?hL/nL*100:0).toFixed(1)+'%）净 '+fm(pL)+' 元\n≥94% 下'+nH+'期 中'+hH+'（'+(nH?hH/nH*100:0).toFixed(1)+'%）净 '+fm(pH)+' 元') : '累计：暂无已开奖记录';
         }catch(e){}
 
         {
