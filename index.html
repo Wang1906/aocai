@@ -369,6 +369,12 @@ h2{font-size:15px;margin-bottom:8px}
         <div id="hbTip" style="margin-top:10px;padding:10px 12px;border-radius:8px;font-size:15px;font-weight:bold;line-height:1.5;background:rgba(0,0,0,.25)">--</div>
       </div>
     </div>
+    <div style="background:#141414;border:1px solid #333;border-radius:10px;padding:13px;margin-top:14px;color:#dcdcdc">
+      <div style="font-size:14px;font-weight:bold;color:#ffd700">📊 实盘追踪（自 2026318 起，页面自动记录，不用手动填）</div>
+      <div id="trackList" style="font-size:13px;line-height:1.85;margin-top:9px;white-space:pre-wrap">--</div>
+      <div id="trackSum" style="font-size:13px;margin-top:9px;white-space:pre-wrap;color:#7bed9f">--</div>
+      <button onclick="localStorage.removeItem('aocaiTrackV1');location.reload()" style="margin-top:10px;background:#2a2a2a;color:#bbb;border:1px solid #444;border-radius:6px;padding:4px 12px;font-size:12px">清空记录</button>
+    </div>
     <div style="margin:22px 0 2px;font-size:14px;font-weight:bold;color:#9aa0a6;letter-spacing:1px">📌 其余参考 · 胜率 &lt;94%（6 张）</div>
     <div style="background:linear-gradient(135deg,#8e2de2,#4a00e0);color:#fff;padding:15px;border-radius:10px;margin-top:12px">
       <div style="background:rgba(255,255,255,.15);padding:12px;border-radius:8px">
@@ -1046,6 +1052,27 @@ window.addEventListener('load', ()=>{
         if(document.getElementById('leftNums2')) _g('leftNums2').innerText = leftStr || '（全杀）';
         if(document.getElementById('leftCount2')) _g('leftCount2').innerText = leftL.length;
         _g('leftCalc').innerText = '全部 18 卡并杀 '+deadL.size+' 码 → 剩 '+leftL.length+' 码';
+        try{
+          const KEY='aocaiTrackV1';
+          let tr={};
+          try{ tr=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){ tr={}; }
+          if(!tr[nextL]){ tr[nextL]={L:leftStr, H:leftStrH}; localStorage.setItem(KEY, JSON.stringify(tr)); }
+          const ps=Object.keys(tr).map(Number).filter(x=>x>=318).sort((a,b)=>a-b);
+          let out=[], nL=0,hL=0,nH=0,hH=0;
+          for(const p of ps){
+            const rec=DRAW.find(x=>+x.split(':')[0]===p);
+            const o=tr[p];
+            if(!rec){ out.push(p+'｜全集 '+o.L.split('-').length+'码 待开奖｜94% '+o.H.split('-').length+'码 待开奖'); continue; }
+            const te=+rec.split(':')[1].split(',')[6];
+            const okL=o.L.split('-').map(Number).includes(te);
+            const okH=o.H.split('-').map(Number).includes(te);
+            nL++; nH++; if(okL) hL++; if(okH) hH++;
+            out.push(p+'｜全集 '+o.L.split('-').length+'码 '+(okL?'✅中':'❌未中')+'｜94% '+o.H.split('-').length+'码 '+(okH?'✅中':'❌未中'));
+          }
+          _g('trackList').innerText = out.length? out.join('\n') : '（从 2026318 期开始记录）';
+          _g('trackSum').innerText = nL? ('累计：全集 '+hL+'/'+nL+' = '+(hL/nL*100).toFixed(1)+'% ｜ ≥94% '+hH+'/'+nH+' = '+(hH/nH*100).toFixed(1)+'%') : '累计：暂无已开奖记录';
+        }catch(e){}
+
         {
           const nT2 = leftL.length;
           let tx2, bg2, fg2;
