@@ -868,7 +868,7 @@ window.addEventListener('load', ()=>{
           else if(nT<=16){ tx='✔ 本期基础注（'+nT+'码，回款1.89倍）'; bg='#7bed9f'; fg='#0b3d1e'; }
           else if(nT<=20){ tx='➖ 本期普通下（'+nT+'码，回款1.64倍）'; bg='#ffa502'; fg='#4a2100'; }
           else if(nT<=24){ tx='➕ 本期可基础注（'+nT+'码，回款1.59倍）'; bg='#ffd166'; fg='#4a2100'; }
-          else { tx='✖ 本期不加注（'+nT+'码，回款1.44倍）'; bg='rgba(255,255,255,.35)'; fg='#222'; }
+          else { tx='➖ 本期下基础注，不加倍（'+nT+'码，回款1.44倍）'; bg='#ffd166'; fg='#4a2100'; }
           const et=_g('hbTip'); et.innerText=tx; et.style.background=bg; et.style.color=fg;
         }
         window.copyHbLeftNums = function(){
@@ -1043,7 +1043,7 @@ window.addEventListener('load', ()=>{
           else if(nT<=16){ tx='✔ 本期基础注（'+nT+'码，回款1.89倍）'; bg='#7bed9f'; fg='#0b3d1e'; }
           else if(nT<=20){ tx='➖ 本期普通下（'+nT+'码，回款1.64倍）'; bg='#ffa502'; fg='#4a2100'; }
           else if(nT<=24){ tx='➕ 本期可基础注（'+nT+'码，回款1.59倍）'; bg='#ffd166'; fg='#4a2100'; }
-          else { tx='✖ 本期不加注（'+nT+'码，回款1.44倍）'; bg='rgba(255,255,255,.35)'; fg='#222'; }
+          else { tx='➖ 本期下基础注，不加倍（'+nT+'码，回款1.44倍）'; bg='#ffd166'; fg='#4a2100'; }
           const et=_g('hbTip'); et.innerText=tx; et.style.background=bg; et.style.color=fg;
         }
         window._LEFT_NUMS = leftStr;
@@ -1065,9 +1065,9 @@ window.addEventListener('load', ()=>{
             const o=tr[p];
             const nl=o.L.split('-').filter(Boolean).length, nh=o.H.split('-').filter(Boolean).length;
             const sL = nl<=4?20:(nl>=8&&nl<=10?10:0);
-            const sH = nh<=14?20:(nh<=24?10:0);
+            const sH = nh<=14?20:10;
             const wL = sL===20?'加倍20/码':(sL===10?'正常10/码':'跳过');
-            const wH = sH===20?'加注20/码':(sH===10?'基础10/码':(nh<=24?'—':'不加'));
+            const wH = sH===20?'加倍20/码':'基础10/码';
             if(!rec){ out.push(p+'｜全集'+nl+'码 '+wL+' 待开奖｜94%'+nh+'码 '+wH+' 待开奖'); continue; }
             const te=+rec.split(':')[1].split(',')[6];
             const okL=o.L.split('-').map(Number).includes(te);
