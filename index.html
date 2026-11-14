@@ -1072,8 +1072,8 @@ window.addEventListener('load', ()=>{
             const te=+rec.split(':')[1].split(',')[6];
             const okL=o.L.split('-').map(Number).includes(te);
             const okH=o.H.split('-').map(Number).includes(te);
-            if(sL){ nL++; if(okL) hL++; pL += okL? (47*sL*nl - sL*nl) : (-sL*nl); }
-            if(sH){ nH++; if(okH) hH++; pH += okH? (47*sH*nh - sH*nh) : (-sH*nh); }
+            if(sL){ nL++; if(okL) hL++; pL += okL? (47*sL - sL*nl) : (-sL*nl); }
+            if(sH){ nH++; if(okH) hH++; pH += okH? (47*sH - sH*nh) : (-sH*nh); }
             out.push(p+'｜全集'+nl+'码 '+wL+' '+(sL?(okL?'✅中':'❌未中'):'—')+'｜94%'+nh+'码 '+wH+' '+(sH?(okH?'✅中':'❌未中'):'—'));
           }
           _g('trackList').innerText = out.length? out.join('\n') : '（从 2026318 期开始记录）';
